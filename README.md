@@ -19,7 +19,7 @@ This is called **GEO (Generative Engine Optimization)** — the new SEO for the 
 
 ---
 
-## 🎯 Inspired by Peec.ai
+## 🎯 Metrics Tracked (inspired by Peec.ai)
 
 | Metric | Description |
 |--------|-------------|
@@ -44,31 +44,27 @@ timestamp,model,prompt,brand,mentioned,position,rank,sentiment,reason
 
 ---
 
-## 🚀 Quick Start
+## 📁 Project Structure
 
-### 1. Clone the repo
-```bash
-git clone https://github.com/yourusername/ai-brand-tracker.git
-cd ai-brand-tracker
+```
+ai-brand-tracker/
+│
+├── collector.py        # 🤖 Main script — collects & analyzes data
+├── config.py           # ⚙️  Configure brands & prompts (edit this!)
+├── results.csv         # 📊 Output data (auto-generated)
+├── requirements.txt    # 📦 Dependencies
+├── .env                # 🔑 API keys (never commit this!)
+└── .gitignore          # 🚫 Protects sensitive files
 ```
 
-### 2. Set up environment
-```bash
-python -m venv .venv
-source .venv/bin/activate      # Mac/Linux
-pip install -r requirements.txt
-```
+---
 
-### 3. Add your API key
-```bash
-# Create .env file
-echo "GEMINI_API_KEY=your_api_key_here" > .env
-```
-Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com)
+## ⚙️ Configuration
 
-### 4. Configure your brands & prompts
+Edit `config.py` to customize — **no need to touch collector.py**
+
 ```python
-# config.py — edit this file only, no need to touch collector.py
+# config.py
 
 BRANDS = [
     "YourBrand",      # ← Add your brand here
@@ -81,26 +77,6 @@ PROMPTS = [
     "แพลตฟอร์มช้อปปิ้งออนไลน์ไหนดีที่สุด?",
     # Add more prompts your customers might ask
 ]
-```
-
-### 5. Run it!
-```bash
-python collector.py
-```
-
----
-
-## 📁 Project Structure
-
-```
-ai-brand-tracker/
-│
-├── collector.py        # 🤖 Main script — collects & analyzes data
-├── config.py           # ⚙️  Configure brands & prompts (edit this!)
-├── results.csv         # 📊 Output data (auto-generated)
-├── requirements.txt    # 📦 Dependencies
-├── .env                # 🔑 API keys (never commit this!)
-└── .gitignore          # 🚫 Protects sensitive files
 ```
 
 ---
@@ -162,21 +138,6 @@ Then **take action** based on data:
 - [ ] Scheduled auto-runs
 - [ ] Multi-model support (GPT-4, Claude)
 - [ ] Source/citation tracking
-
----
-
-## 🙏 Credits
-
-Inspired by [Peec.ai](https://peec.ai) — the leading AI Search Analytics platform.
-
-Built as a portfolio project to demonstrate **Data Engineering** skills:
-Python • API Integration • Data Pipeline • Analytics
-
----
-
-## 📄 License
-
-MIT License — free to use, please credit the author.
 
 ---
 
