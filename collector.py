@@ -31,8 +31,12 @@ response = client.models.generate_content(
 )
 
 print("---Gemini Response---")
+print(f"timestamp : {timestamp}")
+print(f"model     : {model_name}")
+print(f"prompt    : {prompt}")
 print(response.text)
 
+# brand in response
 found_brands = []
 for brand in allnii_competitors:
     if brand.lower() in response.text.lower():
