@@ -1,6 +1,6 @@
 # 🔍 AI Brand Visibility Tracker
 
-> **Track how AI talks about your brand** — inspired by [Peec.ai](https://peec.ai)
+> **Track how AI talks about your brand — the new SEO for the AI era**
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)](https://python.org)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-orange?logo=google)](https://ai.google.dev)
@@ -19,7 +19,7 @@ This is called **GEO (Generative Engine Optimization)** — the new SEO for the 
 
 ---
 
-## 🎯 Metrics Tracked (inspired by Peec.ai)
+## 🎯 Metrics Tracked
 
 | Metric | Description |
 |--------|-------------|
@@ -134,11 +134,3 @@ Then **take action** based on data:
 - [ ] Scheduled auto-runs
 - [ ] Multi-model support (GPT-4, Claude)
 - [ ] Source/citation tracking
-
----
-
-<p align="center">
-  Made with ❤️ for the GEO era
-  <br>
-  <em>Because the future of search is AI-powered</em>
-</p>
