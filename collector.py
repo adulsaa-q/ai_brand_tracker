@@ -1,6 +1,7 @@
 from google import genai
 from dotenv import load_dotenv
 from datetime import datetime
+import pandas as pd
 import os
 
 load_dotenv()
@@ -48,3 +49,15 @@ if found_brands:
         print(f"mentioned: {brand}")
 else:
     print("platform not mentioned")
+rows = []
+for brand in allnii_competitors:
+    rows.append({
+        "timestamp": timestamp,
+        "model": model_name,
+        "prompt": prompt,
+        "brand": brand,
+        "mentioned": brand in found_brands  # True or False
+    })
+df = pd.DataFrame(rows)
+df.to_csv("results.csv", mode="a", header=not os.path.exists("results.csv"), index=False)
+print("\n ---Data saved to results.csv---")
