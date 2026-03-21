@@ -83,8 +83,6 @@ PROMPTS = [
 
 ## 📊 Data Collected
 
-Each run collects the following for every brand × prompt combination:
-
 | Column | Type | Description |
 |--------|------|-------------|
 | `timestamp` | datetime | When the data was collected |
@@ -107,7 +105,6 @@ Each run collects the following for every brand × prompt combination:
 | 🤖 Google Gemini API | AI responses |
 | 🐼 pandas | Data processing & CSV export |
 | 🔐 python-dotenv | Secure API key management |
-| 📊 Power BI / Excel | Dashboard visualization |
 
 ---
 
@@ -134,7 +131,6 @@ Then **take action** based on data:
 - [x] Sentiment + reason analysis
 - [x] Multi-prompt support
 - [x] CSV export
-- [ ] Power BI dashboard
 - [ ] Scheduled auto-runs
 - [ ] Multi-model support (GPT-4, Claude)
 - [ ] Source/citation tracking
