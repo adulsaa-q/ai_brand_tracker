@@ -1,12 +1,18 @@
 from google import genai
 from dotenv import load_dotenv
+from datetime import datetime
 import os
 
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)
 
-# ส่วนที่ 1 — กล่องเก็บ brand
+#context to promt
+timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+model_name = "gemini-2.5-flash"
+prompt = "ซื้อของออนไลน์ที่ไหนดีในไทย?"
+
+# brand box
 allnii_competitors = [
     "Allnii",
     "Konvy",
@@ -18,17 +24,15 @@ allnii_competitors = [
     "Lazada",
     "Shopee"
 ]
-
-# ส่วนที่ 2 — ถาม Gemini
+# prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash",
-    contents="ซื้อของออนไลน์ที่ไหนดีในไทย?"
+    model=model_name,
+    contents=prompt
 )
 
 print("---Gemini Response---")
 print(response.text)
 
-# ส่วนที่ 3 — ค้นหา brand ใน response ← เพิ่มตรงนี้!
 found_brands = []
 for brand in allnii_competitors:
     if brand.lower() in response.text.lower():
