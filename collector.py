@@ -49,6 +49,22 @@ if found_brands:
         print(f"mentioned: {brand}")
 else:
     print("platform not mentioned")
+
+brand_positions = {}
+for brand in allnii_competitors:
+    pos = response.text.lower().find(brand.lower())
+    brand_positions[brand] = pos
+
+# sort by position > rank 1,2,3
+mentioned_sorted = sorted(
+    [b for b in allnii_competitors if brand_positions[b] != -1],
+    key=lambda b: brand_positions[b]
+)
+
+brand_ranks = {}
+for i, brand in enumerate(mentioned_sorted):
+    brand_ranks[brand] = i + 1
+
 rows = []
 for brand in allnii_competitors:
     rows.append({
@@ -56,7 +72,9 @@ for brand in allnii_competitors:
         "model": model_name,
         "prompt": prompt,
         "brand": brand,
-        "mentioned": brand in found_brands  # True or False
+        "mentioned": brand in found_brands,
+        "position": brand_positions[brand],
+        "rank": brand_ranks.get(brand, 0)
     })
 df = pd.DataFrame(rows)
 df.to_csv("results.csv", mode="a", header=not os.path.exists("results.csv"), index=False)
