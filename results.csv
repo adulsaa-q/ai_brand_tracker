@@ -1,10 +1,10 @@
-timestamp,model,prompt,brand,mentioned,position,rank
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Allnii,False,-1,0
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Konvy,False,-1,0
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,EVEANDBOY,False,-1,0
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Beautrium,False,-1,0
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Sephora,False,-1,0
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Watsons,True,2158,3
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Boots,True,2168,4
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Lazada,True,241,1
-2026-03-21 18:57:13,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Shopee,True,590,2
+timestamp,model,prompt,brand,mentioned,position,rank,sentiment,reason
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Allnii,False,-1,0,not_mentioned,ไม่ถูกพูดถึง
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Konvy,False,-1,0,not_mentioned,ไม่ถูกพูดถึง
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,EVEANDBOY,True,2294,4,positive,ได้รับความนิยม มีสินค้าหลากหลายทั้งไทยและเทศ
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Beautrium,False,-1,0,not_mentioned,ไม่ถูกพูดถึง
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Sephora,True,2208,3,positive,สินค้าจากแบรนด์ระดับโลก
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Watsons,False,-1,0,not_mentioned,ไม่ถูกพูดถึง
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Boots,False,-1,0,not_mentioned,ไม่ถูกพูดถึง
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Lazada,True,285,1,positive,สินค้าหลากหลาย มีโปรโมชั่นและส่วนลดบ่อยๆ
+2026-03-21 19:29:36,gemini-2.5-flash,ซื้อของออนไลน์ที่ไหนดีในไทย?,Shopee,True,470,2,positive,สินค้าหลากหลาย มีเกมสะสมคอยน์ และโปรโมชั่นจัดส่งฟรี
