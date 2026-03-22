@@ -145,12 +145,13 @@ Then **take action** based on data:
 - [x] Position & rank analysis
 - [x] Sentiment + reason analysis
 - [x] Multi-prompt support
-- [x] SQLite database storage
-- [x] Error handling (rate limit / timeout)
-- [x] Jupyter Notebook EDA
 - [x] Sample output data
+- [ ] Logging system
+- [ ] Type hints + Modular structure
+- [ ] tqdm progress bar
+- [ ] settings.yaml
+- [ ] CLI command
 - [ ] Scheduled auto-runs
-- [ ] Multi-model support (GPT-4, Claude)
 - [ ] Source/citation tracking
 
 ---
