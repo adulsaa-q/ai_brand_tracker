@@ -4,7 +4,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)](https://python.org)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-orange?logo=google)](https://ai.google.dev)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen)]()
 
 ---
@@ -42,6 +41,8 @@ timestamp,model,prompt,brand,mentioned,position,rank,sentiment,reason
 
 > **Key insight:** Allnii is not mentioned by AI at all — a clear signal to create more AI-visible content!
 
+> 📁 See [sample_output/](sample_output/) for full example data
+
 ---
 
 ## 📁 Project Structure
@@ -51,7 +52,9 @@ ai-brand-tracker/
 │
 ├── collector.py        # 🤖 Main script — collects & analyzes data
 ├── config.py           # ⚙️  Configure brands & prompts (edit this!)
-├── results.csv         # 📊 Output data (auto-generated)
+├── analysis.ipynb      # 📊 Jupyter Notebook — EDA & visualizations
+├── sample_output/      # 📋 Example output data (no API key needed)
+│   └── results_sample.csv
 ├── requirements.txt    # 📦 Dependencies
 ├── .env                # 🔑 API keys (never commit this!)
 └── .gitignore          # 🚫 Protects sensitive files
@@ -65,6 +68,8 @@ Edit `config.py` to customize — **no need to touch collector.py**
 
 ```python
 # config.py
+
+MODEL_NAME = "gemini-2.5-flash"
 
 BRANDS = [
     "YourBrand",      # ← Add your brand here
@@ -97,13 +102,23 @@ PROMPTS = [
 
 ---
 
+## 🛡️ Error Handling
+
+The script handles API errors gracefully:
+- **Rate limit / Timeout** → waits 30 seconds and retries automatically
+- **Sentiment error** → skips and continues to next prompt
+
+---
+
 ## 🔧 Tech Stack
 
 | Tool | Purpose |
 |------|---------|
 | 🐍 Python 3.11+ | Core language |
 | 🤖 Google Gemini API | AI responses |
-| 🐼 pandas | Data processing & CSV export |
+| 🗄️ SQLite | Database storage |
+| 🐼 pandas | Data processing |
+| 📊 matplotlib | Data visualization |
 | 🔐 python-dotenv | Secure API key management |
 
 ---
@@ -130,7 +145,12 @@ Then **take action** based on data:
 - [x] Position & rank analysis
 - [x] Sentiment + reason analysis
 - [x] Multi-prompt support
-- [x] CSV export
+- [x] SQLite database storage
+- [x] Error handling (rate limit / timeout)
+- [x] Jupyter Notebook EDA
+- [x] Sample output data
 - [ ] Scheduled auto-runs
 - [ ] Multi-model support (GPT-4, Claude)
 - [ ] Source/citation tracking
+
+---
