@@ -1,8 +1,9 @@
 from google import genai
 from dotenv import load_dotenv
 from datetime import datetime
-import pandas as pd
 from config import MODEL_NAME, BRANDS, PROMPTS
+import pandas as pd
+import time
 import os
 
 load_dotenv()
@@ -16,10 +17,19 @@ for prompt in PROMPTS:
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # ถาม Gemini ครั้งที่ 1
-    response = client.models.generate_content(
-        model=model_name,
-        contents=prompt
-    )
+    try:
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt
+        )
+    except Exception as e:
+        print(f"⚠️ Error: {e}")
+        print("รอ 30 วินาทีแล้วลองใหม่...")
+        time.sleep(30)
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt
+        )
 
     print("---Gemini Response---")
     print(f"timestamp : {timestamp}")
@@ -40,7 +50,7 @@ for prompt in PROMPTS:
     else:
         print("platform not mentioned")
 
-    # หา position และ rank
+     # หา position และ rank
     brand_positions = {}
     for brand in allnii_competitors:
         pos = response.text.lower().find(brand.lower())
@@ -69,10 +79,15 @@ brand | sentiment | reason
 เช่น:
 Lazada | positive | ราคาถูก โปรโมชั่นเยอะ"""
 
-        sentiment_response = client.models.generate_content(
-            model=model_name,
-            contents=sentiment_prompt
-        )
+        try:
+            sentiment_response = client.models.generate_content(
+                model=model_name,
+                contents=sentiment_prompt
+            )
+        except Exception as e:
+            print(f"⚠️ Sentiment error: {e} — ข้ามไป")
+            continue
+
         print("\n---Sentiment Analysis---")
         print(sentiment_response.text)
 
