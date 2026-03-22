@@ -145,13 +145,8 @@ Then **take action** based on data:
 - [x] Position & rank analysis
 - [x] Sentiment + reason analysis
 - [x] Multi-prompt support
-- [x] Sample output data
 - [ ] Logging system
-- [ ] Type hints + Modular structure
-- [ ] tqdm progress bar
-- [ ] settings.yaml
-- [ ] CLI command
+- [ ] Modular structure
 - [ ] Scheduled auto-runs
-- [ ] Source/citation tracking
 
 ---
