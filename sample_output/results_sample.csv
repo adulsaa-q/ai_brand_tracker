@@ -1,28 +1,28 @@
-timestamp,model,prompt,brand,mentioned,position,rank,sentiment,reason
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Allnii,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Konvy,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,EVEANDBOY,1,1079,2,positive,"ของแท้แน่นอน, หลากหลายแบรนด์, โปรโมชั่นดี"
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Beautrium,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Sephora,1,1035,1,positive,"ของแท้แน่นอน, หลากหลายแบรนด์, โปรโมชั่นดี"
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Watsons,1,1130,3,positive,"ของแท้แน่นอน, หลากหลายแบรนด์, มีโปรโมชั่น"
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Boots,1,1174,4,positive,"ของแท้แน่นอน, หลากหลายแบรนด์, มีโปรโมชั่น"
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Lazada,1,1876,6,positive,"ราคาถูก, โปรโมชั่นเยอะ (แต่ต้องระวังของปลอมหากไม่ซื้อจาก Official Store/LazMall)"
-2026-03-23 14:20:32,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Shopee,1,1802,5,positive,"ราคาถูก, โปรโมชั่นเยอะ (แต่ต้องระวังของปลอมหากไม่ซื้อจาก Official Store/Shopee Mall)"
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Allnii,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Konvy,1,376,1,positive,"สินค้าหลากหลาย, โปรโมชั่นเยอะ, จัดส่งรวดเร็ว"
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,EVEANDBOY,1,684,3,positive,"มีสินค้าหลากหลาย, โปรโมชั่นบ่อย, มีหน้าร้านให้ลอง"
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Beautrium,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Sephora,1,669,2,positive,"รวมแบรนด์ High-end ตะวันตก, มั่นใจของแท้ 100%"
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Watsons,1,1884,4,positive,"แหล่งรวม Drugstore, มีโปรโมชั่นบ่อย"
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Boots,1,2076,5,positive,"แหล่งรวม Drugstore, มีโปรโมชั่นบ่อย"
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Lazada,1,2682,6,negative,มีโอกาสเจอของปลอมสูงหากไม่เลือกร้านค้าที่น่าเชื่อถือ
-2026-03-23 14:20:10,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Shopee,1,2691,7,negative,มีโอกาสเจอของปลอมสูงหากไม่เลือกร้านค้าที่น่าเชื่อถือ
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Allnii,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Konvy,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,EVEANDBOY,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Beautrium,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Sephora,0,-1,0,not_mentioned,ไม่ถูกพูดถึง
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Watsons,1,2199,3,positive,มั่นใจของแท้ สะดวก
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Boots,1,2242,4,positive,มั่นใจของแท้ สะดวก
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Lazada,1,968,1,negative,เสี่ยงเจอของปลอม
-2026-03-23 14:19:50,gemini-2.5-flash,ซื้ออาหารเสริมออนไลน์ที่ไหนดี?,Shopee,1,977,2,negative,เสี่ยงเจอของปลอม
+timestamp,model,prompt,brand,mentioned,position,rank,sentiment,reason,sources
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Allnii,0,,,,,"zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Konvy,1,242.0,1.0,positive,"สินค้าหลากหลาย, ของแท้ 100%, โปรโมชั่นดี","zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,EVEANDBOY,1,1656.0,5.0,positive,สินค้าหลากหลาย ตอบโจทย์หลายกลุ่ม,"zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Beautrium,1,675.0,3.0,positive,"สินค้าหลากหลาย โดยเฉพาะแบรนด์เกาหลี, โปรโมชั่นดี","zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Sephora,1,460.0,2.0,positive,"แบรนด์ดังระดับโลก, เคาน์เตอร์แบรนด์ต่างประเทศ, สะดวกสบาย","zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Watsons,1,1201.0,4.0,positive,"ราคาไม่แพง, โปรโมชั่นบ่อย, สินค้าดรักสโตร์","zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Boots,0,,,,,"zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Lazada,1,1896.0,7.0,positive,"มี LazMall/LazBEAUTY, ของแท้, โปรโมชั่นพิเศษ","zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:48,gemini-2.5-flash,แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?,Shopee,1,1875.0,6.0,positive,"มี Shopee Mall/Shopee Beauty Club, ของแท้, โปรโมชั่นพิเศษ","zipeventapp.com, wongnai.com, proen.co.th, beauticool.com, youtube.com, you.co, punpro.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Allnii,0,,,,,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Konvy,1,202.0,1.0,positive,สินค้าหลากหลาย รับประกันของแท้ มีโปรโมชั่นและรีวิว,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,EVEANDBOY,1,1267.0,4.0,,,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Beautrium,1,1716.0,6.0,positive,มีเครื่องสำอางหลากหลายแบรนด์ จัดโปรโมชั่นบ่อยครั้ง,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Sephora,1,721.0,2.0,positive,รวมแบรนด์ดังระดับโลก มีบริการส่งฟรีและสินค้าทดลองฟรี,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Watsons,1,1561.0,5.0,positive,แบรนด์ดรักสโตร์ราคาไม่แพง มีโปรโมชั่นบ่อยครั้ง,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Boots,0,,,,,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Lazada,0,,,,,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:28,gemini-2.5-flash,ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?,Shopee,1,960.0,3.0,positive,แพลตฟอร์มใหญ่ สินค้าหลากหลาย มีโค้ดส่วนลดและโปรโมชั่นส่งฟรี,"konvy.com, ladymonsters.in.th, zipeventapp.com, beauticool.com, wongnai.com, sephora.co.th, tops.co.th, you.co, jeban.com, caretobeauty.com, pantip.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Allnii,0,,,,,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Konvy,0,,,,,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,EVEANDBOY,0,,,,,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Beautrium,0,,,,,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Sephora,0,,,,,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Watsons,1,1108.0,3.0,positive,สินค้าของแท้ โปรโมชั่น ส่งฟรี เก็บเงินปลายทาง,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Boots,0,,,,,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Lazada,1,137.0,1.0,positive,ราคาคุ้มค่า โปรโมชั่นบ่อย ส่งฟรี เก็บเงินปลายทาง คืนสินค้าฟรี,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"
+2026-03-23 15:53:15,gemini-2.5-flash,อาหารเสริมราคาคุ้มค่า สั่งออนไลน์จากที่ไหนดี?,Shopee,1,373.0,2.0,positive,ยอดนิยม ข้อเสนอและดีลพิเศษ,"lazada.co.th, shopee.co.th, bigc.co.th, tops.co.th, topsvita.com, watsons.co.th, punsuk.com, giffmart.com, novaonlinecenter.com"

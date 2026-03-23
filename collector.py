@@ -1,4 +1,5 @@
 from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 from datetime import datetime
 from config import MODEL_NAME, BRANDS, PROMPTS
@@ -27,9 +28,24 @@ def get_ai_response(prompt):
     try:
         response = client.models.generate_content(
             model=MODEL_NAME,
-            contents=prompt
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                tools=[types.Tool(
+                    google_search=types.GoogleSearch()
+                )]
+            )
         )
-        return response.text
+
+        sources = []
+        if response.candidates[0].grounding_metadata:
+            for chunk in response.candidates[0].grounding_metadata.grounding_chunks:
+                if chunk.web:
+                    title = chunk.web.title or ""
+                    if title not in sources:
+                        sources.append(title)
+
+        return response.text, sources
+
     except Exception as e:
         logging.error(f"⚠️ Error: {e}")
         logging.info("รอ 30 วินาทีแล้วลองใหม่...")
@@ -37,7 +53,8 @@ def get_ai_response(prompt):
         return client.models.generate_content(
             model=MODEL_NAME,
             contents=prompt
-        ).text
+        ).text, []
+
 
 def find_mentioned_brands(response_text, brands):
     found_brands = []
@@ -124,7 +141,7 @@ def export_sample_csv():
 for prompt in tqdm(PROMPTS, desc="Processing Prompts"):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    response_text = get_ai_response(prompt)
+    response_text, sources = get_ai_response(prompt)
     logging.info(f"\n---Gemini Response---\n{response_text}")
 
     found_brands = find_mentioned_brands(response_text, BRANDS)
@@ -144,10 +161,11 @@ for prompt in tqdm(PROMPTS, desc="Processing Prompts"):
             "prompt": prompt,
             "brand": brand,
             "mentioned": brand in found_brands,
-            "position": brand_positions[brand],
-            "rank": brand_ranks.get(brand, 0),
-            "sentiment": s.get("sentiment", "not_mentioned"),
-            "reason": s.get("reason", "ไม่ถูกพูดถึง")
+            "position": brand_positions[brand] if brand in found_brands else None,
+            "rank": brand_ranks.get(brand) or None,
+            "sentiment": s.get("sentiment") or None,
+            "reason": s.get("reason") or None,
+            "sources": ", ".join(sources) if sources else None
         })
 
     save_results(rows)
