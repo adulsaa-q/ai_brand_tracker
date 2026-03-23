@@ -13,7 +13,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s — %(message)s",
     handlers=[
-        logging.FileHandler("tracker.log"),
+        logging.FileHandler("tracker.log", mode="w"),
         logging.StreamHandler()
     ]
 )

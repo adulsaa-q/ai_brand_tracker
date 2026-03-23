@@ -1,0 +1,17 @@
+model: gemini-2.5-flash
+
+brands:
+  - Allnii
+  - Konvy
+  - EVEANDBOY
+  - Beautrium
+  - Sephora
+  - Watsons
+  - Boots
+  - Lazada
+  - Shopee
+
+prompts:
+  - ซื้ออาหารเสริมออนไลน์ที่ไหนดี?
+  - ซื้อเครื่องสำอางออนไลน์จากเว็บไหนดี?
+  - แพลตฟอร์มไหนเหมาะกับซื้อเครื่องสำอางออนไลน์มากที่สุด?
