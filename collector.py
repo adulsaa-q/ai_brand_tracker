@@ -141,7 +141,7 @@ def export_sample_csv():
 for prompt in tqdm(PROMPTS, desc="Processing Prompts"):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    response_text, sources = get_ai_response(prompt)
+    response_text, sources = get_ai_response(prompt["text"])    #catagory
     logging.info(f"\n---Gemini Response---\n{response_text}")
 
     found_brands = find_mentioned_brands(response_text, BRANDS)
@@ -158,14 +158,15 @@ for prompt in tqdm(PROMPTS, desc="Processing Prompts"):
         rows.append({
             "timestamp": timestamp,
             "model": MODEL_NAME,
-            "prompt": prompt,
+            "prompt": prompt["text"],
             "brand": brand,
             "mentioned": brand in found_brands,
             "position": brand_positions[brand] if brand in found_brands else None,
             "rank": brand_ranks.get(brand) or None,
             "sentiment": s.get("sentiment") or None,
             "reason": s.get("reason") or None,
-            "sources": ", ".join(sources) if sources else None
+            "sources": ", ".join(sources) if (sources and brand in found_brands) else None,
+            "prompt_category": prompt.get("category")
         })
 
     save_results(rows)

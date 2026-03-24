@@ -45,6 +45,32 @@ timestamp,model,prompt,brand,mentioned,position,rank,sentiment,reason
 
 ---
 
+## 📊 Analysis Results
+
+> From a real run tracking **9 brands** across **30 prompts** using Gemini 2.5 Flash
+
+### Brand Visibility
+![Brand Visibility](images/01_brand_visibility.png)
+
+### Brand Rank by Prompt
+![Brand Rank by Prompt](images/02_brand_rank_by_prompt.png)
+
+### Sentiment Breakdown
+![Sentiment Breakdown](images/03_sentiment_breakdown.png)
+
+### Brand Mentions Heatmap
+![Heatmap](images/04_heatmap_brand_by_prompt.png)
+
+### Average Rank by Brand
+![Average Rank](images/05_avg_rank_by_brand.png)
+
+### Mention Rate by Category
+![Mention Rate by Category](images/06_mention_rate_by_category.png)
+
+> 📓 See full analysis in [analysis.ipynb](analysis.ipynb)
+
+---
+
 ## 📁 Project Structure
 
 ```
