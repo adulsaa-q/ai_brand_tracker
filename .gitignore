@@ -5,3 +5,7 @@ __pycache__/
 .claude/  
 *.pyc
 *.log
+
+# Local dev docs (ไม่ต้องขึ้น git)
+PIPELINE.md
+ISSUES.md
