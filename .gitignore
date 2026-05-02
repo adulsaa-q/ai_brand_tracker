@@ -7,5 +7,4 @@ __pycache__/
 *.log
 
 # Local dev docs (ไม่ต้องขึ้น git)
-PIPELINE.md
-ISSUES.md
+docs/

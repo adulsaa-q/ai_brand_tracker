@@ -4,7 +4,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11+-1f425f?style=flat-square)](https://python.org)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4?style=flat-square)](https://ai.google.dev)
-[![License](https://img.shields.io/badge/License-MIT-black?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-black?style=flat-square)](https://opensource.org/licenses/MIT)
 
 ---
 
@@ -101,22 +101,21 @@ collector.py → Gemini API → SQLite → analysis.ipynb → Insights
 ```
 
 ### Configuration
-Edit `config.py` to customize tracking parameters:
+Edit `settings.yaml` to customize tracking parameters:
 
-```python
-MODEL_NAME = "gemini-2.5-flash"
+```yaml
+model: gemini-2.5-flash
 
-BRANDS = [
-    "YourBrand",
-    "Competitor1", 
-    "Competitor2",
-]
+brands:
+  - YourBrand
+  - Competitor1
+  - Competitor2
 
-PROMPTS = [
-    "Where should I buy cosmetics online in Thailand?",
-    "Which platform has the best beauty product selection?",
-    # Add customer queries
-]
+prompts:
+  - text: "Where should I buy cosmetics online in Thailand?"
+    category: "discovery"
+  - text: "Which platform has the best beauty product selection?"
+    category: "discovery"
 ```
 
 ### Data Schema
@@ -128,8 +127,8 @@ PROMPTS = [
 | `prompt` | string | User query |
 | `brand` | string | Tracked brand name |
 | `mentioned` | boolean | Mention status |
-| `position` | integer | Character index (-1 if not found) |
-| `rank` | integer | Mention order (0 if not mentioned) |
+| `position` | integer | Character index in response (null if not mentioned) |
+| `rank` | integer | Mention order — 1st, 2nd... (null if not mentioned) |
 | `sentiment` | string | positive / neutral / negative / not_mentioned |
 | `reason` | string | AI's explanation |
 | `prompt_category` | string | Query classification |
@@ -172,19 +171,23 @@ PROMPTS = [
 ```
 ai-brand-tracker/
 ├── collector.py           # Data collection pipeline
-├── config.py              # Configuration parameters
+├── config.py              # Configuration loader
+├── settings.yaml          # Brands, prompts, model config
 ├── analysis.ipynb         # Statistical analysis & visualization
-├── results.db             # SQLite database
 ├── requirements.txt       # Python dependencies
 ├── .env                   # API credentials (not tracked)
-└── images/                # Generated visualizations
+├── images/                # Generated chart outputs
+├── sample_output/         # Sample CSV from latest run
+└── docs/                  # Internal dev docs (not tracked in git)
+    ├── PIPELINE.md        #   Full pipeline walkthrough
+    └── ISSUES.md          #   Known bugs & future features
 ```
 
 ---
 
 ## Error Handling
 
-**Rate Limiting:** 30-second exponential backoff with automatic retry  
+**Rate Limiting:** 30-second wait then single retry on API error  
 **API Timeouts:** Graceful degradation, continues to next prompt  
 **Sentiment Failures:** Logs error, marks as `not_mentioned`, proceeds  
 
