@@ -2,7 +2,7 @@
 .venv
 results.db
 __pycache__/
-.claude/  
+.claude/
 *.pyc
 *.log
 
