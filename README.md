@@ -1,246 +1,74 @@
-# AI Brand Visibility Tracker
+# 🇹🇭 Thailand AI Market & Decision Intelligence Platform
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+[![Architecture](https://img.shields.io/badge/Architecture-Multi--Model_GEO_Platform-brightgreen.svg)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Measuring brand presence in the age of AI-powered recommendations**
-
-[![Python](https://img.shields.io/badge/Python-3.11+-1f425f?style=flat-square)](https://python.org)
-[![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4?style=flat-square)](https://ai.google.dev)
-[![License](https://img.shields.io/badge/License-MIT-black?style=flat-square)](https://opensource.org/licenses/MIT)
-
----
-
-## Overview
-
-Traditional SEO optimizes for search engines. But when users ask Claude, ChatGPT, or Gemini *"Where should I shop for cosmetics in Thailand?"* — which brands appear in the response?
-
-This project quantifies **brand visibility in AI-generated recommendations** through systematic prompt testing and response analysis. It tracks mention frequency, ranking position, sentiment, and reasoning across multiple query types.
-
-**Use case:** Marketing teams can identify visibility gaps, understand competitive positioning in AI responses, and optimize content strategy for generative engine optimization (GEO).
+An enterprise-grade **Generative Engine Optimization (GEO)**, **AI Share of Voice**, and **Thai Consumer Decision Intelligence Platform**.
 
 ---
 
-## Key Findings
+## 🎯 The Core Question
+> *What are Thai consumers asking and discovering across AI and search ecosystems? What do AI answer engines recommend to them, why do certain platforms win, and what strategic actions should businesses take next?*
 
-From analyzing **270 AI responses** (9 brands × 30 prompts):
-
-**Market Leaders**
-- Shopee and Lazada dominate with 78.8% and 69.7% mention rates
-- Both maintain strong positions (avg rank ~2.0) across query types
-
-**Specialty Players**
-- Sephora: 39.4% mention rate, strongest in gift and authenticity queries (avg rank 2.08)
-- EVEANDBOY, Konvy: Moderate visibility (27-30%), category-specific strength
-
-**Visibility Gap**
-- Allnii: 0% mention rate across all prompts — complete AI invisibility
-- Indicates insufficient structured content for AI model training/retrieval
-
-**Category Insights**
-- Highest AI confidence: product authenticity, first-time buyer, provincial shipping (66.7% mention rate)
-- AI avoidance: counterfeit concerns, customer service, new brand discovery (0% mention rate)
-
----
-
-## Methodology
-
-### Data Collection
-```
-30 prompts × 9 brands × 2 API calls = 540 requests
-├─ Primary call: Brand mention detection
-└─ Secondary call: Sentiment analysis
-```
-
-### Metrics Tracked
-
-| Metric | Description | Use Case |
-|--------|-------------|----------|
-| **Visibility** | Binary mention (True/False) | Market share of voice |
-| **Position** | Character index in response | Prominence measurement |
-| **Rank** | Sequential order (1st, 2nd, 3rd...) | Competitive positioning |
-| **Sentiment** | Positive/Neutral/Negative | Brand perception |
-| **Reasoning** | AI's stated rationale | Messaging effectiveness |
-
-### Query Categories
-
-Prompts span the customer journey:
-- **Discovery:** Price comparison, product variety, authenticity
-- **Purchase:** Shipping, payment methods, first-time buyer concerns  
-- **Post-purchase:** Returns, customer service, issue resolution
-- **Specialty:** Gift wrapping, international shipping
-
----
-
-## Analysis Results
-
-### Brand Visibility
-![Brand Visibility](images/01_brand_visibility.png)
-
-### Competitive Positioning
-![Brand Rank by Prompt](images/02_brand_rank_by_prompt.png)
-
-### Sentiment Distribution
-![Sentiment Breakdown](images/03_sentiment_breakdown.png)
-
-### Category × Brand Performance
-![Heatmap](images/04_heatmap_brand_by_prompt.png)
-
-### Average Ranking
-![Average Rank](images/05_avg_rank_by_brand.png)
-
-### Query Type Performance
-![Mention Rate by Category](images/06_mention_rate_by_category.png)
-
-*Full analysis available in [analysis.ipynb](analysis.ipynb)*
-
----
-
-## Technical Implementation
-
-### Architecture
-```
-collector.py → Gemini API → SQLite → analysis.ipynb → Insights
-```
-
-### Configuration
-Edit `settings.yaml` to customize tracking parameters:
-
-```yaml
-model: gemini-2.5-flash
-
-brands:
-  - YourBrand
-  - Competitor1
-  - Competitor2
-
-prompts:
-  - text: "Where should I buy cosmetics online in Thailand?"
-    category: "discovery"
-  - text: "Which platform has the best beauty product selection?"
-    category: "discovery"
-```
-
-### Data Schema
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `timestamp` | datetime | Collection time |
-| `model` | string | AI model identifier |
-| `prompt` | string | User query |
-| `brand` | string | Tracked brand name |
-| `mentioned` | boolean | Mention status |
-| `position` | integer | Character index in response (null if not mentioned) |
-| `rank` | integer | Mention order — 1st, 2nd... (null if not mentioned) |
-| `sentiment` | string | positive / neutral / negative / not_mentioned |
-| `reason` | string | AI's explanation |
-| `prompt_category` | string | Query classification |
-
----
-
-## Technology Stack
-
-**Language:** Python 3.11+  
-**API:** Google Gemini 2.5 Flash  
-**Storage:** SQLite  
-**Analysis:** pandas, NumPy  
-**Visualization:** Matplotlib, Seaborn  
-**Environment:** python-dotenv
-
----
-
-## Business Applications
-
-**For Marketing Teams:**
-- Identify which competitors AI favors in recommendations
-- Discover query types where your brand is invisible
-- Understand sentiment patterns across different contexts
-- Prioritize content creation based on AI visibility gaps
-
-**For Product Managers:**
-- Validate market positioning in AI-native channels
-- Track brand perception shifts over time
-- Benchmark against competitors in emerging search paradigm
-
-**For Content Strategists:**
-- Optimize structured data and metadata for AI retrieval
-- Create content addressing AI-identified brand weaknesses
-- Target high-impact query categories with low current visibility
-
----
-
-## Project Structure
-
-```
-ai-brand-tracker/
-├── collector.py           # Data collection pipeline
-├── config.py              # Configuration loader
-├── settings.yaml          # Brands, prompts, model config
-├── analysis.ipynb         # Statistical analysis & visualization
-├── requirements.txt       # Python dependencies
-├── .env                   # API credentials (not tracked)
-├── images/                # Generated chart outputs
-├── sample_output/         # Sample CSV from latest run
-└── docs/                  # Internal dev docs (not tracked in git)
-    ├── PIPELINE.md        #   Full pipeline walkthrough
-    └── ISSUES.md          #   Known bugs & future features
+```mermaid
+graph TD
+    UserQuery[Thai Consumer Intent
+Persona × Budget × Channel × Pain Point] --> Generator[Query Universe Engine
+Controlled Randomness Sampling]
+    
+    subgraph Observation Layer
+        Generator --> Engine1[Google Gemini
+GenAI + Search Grounding]
+        Generator --> Engine2[OpenRouter
+Free-Tier S-Models]
+        Generator --> Engine3[Perplexity AI
+Citation & Source Intelligence]
+    end
+    
+    Engine1 & Engine2 & Engine3 --> Pydantic[Single-Pass Pydantic Extraction
+Rank, Sentiment, NRS, Citations]
+    
+    subgraph Storage & Lakehouse
+        Pydantic --> DuckDB[(DuckDB Star Schema
+Zero-Cost Local Analytics)]
+        Pydantic --> SQLite[(SQLite Time-Series)]
+    end
+    
+    DuckDB --> Dashboard[Streamlit Executive Portal
+Share of Voice · Gap Analysis · Action Engine]
+    DuckDB --> Cron[GitHub Actions Scheduled Tracker
+Weekly Automated Cron]
 ```
 
 ---
 
-## Error Handling
+## 🚀 Quickstart (Local Offline Simulation)
 
-**Rate Limiting:** 30-second wait then single retry on API error  
-**API Timeouts:** Graceful degradation, continues to next prompt  
-**Sentiment Failures:** Logs error, marks as `not_mentioned`, proceeds  
+```bash
+# 1. Clone and switch to upgrade branch
+git clone https://github.com/adulsaa-q/ai_brand_tracker.git
+cd ai_brand_tracker
+git checkout upgrade/thailand-intelligence-v3
 
----
+# 2. Run simulation pipeline (0 API keys needed)
+python src/cli.py run --count 15 --engine mock
 
-## Learnings
-
-**Technical Skills:**
-- API integration with retry logic and error handling
-- Structured data collection pipeline design
-- SQLite database schema optimization
-- Statistical analysis of categorical and ordinal data
-- Data visualization for business stakeholders
-
-**Domain Knowledge:**
-- Generative engine optimization (GEO) principles
-- AI model behavior patterns in recommendation tasks
-- Brand positioning metrics for AI-native channels
-
-**Business Impact:**
-- Identified 0% visibility for target brand (Allnii)
-- Quantified competitive gaps (Shopee 78.8% vs Allnii 0%)
-- Pinpointed high-value categories for content investment
-
----
-
-## Future Development
-
-- [ ] Multi-model comparison (Claude, GPT-4, Llama)
-- [ ] Temporal tracking (weekly/monthly visibility trends)
-- [ ] Source citation analysis (where AI gets brand information)
-- [ ] Automated report generation
-- [ ] CLI interface for ad-hoc queries
-
----
-
-## Sample Output
-
-```csv
-timestamp,model,prompt,brand,mentioned,position,rank,sentiment,reason
-2026-03-24 13:42,gemini-2.5-flash,ซื้อเครื่องสำอางที่ไหนดี?,Shopee,True,232,1,positive,มีสินค้าหลากหลายและโปรโมชั่นบ่อย
-2026-03-24 13:42,gemini-2.5-flash,ซื้อเครื่องสำอางที่ไหนดี?,Lazada,True,640,2,positive,มี LazMall สำหรับสินค้าแท้และระบบส่งดี
-2026-03-24 13:42,gemini-2.5-flash,ซื้อเครื่องสำอางที่ไหนดี?,Allnii,False,-1,0,not_mentioned,ไม่ถูกพูดถึง
+# 3. Launch Interactive Dashboard
+streamlit run dashboard/app.py
 ```
 
-*Full sample dataset available in [sample_output/](sample_output/)*
+---
+
+## 📁 Repository Structure
+* `config/`: Multi-vertical entities & Thai consumer personas
+* `src/universe/`: Query Universe Generator with controlled randomness
+* `src/engines/`: Multi-Model Observation Layer (Gemini, OpenRouter, Mock)
+* `src/storage/`: DuckDB Lakehouse + Zero-dependency SQLite Store
+* `src/analytics/`: Share of Voice, Net Recommendation Score (NRS), Opportunity Finder
+* `dashboard/`: Interactive Streamlit multi-tab executive portal
+* `docs/`: Master Prompt & Thai consumer behavior research 2026
 
 ---
 
-## License
-
-MIT License — Free for personal and commercial use
-
----
-
-**Built with Python** | Data-driven insights for the AI era
+## 📄 License
+MIT License — Copyright (c) 2026 Adul Saa (Q).

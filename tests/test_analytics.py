@@ -1,0 +1,45 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from src.analytics.metrics import MarketMetricsEngine
+from src.analytics.opportunity import OpportunityFinder
+
+def test_metrics_calculation():
+    sample_obs = [
+        {
+            "query_id": "q1",
+            "brand_mentions": [
+                {"brand_name": "Shopee", "mentioned": True, "rank": 1, "sentiment": "positive", "recommendation_intent": "strongly_recommended"},
+                {"brand_name": "Lazada", "mentioned": True, "rank": 2, "sentiment": "neutral", "recommendation_intent": "recommended"}
+            ]
+        },
+        {
+            "query_id": "q2",
+            "brand_mentions": [
+                {"brand_name": "Shopee", "mentioned": True, "rank": 1, "sentiment": "positive", "recommendation_intent": "recommended"}
+            ]
+        }
+    ]
+    
+    res = MarketMetricsEngine.calculate_share_of_voice(sample_obs)
+    assert res["total_queries"] == 2
+    brands = {b["brand"]: b for b in res["brands"]}
+    assert brands["Shopee"]["share_of_voice_pct"] == 100.0
+    assert brands["Lazada"]["share_of_voice_pct"] == 50.0
+    assert brands["Shopee"]["average_rank"] == 1.0
+
+def test_opportunity_finder():
+    metrics = {"brands": []}
+    obs = [
+        {
+            "query_text": "ซื้อเครื่องสำอางแท้ที่ไหนดี?",
+            "category": "ความน่าเชื่อถือ",
+            "brand_mentions": [
+                {"brand_name": "Konvy", "rank": 1, "sentiment": "positive"}
+            ]
+        }
+    ]
+    gaps = OpportunityFinder.identify_gaps("Shopee", metrics, obs)
+    assert len(gaps) == 1
+    assert gaps[0]["type"] == "VISIBILITY_GAP"
