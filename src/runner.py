@@ -7,9 +7,16 @@ sys.stdout.reconfigure(encoding='utf-8')
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.universe import QueryUniverseGenerator
+from src.universe.temporal_events import ThailandTemporalEngine
 from src.engines import MockObservationEngine, GeminiObservationEngine, OpenRouterEngine
 from src.storage import SQLiteStore
-from src.analytics import MarketMetricsEngine, OpportunityFinder
+from src.analytics import (
+    MarketMetricsEngine,
+    OpportunityFinder,
+    CitationInfluenceAnalyzer,
+    ClaimIntelligenceEngine,
+    AIInformationLagTracker
+)
 
 def run_intelligence_pipeline(
     count: int = 10,
@@ -25,6 +32,9 @@ def run_intelligence_pipeline(
     
     brands = [b["name"] for b in entities["verticals"][0]["brands"]]
     focal_brand = entities["verticals"][0].get("focal_brand", "shopee")
+
+    active_events = ThailandTemporalEngine.get_active_events()
+    print(f"📅 Active Thailand Temporal Contexts: {[e['name_th'] for e in active_events]}")
 
     generator = QueryUniverseGenerator()
     queries = generator.generate_queries(count=count, seed=seed)
@@ -45,8 +55,16 @@ def run_intelligence_pipeline(
         obs_dict["category"] = q["category"]
         observations.append(obs_dict)
 
+    # 1. Share of Voice & Ranking
     metrics = MarketMetricsEngine.calculate_share_of_voice(observations)
+    # 2. Competitor Gaps
     opportunities = OpportunityFinder.identify_gaps(focal_brand, metrics, observations)
+    # 3. Citation Graph
+    citations = CitationInfluenceAnalyzer.analyze_influence(observations)
+    # 4. Claim Intelligence
+    claims = ClaimIntelligenceEngine.audit_claims(observations)
+    # 5. AI Information Freshness & Lag
+    lag = AIInformationLagTracker.measure_knowledge_freshness(observations)
 
     os.makedirs("data", exist_ok=True)
     summary_path = "data/latest_run_summary.json"
@@ -54,10 +72,14 @@ def run_intelligence_pipeline(
         json.dump({
             "metrics": metrics,
             "opportunities": opportunities,
+            "citations_analysis": citations,
+            "claims_audit": claims,
+            "information_lag": lag,
+            "active_events": active_events,
             "observations": observations
         }, f, ensure_ascii=False, indent=2)
 
-    print(f"🎉 Pipeline Completed! Results saved to {summary_path}")
+    print(f"🎉 Pipeline Completed! Deep Results saved to {summary_path}")
     return metrics, opportunities
 
 if __name__ == "__main__":
