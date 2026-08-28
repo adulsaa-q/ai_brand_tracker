@@ -1,0 +1,12 @@
+from abc import ABC, abstractmethod
+from typing import Dict, Any, Optional, List
+from src.models.observations import RawObservation
+
+class BaseObservationEngine(ABC):
+    def __init__(self, model_name: str, api_key: Optional[str] = None):
+        self.model_name = model_name
+        self.api_key = api_key
+
+    @abstractmethod
+    def observe(self, query_id: str, query_text: str, target_brands: List[str]) -> RawObservation:
+        pass
