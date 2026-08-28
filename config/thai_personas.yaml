@@ -1,0 +1,36 @@
+personas:
+  - id: "bkk_genz_student"
+    name: "นักศึกษามหาวิทยาลัยในกรุงเทพฯ"
+    age_group: "18-22"
+    location_type: "bkk"
+    budget_tier: "budget"
+    tech_savviness: "high"
+    primary_channels: ["tiktok", "x", "instagram", "shopee"]
+    language_style: "casual"
+
+  - id: "first_jobber_beauty_enthusiast"
+    name: "First Jobber วัยทำงาน ใส่ใจสกินแคร์"
+    age_group: "23-29"
+    location_type: "bkk"
+    budget_tier: "value"
+    tech_savviness: "high"
+    primary_channels: ["tiktok", "lemon8", "x", "konvy", "shopee", "lazada"]
+    language_style: "mixed_en_th"
+
+  - id: "smart_mom_family_manager"
+    name: "คุณแม่ยุคใหม่ จัดการค่าใช้จ่ายครอบครัว"
+    age_group: "30-45"
+    location_type: "urban_province"
+    budget_tier: "value"
+    tech_savviness: "medium"
+    primary_channels: ["facebook", "lazada", "shopee", "line"]
+    language_style: "casual"
+
+  - id: "luxury_counter_brand_buyer"
+    name: "ผู้บริโภคระดับพรีเมียม ซื้อสกินแคร์เคาน์เตอร์แบรนด์"
+    age_group: "28-50"
+    location_type: "bkk"
+    budget_tier: "luxury"
+    tech_savviness: "medium"
+    primary_channels: ["central_online", "sephora", "instagram", "google_search"]
+    language_style: "formal"

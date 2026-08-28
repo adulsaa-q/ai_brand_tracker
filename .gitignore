@@ -1,10 +1,14 @@
 .env
+.env.*
+!.env.example
 .venv
-results.db
+venv/
 __pycache__/
-.claude/
-*.pyc
+*.py[cod]
 *.log
-
-# Local dev docs (ไม่ต้องขึ้น git)
-docs/
+*.db
+*.duckdb
+*.sqlite3
+data/
+output/
+.claude/

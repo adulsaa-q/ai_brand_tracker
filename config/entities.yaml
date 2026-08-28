@@ -1,0 +1,52 @@
+verticals:
+  - vertical_id: "ecommerce_retail_th"
+    name_th: "แพลตฟอร์มอีคอมเมิร์ซและร้านค้าปลีกความงามไทย"
+    name_en: "Thailand E-Commerce & Beauty Retail"
+    focal_brand: "shopee"
+    brands:
+      - id: "shopee"
+        name: "Shopee Thailand"
+        vertical: "ecommerce_retail_th"
+        is_focal_brand: true
+        aliases: ["ช้อปปี้", "shopee", "แอพส้ม", "ชอปปี้"]
+        official_domains: ["shopee.co.th"]
+      - id: "lazada"
+        name: "Lazada Thailand"
+        vertical: "ecommerce_retail_th"
+        aliases: ["ลาซาด้า", "lazada", "แอพน้ำเงิน"]
+        official_domains: ["lazada.co.th"]
+      - id: "konvy"
+        name: "Konvy"
+        vertical: "ecommerce_retail_th"
+        aliases: ["คอนวี่", "konvy"]
+        official_domains: ["konvy.com"]
+      - id: "eveandboy"
+        name: "EVEANDBOY"
+        vertical: "ecommerce_retail_th"
+        aliases: ["อีฟแอนด์บอย", "eveandboy"]
+        official_domains: ["eveandboy.com"]
+      - id: "beautrium"
+        name: "Beautrium"
+        vertical: "ecommerce_retail_th"
+        aliases: ["บิวเทรี่ยม", "beautrium"]
+        official_domains: ["thebeautrium.com"]
+      - id: "sephora"
+        name: "Sephora Thailand"
+        vertical: "ecommerce_retail_th"
+        aliases: ["เซโฟร่า", "sephora"]
+        official_domains: ["sephora.co.th"]
+      - id: "watsons"
+        name: "Watsons Thailand"
+        vertical: "ecommerce_retail_th"
+        aliases: ["วัตสัน", "watsons"]
+        official_domains: ["watsons.co.th"]
+      - id: "boots"
+        name: "Boots Thailand"
+        vertical: "ecommerce_retail_th"
+        aliases: ["บู๊ทส์", "boots"]
+        official_domains: ["store.boots.co.th"]
+      - id: "tiktok_shop"
+        name: "TikTok Shop Thailand"
+        vertical: "ecommerce_retail_th"
+        aliases: ["ติ๊กต๊อกช็อป", "tiktok shop"]
+        official_domains: ["tiktok.com"]
