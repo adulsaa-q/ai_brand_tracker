@@ -1,22 +1,23 @@
 from __future__ import annotations
-from typing import List, Optional, Dict, Any, Literal
-from pydantic import BaseModel, Field
-from datetime import datetime
+from typing import List, Dict, Any
+from pydantic import BaseModel, Field, ConfigDict
 
 class BrandEntity(BaseModel):
-    id: str = Field(..., description="Unique slug (e.g. shopee, konvy, kbank)")
-    name: str = Field(..., description="Display name in Thai / English")
-    vertical: str = Field(..., description="Industry vertical (beauty, e-commerce, banking, healthcare)")
-    aliases: List[str] = Field(default_factory=list, description="Common spelling variations / slang in Thai")
-    official_domains: List[str] = Field(default_factory=list, description="Official website domains for citation matching")
-    is_focal_brand: bool = Field(default=False, description="True if this is our primary brand being audited")
+    model_config = ConfigDict(frozen=True, extra="forbid", str_strip_whitespace=True)
+
+    id: str = Field(..., description="Unique slug identifier")
+    name: str = Field(..., description="Canonical display name")
+    vertical: str = Field(..., description="Industry vertical category")
+    aliases: List[str] = Field(default_factory=list, description="Thai slang, typos, aliases")
+    official_domains: List[str] = Field(default_factory=list, description="Official domain names")
+    is_focal_brand: bool = Field(default=False, description="Primary audited entity")
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
 class VerticalConfig(BaseModel):
-    vertical_id: str
-    name_th: str
-    name_en: str
-    focal_brands: List[str]
-    competitor_brands: List[str]
-    categories: List[str]
-    channels: List[str] = Field(default_factory=lambda: ["google_search", "tiktok", "shopee", "lazada", "pantip", "ai_chat"])
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    vertical_id: str = Field(...)
+    name_th: str = Field(...)
+    name_en: str = Field(...)
+    focal_brand_id: str = Field(...)
+    brands: List[BrandEntity] = Field(default_factory=list)
