@@ -43,11 +43,11 @@ class TavilyGroundingEngine(BaseObservationEngine):
                 "api_key": self.api_key,
                 "query": f"{query_text} ซื้อที่ไหน รีวิว",
                 "max_results": 5,
-                "search_depth": "advanced",
+                "search_depth": "basic",  # 1 credit vs 2 for "advanced"; keeps the free tier lasting
                 "include_domains": self._DOMAINS,
             },
             headers={"Content-Type": "application/json"},
-            timeout=15,
+            timeout=25,
             engine="tavily",
         )
         latency = int((time.time() - start_time) * 1000)

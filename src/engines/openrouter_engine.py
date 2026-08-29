@@ -42,7 +42,7 @@ class OpenRouterEngine(BaseObservationEngine):
             "Content-Type": "application/json",
         }
 
-        data, retries = request_json(_ENDPOINT, payload=payload, headers=headers, timeout=30, engine="openrouter")
+        data, retries = request_json(_ENDPOINT, payload=payload, headers=headers, timeout=60, engine="openrouter")
         latency = int((time.time() - start_time) * 1000)
 
         try:

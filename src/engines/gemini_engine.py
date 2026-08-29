@@ -104,13 +104,13 @@ def _extract_citations(response) -> list[CitationSource]:
         if not web:
             continue
         url = getattr(web, "uri", None)
-        domain = url.split("//")[-1].split("/")[0] if url else "web"
-        out.append(
-            CitationSource(
-                url=url,
-                domain=domain,
-                title=getattr(web, "title", "Web Source") or "Web Source",
-                source_type="news",
-            )
-        )
+        title = getattr(web, "title", "") or ""
+        host = url.split("//")[-1].split("/")[0].lower() if url else ""
+        # Gemini grounding returns Vertex redirect URLs, not the real source host.
+        # In that case the source site is carried in `web.title` (e.g. "pantip.com").
+        if not host or "vertexaisearch" in host or "grounding-api-redirect" in (url or ""):
+            domain = title.strip().lower() or "google-grounding"
+        else:
+            domain = host.removeprefix("www.")
+        out.append(CitationSource(url=url, domain=domain, title=title or "Web Source", source_type="news"))
     return out

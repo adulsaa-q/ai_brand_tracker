@@ -35,6 +35,46 @@ def test_list_models_rejects_other_providers():
     assert client.get("/api/v1/models?provider=openai").status_code == 400
 
 
+def test_free_model_list_excludes_non_chat_and_prefers_chat_families(monkeypatch):
+    fake = [
+        {"id": "acme/lyria-audio:free", "context_length": 999999, "pricing": {"prompt": "0", "completion": "0"}},
+        {"id": "acme/inkling-small:free", "context_length": 999999, "pricing": {"prompt": "0", "completion": "0"}},
+        {"id": "meta/llama-3.3-70b:free", "context_length": 128000, "pricing": {"prompt": "0", "completion": "0"}},
+        {"id": "obscure/model-x:free", "context_length": 200000, "pricing": {"prompt": "0", "completion": "0"}},
+    ]
+    monkeypatch.setattr(model_registry.OpenRouterModelRegistry, "fetch_available_models", lambda self: fake)
+    ids = [m["id"] for m in model_registry.OpenRouterModelRegistry().get_free_tier_candidates()]
+    assert "acme/lyria-audio:free" not in ids  # audio excluded
+    assert "acme/inkling-small:free" not in ids  # agentic-only excluded
+    assert ids[0] == "meta/llama-3.3-70b:free"  # chat family ranked above obscure/model-x
+
+
+def test_resolve_working_free_model_probes_and_caches(monkeypatch):
+    reg = model_registry.OpenRouterModelRegistry(api_key="k-probe-test")
+    reg._resolved.clear()
+    monkeypatch.setattr(
+        model_registry.OpenRouterModelRegistry,
+        "get_free_tier_candidates",
+        lambda self: [
+            {"id": "bad/one:free", "chat_family": True, "context_length": 1},
+            {"id": "good/two:free", "chat_family": True, "context_length": 1},
+        ],
+    )
+    probed: list[str] = []
+
+    def fake_probe(self, mid):
+        probed.append(mid)
+        return mid == "good/two:free"
+
+    monkeypatch.setattr(model_registry.OpenRouterModelRegistry, "_probe", fake_probe)
+    assert reg.resolve_working_free_model() == "good/two:free"
+    assert probed == ["bad/one:free", "good/two:free"]
+    # cached: no more probes
+    probed.clear()
+    assert reg.resolve_working_free_model() == "good/two:free"
+    assert probed == []
+
+
 def test_factory_threads_model_and_key():
     eng = EngineFactory.create("openrouter", model_name="free/big", api_key="sk-user-123")
     assert isinstance(eng, OpenRouterEngine)
