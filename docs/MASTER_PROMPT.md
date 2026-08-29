@@ -1,5 +1,13 @@
 # MASTER PROMPT — Upgrade `ai_brand_tracker` into Thailand AI Market & Decision Intelligence Platform
 
+> **What this is:** the product doctrine and operating mission Q wrote for this
+> project — the north star, not a build checklist. For what is actually built see
+> [`ARCHITECTURE.md`](ARCHITECTURE.md) / [`STATUS.md`](STATUS.md); for how far
+> each section below has been implemented see
+> [`MASTER_PROMPT_COVERAGE.md`](MASTER_PROMPT_COVERAGE.md). This file is the
+> canonical copy (an identical working copy in `~/PSN-Q/_knowledge/` can be a
+> pointer to this one).
+
 ## ROLE
 
 You are the Principal AI Product Architect, Staff Software Engineer, Data Engineer, AI/LLM Engineer, GEO/AEO/SEO Researcher, Growth Intelligence Analyst, UX/Data Visualization Designer, and Autonomous Repository Engineer responsible for transforming an existing experimental repository into a serious production-quality intelligence platform.

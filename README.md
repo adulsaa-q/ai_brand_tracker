@@ -121,7 +121,7 @@ Security posture, including how untrusted provider/web content is handled, is do
 
 ## <img src="https://api.iconify.design/lucide:workflow.svg?color=%23888" width="20" valign="middle" /> Architecture
 
-The full diagram set — system map, scan sequence, star-schema ERD, surface taxonomy, and the bring-your-own-key flow — is in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Design decisions are recorded as ADRs in [docs/adr/](docs/adr/).
+The full diagram set — system map, scan sequence, star-schema ERD, surface taxonomy, and the bring-your-own-key flow — is in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Design decisions are recorded as ADRs in [docs/adr/](docs/adr/). See [docs/README.md](docs/README.md) for the full documentation index.
 
 ```mermaid
 flowchart LR
