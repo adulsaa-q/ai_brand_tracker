@@ -91,6 +91,12 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
 
 with tab1:
     st.subheader("📈 AI Share of Voice (SoV) & Net Recommendation Score (NRS)")
+    _primary = metrics.get("primary_surface")
+    if _primary:
+        st.caption(
+            f"Headline numbers = surface `{_primary}` · surfaces in this run: "
+            f"{', '.join(metrics.get('surfaces_present', [])) or 'n/a'}"
+        )
     if brands:
         df_brands = pd.DataFrame(brands)
         top_brand = brands[0]

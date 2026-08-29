@@ -58,6 +58,8 @@ class DuckDBStore:
                     answer_surface VARCHAR NOT NULL,
                     grounding_enabled BOOLEAN,
                     parse_status VARCHAR,
+                    prompt_version VARCHAR,
+                    retry_count INTEGER DEFAULT 0,
                     latency_ms INTEGER,
                     token_count INTEGER,
                     response_text VARCHAR
@@ -129,8 +131,9 @@ class DuckDBStore:
                 """
                 INSERT OR REPLACE INTO fact_observation
                     (observation_id, run_id, timestamp, query_id, vertical, provider, model_name,
-                     answer_surface, grounding_enabled, parse_status, latency_ms, token_count, response_text)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     answer_surface, grounding_enabled, parse_status, prompt_version, retry_count,
+                     latency_ms, token_count, response_text)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 [
                     obs["observation_id"],
@@ -143,6 +146,8 @@ class DuckDBStore:
                     obs["answer_surface"],
                     obs.get("grounding_enabled"),
                     obs.get("parse_status"),
+                    obs.get("prompt_version"),
+                    obs.get("retry_count", 0),
                     obs.get("response_latency_ms"),
                     obs.get("token_count"),
                     obs.get("response_raw_text"),

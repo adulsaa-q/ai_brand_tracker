@@ -68,6 +68,8 @@ class RawObservation(BaseModel):
     answer_surface: AnswerSurface
     grounding_enabled: bool = True
     run_id: str | None = None
+    prompt_version: str | None = None
+    retry_count: int = 0
 
     # --- payload ---
     response_raw_text: str

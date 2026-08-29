@@ -19,6 +19,7 @@ from src.analytics import (
     MarketMetricsEngine,
     OpportunityFinder,
 )
+from src.analytics.repository import AnalyticsRepository
 from src.brands import resolve_focal_brand
 from src.exceptions import EngineError
 from src.ids import new_run_id
@@ -165,11 +166,19 @@ def run_intelligence_pipeline(
     if stats["persistence_failures"] > 0:
         logger.error("Run %s had %d persistence failures", run_id, stats["persistence_failures"])
 
-    metrics = MarketMetricsEngine.calculate_share_of_voice(observations)
-    opportunities = OpportunityFinder.identify_gaps(focal, metrics, observations)
-    citations = CitationInfluenceAnalyzer.analyze_influence(observations)
-    claims = ClaimIntelligenceEngine.audit_claims(observations)
-    lag = AIInformationLagTracker.measure_knowledge_freshness(observations)
+    # Canonical analytics input: read back what was actually persisted to DuckDB
+    # (not the in-memory list). See docs/adr/0001.
+    persisted = AnalyticsRepository(duckdb_store).load_observations(run_id)
+    logger.info("Reloaded %d observations from DuckDB for analytics", len(persisted))
+    stats["persisted_observations_reloaded"] = len(persisted)
+    stats["retries_total"] = sum(o.get("retry_count", 0) for o in observations)
+    stats["surfaces"] = sorted({o.get("answer_surface", "unknown") for o in persisted})
+
+    metrics = MarketMetricsEngine.build_report(persisted)
+    opportunities = OpportunityFinder.identify_gaps(focal, metrics, persisted)
+    citations = CitationInfluenceAnalyzer.analyze_influence(persisted)
+    claims = ClaimIntelligenceEngine.audit_claims(persisted)
+    lag = AIInformationLagTracker.measure_knowledge_freshness(persisted)
 
     result_data = {
         "run_id": run_id,
@@ -186,7 +195,7 @@ def run_intelligence_pipeline(
         "citations_analysis": citations,
         "claims_audit": claims,
         "information_lag": lag,
-        "observations": observations,
+        "observations": persisted,
     }
 
     os.makedirs(output_dir, exist_ok=True)

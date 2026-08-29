@@ -1,13 +1,11 @@
 # src/engines/serper_engine.py
-import json
 import os
 import time
-import urllib.error
-import urllib.request
 from datetime import datetime
 
+from src.engines._http import request_json
 from src.engines.base import BaseObservationEngine
-from src.exceptions import EngineError, RateLimitExceededError
+from src.exceptions import EngineError
 from src.ids import new_observation_id
 from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
 
@@ -15,8 +13,8 @@ from src.models.observations import BrandMentionDetail, CitationSource, RawObser
 class SerperGoogleEngine(BaseObservationEngine):
     """Google organic SERP ranking via Serper.dev.
 
-    This is an ``organic_serp`` surface: ``rank`` is a search-result position,
-    NOT a generative recommendation rank. Analytics must not average it against
+    ``organic_serp`` surface: ``rank`` is a search-result position, NOT a
+    generative recommendation rank. Analytics must not average it against
     generative-answer ranks.
     """
 
@@ -30,21 +28,13 @@ class SerperGoogleEngine(BaseObservationEngine):
             raise EngineError("Serper engine requires SERPER_API_KEY", {"engine": "serper"})
 
         start_time = time.time()
-        req = urllib.request.Request(
+        data, retries = request_json(
             self.ENDPOINT,
+            payload={"q": query_text, "gl": "th", "hl": "th", "num": 10},
             headers={"X-API-KEY": self.api_key, "Content-Type": "application/json"},
-            data=json.dumps({"q": query_text, "gl": "th", "hl": "th", "num": 10}).encode("utf-8"),
+            timeout=15,
+            engine="serper",
         )
-        try:
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            if exc.code == 429:
-                raise RateLimitExceededError("Serper rate limit", {"engine": "serper"}) from exc
-            raise EngineError(f"Serper HTTP {exc.code}", {"engine": "serper", "query_id": query_id}) from exc
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-            raise EngineError(f"Serper call failed: {exc}", {"engine": "serper", "query_id": query_id}) from exc
-
         latency = int((time.time() - start_time) * 1000)
         organic_results = data.get("organic", [])
 
@@ -68,19 +58,17 @@ class SerperGoogleEngine(BaseObservationEngine):
                 if brand.lower() in full_text and brand not in brand_positions:
                     brand_positions[brand] = idx
 
-        mentions = []
-        for brand in target_brands:
-            rank = brand_positions.get(brand)
-            mentions.append(
-                BrandMentionDetail(
-                    brand_id=brand.lower().replace(" ", "_"),
-                    brand_name=brand,
-                    mentioned=rank is not None,
-                    rank=rank,
-                    sentiment="neutral",
-                    recommendation_intent="neutral_mention",
-                )
+        mentions = [
+            BrandMentionDetail(
+                brand_id=brand.lower().replace(" ", "_"),
+                brand_name=brand,
+                mentioned=brand in brand_positions,
+                rank=brand_positions.get(brand),
+                sentiment="neutral",
+                recommendation_intent="neutral_mention",
             )
+            for brand in target_brands
+        ]
 
         return RawObservation(
             observation_id=new_observation_id("serper"),
@@ -91,7 +79,8 @@ class SerperGoogleEngine(BaseObservationEngine):
             model_name=self.model_name,
             answer_surface="organic_serp",
             grounding_enabled=True,
-            response_raw_text=(f"Google SERP for Thai query: {query_text} ({len(organic_results)} organic results)"),
+            retry_count=retries,
+            response_raw_text=f"Google SERP for: {query_text} ({len(organic_results)} organic results)",
             response_latency_ms=latency,
             parse_status="not_applicable",
             brand_mentions=mentions,
