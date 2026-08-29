@@ -129,6 +129,12 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#0F1F38] selection:text-[#FAF9F8]">
 
+  <!-- Phase 0 remediation: this page still renders bundled sample datasets and
+       is NOT yet wired to the FastAPI backend. Backend integration is Phase 4. -->
+  <div id="demoDataBanner" class="w-full bg-[#6B2326] text-[#FAF9F8] text-center text-[11px] font-mono uppercase tracking-wider py-2 px-4">
+    Demo data — figures below are bundled samples, not live AI observations. Backend wiring in progress.
+  </div>
+
   <!-- ======================================================
        EDITORIAL METADATA MASTHEAD & TOP CONTROLS
   ====================================================== -->
@@ -745,7 +751,7 @@
         </div>
 
         <div class="pt-2 text-[11px] text-ink-muted italic flex items-center justify-between">
-          <span>Persisting to DuckDB Star Schema Lakehouse.</span>
+          <span>Demo animation only — not persisting.</span>
           <span class="font-mono text-[10px] text-midnight font-bold">PORT: 8000</span>
         </div>
       </div>
@@ -1418,7 +1424,7 @@
           document.getElementById("scanStatusBadge").innerText = "COMPLETED";
           setTimeout(() => {
             closeModal("modalScanProgress");
-            alert(`AI Market Scan completed. Persisted ${count} observations to DuckDB.`);
+            alert(`DEMO ONLY: no scan was run and nothing was persisted. This button is not yet connected to the backend (POST /api/v1/scan). Showing bundled sample data.`);
             renderAll();
           }, 800);
         }
@@ -1444,7 +1450,7 @@
 
     function refreshData() {
       renderAll();
-      alert("Refreshed analytical data from DuckDB Star Schema Lakehouse.");
+      alert("DEMO ONLY: re-rendered bundled sample data. Not connected to the backend yet.");
     }
 
     document.addEventListener("DOMContentLoaded", () => {

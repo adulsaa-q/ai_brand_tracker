@@ -3,12 +3,13 @@ from __future__ import annotations
 
 import csv
 import io
+import json
 import os
 import sys
 import threading
 import time
 import uuid
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 from fastapi import BackgroundTasks, FastAPI, HTTPException
@@ -24,21 +25,26 @@ from src.runner import run_intelligence_pipeline
 
 logger = get_logger("api")
 
+# Configurable so tests never mutate the real config file.
+ENTITIES_PATH = os.getenv("ENTITIES_PATH", "config/entities.yaml")
+DATA_DIR = os.getenv("DATA_DIR", "data")
+MAX_TASK_HISTORY = 100
+VALID_ENGINES = ("mock", "gemini", "openrouter", "tavily", "serper")
+
 app = FastAPI(
     title="Thailand AI Market & Decision Intelligence API",
-    description="Universal Production-Grade AI Share of Voice & Market Intelligence Platform",
+    description="AI Share of Voice & Market Intelligence Platform",
     version="5.0.0",
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=["*"],  # Phase 3: tighten per-environment
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# In-Memory Background Tasks State Store
 tasks_state: dict[str, dict[str, Any]] = {}
 tasks_lock = threading.Lock()
 
@@ -52,34 +58,45 @@ class BrandInput(BaseModel):
 
 
 class VerticalCreateRequest(BaseModel):
-    vertical_id: str
-    name_th: str
-    name_en: str
-    focal_brand: str
+    vertical_id: str = Field(min_length=2, max_length=64, pattern=r"^[a-z0-9_]+$")
+    name_th: str = Field(min_length=1, max_length=200)
+    name_en: str = Field(min_length=1, max_length=200)
+    focal_brand: str = Field(min_length=1, max_length=120)
     categories: list[str] = Field(default_factory=list)
-    brands: list[BrandInput] = Field(default_factory=list)
+    brands: list[BrandInput] = Field(default_factory=list, max_length=40)
 
 
 class ScanTriggerRequest(BaseModel):
-    vertical_id: str = "ecommerce_retail_th"
-    engine_type: str = "mock"  # "mock" | "gemini" | "tavily" | "openrouter"
-    count: int = 30
+    vertical_id: str = Field("ecommerce_retail_th", min_length=2, max_length=64)
+    engine_type: Literal["mock", "gemini", "openrouter", "tavily", "serper"] = "mock"
+    count: int = Field(30, ge=1, le=200)
     include_control_set: bool = True
-    seed: int = 42
+    seed: int = Field(42, ge=0, le=2**31 - 1)
 
 
 def _get_entities_config() -> dict[str, Any]:
-    entities_path = "config/entities.yaml"
-    if os.path.exists(entities_path):
-        with open(entities_path, encoding="utf-8") as f:
+    if os.path.exists(ENTITIES_PATH):
+        with open(ENTITIES_PATH, encoding="utf-8") as f:
             return yaml.safe_load(f) or {"verticals": []}
     return {"verticals": []}
 
 
 def _save_entities_config(data: dict[str, Any]):
-    os.makedirs("config", exist_ok=True)
-    with open("config/entities.yaml", "w", encoding="utf-8") as f:
+    parent = os.path.dirname(ENTITIES_PATH) or "."
+    os.makedirs(parent, exist_ok=True)
+    with open(ENTITIES_PATH, "w", encoding="utf-8") as f:
         yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+
+
+def _prune_tasks_locked() -> None:
+    if len(tasks_state) <= MAX_TASK_HISTORY:
+        return
+    finished = sorted(
+        (t for t in tasks_state.values() if t.get("status") in ("COMPLETED", "FAILED")),
+        key=lambda t: t.get("finished_at", 0),
+    )
+    for t in finished[: len(tasks_state) - MAX_TASK_HISTORY]:
+        tasks_state.pop(t["task_id"], None)
 
 
 def _run_scan_background_task(
@@ -91,10 +108,12 @@ def _run_scan_background_task(
 
     def progress_callback(current: int, total: int, query_text: str):
         with tasks_lock:
-            tasks_state[task_id]["completed"] = current
-            tasks_state[task_id]["total"] = total
-            tasks_state[task_id]["progress_pct"] = round((current / total) * 100, 1)
-            tasks_state[task_id]["current_query"] = query_text
+            tasks_state[task_id].update(
+                completed=current,
+                total=total,
+                progress_pct=round((current / total) * 100, 1) if total else 0.0,
+                current_query=query_text,
+            )
 
     try:
         result = run_intelligence_pipeline(
@@ -104,25 +123,28 @@ def _run_scan_background_task(
             engine_type=engine_type,
             include_control=include_control,
             progress_callback=progress_callback,
+            entities_path=ENTITIES_PATH,
+            output_dir=DATA_DIR,
         )
         with tasks_lock:
-            tasks_state[task_id]["status"] = "COMPLETED"
-            tasks_state[task_id]["progress_pct"] = 100.0
-            tasks_state[task_id]["completed"] = count
-            tasks_state[task_id]["total"] = count
-            tasks_state[task_id]["result"] = result
-            tasks_state[task_id]["finished_at"] = time.time()
-    except Exception as e:
-        logger.error(f"Background task {task_id} failed: {e}")
+            tasks_state[task_id].update(
+                status="COMPLETED",
+                progress_pct=100.0,
+                run_id=result.get("run_id"),
+                data_mode=result.get("data_mode"),
+                run_stats=result.get("run_stats"),
+                result=result,
+                finished_at=time.time(),
+            )
+            _prune_tasks_locked()
+    except Exception as exc:
+        logger.exception("Background task %s failed", task_id)
         with tasks_lock:
-            tasks_state[task_id]["status"] = "FAILED"
-            tasks_state[task_id]["error"] = str(e)
-            tasks_state[task_id]["finished_at"] = time.time()
+            tasks_state[task_id].update(status="FAILED", error=str(exc), finished_at=time.time())
+            _prune_tasks_locked()
 
 
-# ==========================================
-# REST ENDPOINTS
-# ==========================================
+# ---------------------------------------------------------------- REST
 
 
 @app.get("/api/v1/health")
@@ -137,37 +159,37 @@ def get_health():
 
 @app.get("/api/v1/verticals")
 def get_verticals():
-    config = _get_entities_config()
-    return config.get("verticals", [])
+    return _get_entities_config().get("verticals", [])
 
 
 @app.post("/api/v1/verticals")
 def create_vertical(req: VerticalCreateRequest):
     config = _get_entities_config()
-    verticals = config.get("verticals", [])
-
-    # Check if vertical already exists
+    verticals = config.setdefault("verticals", [])
+    payload = req.model_dump()
     for idx, v in enumerate(verticals):
         if v["vertical_id"] == req.vertical_id:
-            verticals[idx] = req.model_dump()
+            verticals[idx] = payload
             _save_entities_config(config)
-            return {"status": "UPDATED", "vertical": req.model_dump()}
-
-    new_vertical = req.model_dump()
-    verticals.append(new_vertical)
-    config["verticals"] = verticals
+            return {"status": "UPDATED", "vertical": payload}
+    verticals.append(payload)
     _save_entities_config(config)
-    return {"status": "CREATED", "vertical": new_vertical}
+    return {"status": "CREATED", "vertical": payload}
 
 
 @app.post("/api/v1/scan")
 def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
+    known = {v["vertical_id"] for v in _get_entities_config().get("verticals", [])}
+    if req.vertical_id not in known:
+        raise HTTPException(status_code=404, detail=f"Unknown vertical: {req.vertical_id}")
+
     task_id = f"scan_{uuid.uuid4().hex[:8]}"
     with tasks_lock:
         tasks_state[task_id] = {
             "task_id": task_id,
             "vertical_id": req.vertical_id,
             "engine_type": req.engine_type,
+            "data_mode": "synthetic" if req.engine_type == "mock" else "live",
             "status": "QUEUED",
             "progress_pct": 0.0,
             "completed": 0,
@@ -177,7 +199,6 @@ def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
             "result": None,
             "error": None,
         }
-
     background_tasks.add_task(
         _run_scan_background_task,
         task_id=task_id,
@@ -187,8 +208,8 @@ def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
         seed=req.seed,
         include_control=req.include_control_set,
     )
-
-    return {"task_id": task_id, "status": "QUEUED", "vertical_id": req.vertical_id}
+    data_mode = "synthetic" if req.engine_type == "mock" else "live"
+    return {"task_id": task_id, "status": "QUEUED", "vertical_id": req.vertical_id, "data_mode": data_mode}
 
 
 @app.get("/api/v1/scan/{task_id}/progress")
@@ -201,62 +222,42 @@ def get_scan_progress(task_id: str):
 
 @app.get("/api/v1/metrics/{vertical_id}")
 def get_vertical_metrics(vertical_id: str):
-    summary_path = f"data/latest_run_summary_{vertical_id}.json"
-    if os.path.exists(summary_path):
-        import json
-
-        with open(summary_path, encoding="utf-8") as f:
+    path = os.path.join(DATA_DIR, f"latest_run_summary_{vertical_id}.json")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
-
-    # Fallback to general summary if available
-    general_summary = "data/latest_run_summary.json"
-    if os.path.exists(general_summary):
-        import json
-
-        with open(general_summary, encoding="utf-8") as f:
-            data = json.load(f)
-            if data.get("vertical_id") == vertical_id:
-                return data
-
-    # Return empty structured schema
     return {
         "vertical_id": vertical_id,
+        "data_mode": "none",
+        "status": "PENDING_SCAN",
         "metrics": {"total_queries": 0, "brands": []},
         "opportunities": [],
-        "citations_analysis": {"total_citations": 0, "domains": []},
+        "citations_analysis": {"total_citations": 0, "domain_rankings": []},
         "claims_audit": [],
-        "information_lag": {"freshness_status": "PENDING_SCAN"},
+        "information_lag": {"grounded_rate_pct": 0.0},
     }
 
 
 @app.get("/api/v1/export/{vertical_id}")
 def export_vertical_data(vertical_id: str, format: str = "csv"):
-    summary_path = f"data/latest_run_summary_{vertical_id}.json"
-    if not os.path.exists(summary_path):
-        summary_path = "data/latest_run_summary.json"
-
-    if not os.path.exists(summary_path):
-        raise HTTPException(status_code=404, detail="No analytical data found for export.")
-
-    import json
-
-    with open(summary_path, encoding="utf-8") as f:
+    path = os.path.join(DATA_DIR, f"latest_run_summary_{vertical_id}.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="No analytical data found for this vertical.")
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
     if format == "json":
         return JSONResponse(content=data)
 
-    # Export CSV format
     output = io.StringIO()
     writer = csv.writer(output)
     writer.writerow(
         ["Rank", "Brand", "Share_of_Voice_Pct", "Average_Rank", "Net_Sentiment_Score", "Net_Recommendation_Score"]
     )
-
-    for idx, b in enumerate(data.get("metrics", {}).get("brands", [])):
+    for idx, b in enumerate(data.get("metrics", {}).get("brands", []), start=1):
         writer.writerow(
             [
-                idx + 1,
+                idx,
                 b.get("brand"),
                 b.get("share_of_voice_pct"),
                 b.get("average_rank"),
@@ -264,7 +265,6 @@ def export_vertical_data(vertical_id: str, format: str = "csv"):
                 b.get("net_recommendation_score"),
             ]
         )
-
     output.seek(0)
     return Response(
         content=output.getvalue(),
@@ -273,9 +273,7 @@ def export_vertical_data(vertical_id: str, format: str = "csv"):
     )
 
 
-# ==========================================
-# STATIC WEB DASHBOARD MOUNT
-# ==========================================
+# ---------------------------------------------------------------- static web
 web_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "dashboard", "web"))
 if os.path.exists(web_dir):
     app.mount("/static", StaticFiles(directory=web_dir), name="static")

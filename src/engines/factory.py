@@ -19,7 +19,7 @@ class EngineFactory:
         if engine_type == "gemini":
             return GeminiObservationEngine(model_name=model_name or "gemini-2.5-flash")
         elif engine_type == "openrouter":
-            return OpenRouterEngine(model_name=model_name or "nvidia/nemotron-3.5-lightning:free")
+            return OpenRouterEngine(model_name=model_name or "deepseek/deepseek-chat:free")
         elif engine_type == "tavily":
             return TavilyGroundingEngine(model_name=model_name or "tavily-search-v1")
         elif engine_type == "serper":

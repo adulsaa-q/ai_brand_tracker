@@ -54,9 +54,6 @@ def main():
     # dashboard
     subparsers.add_parser("dashboard", help="Launch Executive Streamlit Dashboard")
 
-    # web
-    subparsers.add_parser("web", help="Launch Executive Web Dashboard")
-
     args = parser.parse_args()
 
     if args.command == "serve":
@@ -97,14 +94,8 @@ def main():
     elif args.command == "dashboard":
         import subprocess
 
-        print("🚀 Launching Streamlit Executive Dashboard...")
+        print("Launching Streamlit dashboard...")
         subprocess.run(["streamlit", "run", "dashboard/app.py"])
-
-    elif args.command == "web":
-        import uvicorn
-
-        print("🌐 Modern Executive Web Command Center (Style Q) running at http://127.0.0.1:8000")
-        uvicorn.run("src.api:app", host="127.0.0.1", port=8000, reload=False)
 
     else:
         parser.print_help()

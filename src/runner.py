@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+import tempfile
 from typing import Any
 
 import yaml
@@ -18,12 +19,30 @@ from src.analytics import (
     MarketMetricsEngine,
     OpportunityFinder,
 )
+from src.brands import resolve_focal_brand
+from src.exceptions import EngineError
+from src.ids import new_run_id
 from src.logger import get_logger
-from src.storage import DuckDBStore, SQLiteStore
+from src.storage import DuckDBStore
 from src.universe import QueryUniverseGenerator
 from src.universe.temporal_events import ThailandTemporalEngine
 
 logger = get_logger("runner")
+
+ENTITIES_PATH = os.getenv("ENTITIES_PATH", "config/entities.yaml")
+
+
+def _atomic_write_json(path: str, payload: dict) -> None:
+    parent = os.path.dirname(path) or "."
+    os.makedirs(parent, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=parent, suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
 
 
 def run_intelligence_pipeline(
@@ -31,115 +50,137 @@ def run_intelligence_pipeline(
     count: int = 30,
     seed: int = 42,
     engine_type: str = "mock",
-    db_path: str = "data/intelligence.db",
-    duckdb_path: str = "data/intelligence.duckdb",
+    duckdb_path: str | None = None,
     include_control: bool = True,
     progress_callback: Any = None,
+    entities_path: str | None = None,
+    output_dir: str = "data",
 ) -> dict[str, Any]:
-    logger.info(
-        f"Initializing AI Market Intelligence Pipeline [Vertical: {vertical_id}, Engine: {engine_type.upper()}]..."
-    )
+    run_id = new_run_id()
+    entities_path = entities_path or ENTITIES_PATH
+    duckdb_path = duckdb_path or os.path.join(output_dir, "intelligence.duckdb")
+    logger.info("Starting run %s [vertical=%s engine=%s count=%s]", run_id, vertical_id, engine_type.upper(), count)
 
-    sqlite_store = SQLiteStore(db_path=db_path)
     duckdb_store = DuckDBStore(db_path=duckdb_path)
 
-    with open("config/entities.yaml", encoding="utf-8") as f:
-        entities_data = yaml.safe_load(f)
+    with open(entities_path, encoding="utf-8") as f:
+        entities_data = yaml.safe_load(f) or {"verticals": []}
 
-    target_vertical = None
-    for v in entities_data.get("verticals", []):
-        if v["vertical_id"] == vertical_id:
-            target_vertical = v
-            break
-
+    target_vertical = next((v for v in entities_data.get("verticals", []) if v["vertical_id"] == vertical_id), None)
     if not target_vertical:
+        if not entities_data.get("verticals"):
+            raise ValueError(f"No verticals defined in {entities_path}")
         target_vertical = entities_data["verticals"][0]
         vertical_id = target_vertical["vertical_id"]
+        logger.warning("Vertical not found; falling back to %s", vertical_id)
 
     brands = [b["name"] for b in target_vertical.get("brands", [])]
-    focal_brand = target_vertical.get("focal_brand", brands[0] if brands else "focal")
+    focal = resolve_focal_brand(target_vertical)
+    logger.info("Focal brand resolved: %s (id=%s)", focal.name, focal.brand_id)
 
-    # Ingest Brands into Lakehouse Dimensions
     for b in target_vertical.get("brands", []):
         duckdb_store.insert_brand(
             brand_id=b["id"],
             name=b["name"],
             vertical=vertical_id,
-            is_focal=b.get("is_focal_brand", False),
-            aliases=b.get("aliases", []),
-            domains=b.get("official_domains", []),
-        )
-        sqlite_store.insert_brand(
-            brand_id=b["id"],
-            name=b["name"],
-            vertical=vertical_id,
-            is_focal=b.get("is_focal_brand", False),
+            is_focal=focal.matches(b.get("id", "")) or focal.matches(b.get("name", "")),
             aliases=b.get("aliases", []),
             domains=b.get("official_domains", []),
         )
 
-    active_events = ThailandTemporalEngine.get_active_events()
-    logger.info(f"Active Thailand Temporal Contexts: {[e['name_th'] for e in active_events]}")
+    active_events = [
+        {k: v for k, v in e.items() if isinstance(v, (str, int, float, list))}
+        for e in ThailandTemporalEngine.get_active_events()
+    ]
+    logger.info("Active Thailand temporal contexts: %s", [e.get("name_th") for e in active_events])
 
-    generator = QueryUniverseGenerator()
+    generator = QueryUniverseGenerator(entities_path=entities_path)
     queries = generator.generate_queries(
         vertical_id=vertical_id, count=count, seed=seed, include_control=include_control
     )
+    for q in queries:
+        q.setdefault("vertical_id", vertical_id)
+        duckdb_store.insert_query(q)
     logger.info(
-        f"Generated {len(queries)} Thai Consumer Queries (Control: {sum(1 for q in queries if q.get('is_control_set'))}, Exploratory: {sum(1 for q in queries if not q.get('is_control_set'))})."
+        "Generated %d queries (control=%d exploratory=%d)",
+        len(queries),
+        sum(1 for q in queries if q.get("is_control_set")),
+        sum(1 for q in queries if not q.get("is_control_set")),
     )
 
     from src.engines import EngineFactory
 
     engine = EngineFactory.create(engine_type=engine_type)
 
-    observations = []
+    stats = {
+        "requested_observations": len(queries),
+        "successful_observations": 0,
+        "persistence_failures": 0,
+        "provider_errors": 0,
+        "parse_failures": 0,
+        "no_structured_output": 0,
+    }
+    observations: list[dict[str, Any]] = []
     total_q = len(queries)
-    logger.info(f"Executing AI Observations with [{engine_type.upper()}]...")
+
     for idx, q in enumerate(queries):
         if progress_callback:
             progress_callback(idx + 1, total_q, q["text_th"])
 
-        obs = engine.observe(query_id=q["query_id"], query_text=q["text_th"], target_brands=brands)
+        try:
+            obs = engine.observe(query_id=q["query_id"], query_text=q["text_th"], target_brands=brands)
+        except EngineError as exc:
+            stats["provider_errors"] += 1
+            logger.error("Provider error on %s: %s", q["query_id"], exc, exc_info=False)
+            continue
+
         obs_dict = obs.model_dump()
+        obs_dict["run_id"] = run_id
         obs_dict["category"] = q.get("category", "General")
         obs_dict["is_control_set"] = q.get("is_control_set", False)
         obs_dict["vertical_id"] = vertical_id
-        observations.append(obs_dict)
+
+        if obs_dict.get("parse_status") == "parse_error":
+            stats["parse_failures"] += 1
+        elif obs_dict.get("parse_status") == "no_structured_output":
+            stats["no_structured_output"] += 1
 
         try:
             duckdb_store.insert_observation(obs_dict)
-            sqlite_store.insert_raw_observation(
-                query_id=obs_dict["query_id"],
-                query_text=obs_dict["query_text"],
-                engine_provider=obs_dict["engine_provider"],
-                model_name=obs_dict["model_name"],
-                raw_text=obs_dict.get("response_raw_text", ""),
-                latency_ms=obs_dict.get("response_latency_ms", 0),
-                mentions=obs_dict.get("brand_mentions", []),
-                citations=obs_dict.get("citations", []),
-            )
-        except Exception as e:
-            logger.warning(f"Failed to persist observation {obs_dict.get('observation_id')}: {e}")
+        except Exception:
+            stats["persistence_failures"] += 1
+            logger.exception("Persistence failure for observation %s", obs_dict.get("observation_id"))
+            continue
 
-    # 1. Share of Voice & Ranking
+        observations.append(obs_dict)
+        stats["successful_observations"] += 1
+
+    logger.info("Run %s stats: %s", run_id, stats)
+
+    if stats["successful_observations"] == 0:
+        raise RuntimeError(
+            f"Run {run_id} produced 0 persisted observations "
+            f"(provider_errors={stats['provider_errors']}, persistence_failures={stats['persistence_failures']})"
+        )
+    if stats["persistence_failures"] > 0:
+        logger.error("Run %s had %d persistence failures", run_id, stats["persistence_failures"])
+
     metrics = MarketMetricsEngine.calculate_share_of_voice(observations)
-    # 2. Competitor Gaps & Opportunities
-    opportunities = OpportunityFinder.identify_gaps(focal_brand, metrics, observations)
-    # 3. Citation Graph
+    opportunities = OpportunityFinder.identify_gaps(focal, metrics, observations)
     citations = CitationInfluenceAnalyzer.analyze_influence(observations)
-    # 4. Claim Intelligence
     claims = ClaimIntelligenceEngine.audit_claims(observations)
-    # 5. AI Information Freshness & Lag
     lag = AIInformationLagTracker.measure_knowledge_freshness(observations)
 
-    os.makedirs("data", exist_ok=True)
-    summary_path = f"data/latest_run_summary_{vertical_id}.json"
     result_data = {
+        "run_id": run_id,
         "vertical_id": vertical_id,
         "vertical_name": target_vertical.get("name_th", ""),
-        "total_queries": len(queries),
+        "focal_brand": {"id": focal.brand_id, "name": focal.name},
         "engine_type": engine_type,
+        "data_mode": "synthetic" if engine_type == "mock" else "live",
+        "total_queries": len(queries),
+        "run_stats": stats,
+        "active_events": active_events,
         "metrics": metrics,
         "opportunities": opportunities,
         "citations_analysis": citations,
@@ -148,14 +189,12 @@ def run_intelligence_pipeline(
         "observations": observations,
     }
 
-    with open(summary_path, "w", encoding="utf-8") as f:
-        json.dump(result_data, f, ensure_ascii=False, indent=2)
+    os.makedirs(output_dir, exist_ok=True)
+    _atomic_write_json(os.path.join(output_dir, f"run_{run_id}.json"), result_data)
+    _atomic_write_json(os.path.join(output_dir, f"latest_run_summary_{vertical_id}.json"), result_data)
+    _atomic_write_json(os.path.join(output_dir, "latest_run_summary.json"), result_data)
 
-    # Also update general latest_run_summary.json
-    with open("data/latest_run_summary.json", "w", encoding="utf-8") as f:
-        json.dump(result_data, f, ensure_ascii=False, indent=2)
-
-    logger.info(f"Pipeline completed successfully for {vertical_id}. Summary persisted to {summary_path}")
+    logger.info("Run %s complete for %s", run_id, vertical_id)
     return result_data
 
 
