@@ -5,17 +5,19 @@ collector.py — รัน: python collector.py
 quota หมดแล้ว? → ดูผลใน analysis.ipynb ได้เลย ไม่ต้องรันใหม่
 """
 
-from google import genai
-from google.genai import types
-from dotenv import load_dotenv
-from datetime import datetime
-from config import MODEL_NAME, BRANDS, PROMPTS
-from tqdm import tqdm
-import pandas as pd
 import logging
+import os
 import sqlite3
 import time
-import os
+from datetime import datetime
+
+import pandas as pd
+from dotenv import load_dotenv
+from google import genai
+from google.genai import types
+from tqdm import tqdm
+
+from config import BRANDS, MODEL_NAME, PROMPTS
 
 logging.basicConfig(
     level=logging.INFO,

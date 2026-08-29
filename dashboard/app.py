@@ -1,9 +1,10 @@
-import streamlit as st
-import pandas as pd
 import json
 import os
 import sys
+
+import pandas as pd
 import plotly.express as px
+import streamlit as st
 
 # Ensure src path is accessible
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -26,7 +27,7 @@ if not os.path.exists(summary_file):
         st.rerun()
     st.stop()
 
-with open(summary_file, "r", encoding="utf-8") as f:
+with open(summary_file, encoding="utf-8") as f:
     data = json.load(f)
 
 metrics = data.get("metrics", {})

@@ -1,9 +1,11 @@
 # src/universe/generator.py
-import random
-import yaml
 import os
-from typing import List, Dict, Any, Optional
+import random
 from datetime import datetime
+from typing import Any
+
+import yaml
+
 
 class QueryUniverseGenerator:
     def __init__(
@@ -12,15 +14,15 @@ class QueryUniverseGenerator:
         personas_path: str = "config/thai_personas.yaml",
         control_set_path: str = "config/control_benchmark_set.yaml"
     ):
-        with open(entities_path, "r", encoding="utf-8") as f:
+        with open(entities_path, encoding="utf-8") as f:
             self.entities = yaml.safe_load(f)
-        with open(personas_path, "r", encoding="utf-8") as f:
+        with open(personas_path, encoding="utf-8") as f:
             self.personas = yaml.safe_load(f).get("personas", [])
 
         self.control_set_path = control_set_path
         self.control_queries = []
         if os.path.exists(control_set_path):
-            with open(control_set_path, "r", encoding="utf-8") as f:
+            with open(control_set_path, encoding="utf-8") as f:
                 self.control_queries = yaml.safe_load(f).get("queries", [])
 
         # Query intent templates with Thai language slots
@@ -44,7 +46,7 @@ class QueryUniverseGenerator:
 
         self.budgets = ["ประหยัด", "ไม่เกิน 500 บาท", "ไม่เกิน 1,500 บาท", "ไม่อั้น/พรีเมียม"]
 
-    def get_control_benchmark_set(self) -> List[Dict[str, Any]]:
+    def get_control_benchmark_set(self) -> list[dict[str, Any]]:
         """Returns the 30 invariant benchmark queries for longitudinal stability."""
         return [
             {
@@ -59,7 +61,7 @@ class QueryUniverseGenerator:
             for i, q in enumerate(self.control_queries)
         ]
 
-    def generate_exploratory_queries(self, count: int = 10, seed: int = 42) -> List[Dict[str, Any]]:
+    def generate_exploratory_queries(self, count: int = 10, seed: int = 42) -> list[dict[str, Any]]:
         """Generates randomized queries with seeded reproducibility across Persona x Intent."""
         rng = random.Random(seed)
         queries = []
@@ -94,7 +96,7 @@ class QueryUniverseGenerator:
 
         return queries
 
-    def generate_queries(self, count: int = 20, seed: int = 42, include_control: bool = False) -> List[Dict[str, Any]]:
+    def generate_queries(self, count: int = 20, seed: int = 42, include_control: bool = False) -> list[dict[str, Any]]:
         if include_control:
             ctrl = self.get_control_benchmark_set()
             if count <= len(ctrl):

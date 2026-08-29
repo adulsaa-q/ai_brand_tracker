@@ -1,7 +1,8 @@
-import sqlite3
-import os
 import json
-from typing import List, Dict, Any, Optional
+import os
+import sqlite3
+from typing import Any
+
 
 class SQLiteStore:
     def __init__(self, db_path: str = "data/intelligence.db"):
@@ -75,7 +76,7 @@ class SQLiteStore:
             """, (brand_id, name, vertical, 1 if is_focal else 0, json.dumps(aliases or []), json.dumps(domains or [])))
             con.commit()
 
-    def get_brands(self, vertical: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_brands(self, vertical: str | None = None) -> list[dict[str, Any]]:
         with self._get_connection() as con:
             con.row_factory = sqlite3.Row
             cur = con.cursor()

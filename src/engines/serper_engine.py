@@ -1,22 +1,23 @@
 # src/engines/serper_engine.py
-import os
 import json
+import os
 import time
 import urllib.request
 from datetime import datetime
-from typing import List, Optional
+
 from src.engines.base import BaseObservationEngine
-from src.models.observations import RawObservation, BrandMentionDetail, CitationSource
+from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
+
 
 class SerperGoogleEngine(BaseObservationEngine):
     """Google Organic SERP Ranking Engine using Serper.dev API."""
 
     ENDPOINT = "https://google.serper.dev/search"
 
-    def __init__(self, model_name: str = "google-serp-th", api_key: Optional[str] = None):
+    def __init__(self, model_name: str = "google-serp-th", api_key: str | None = None):
         super().__init__(model_name, api_key or os.getenv("SERPER_API_KEY"))
 
-    def observe(self, query_id: str, query_text: str, target_brands: List[str]) -> RawObservation:
+    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
         if not self.api_key:
             raise RuntimeError("Serper API Key not configured. Set SERPER_API_KEY.")
 

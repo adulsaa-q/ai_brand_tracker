@@ -1,11 +1,13 @@
-import sys
 import os
+import sys
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from src.analytics.citation_graph import CitationInfluenceAnalyzer
+from src.analytics.claim_intelligence import ClaimIntelligenceEngine
 from src.analytics.metrics import MarketMetricsEngine
 from src.analytics.opportunity import OpportunityFinder
-from src.analytics.claim_intelligence import ClaimIntelligenceEngine
-from src.analytics.citation_graph import CitationInfluenceAnalyzer
+
 
 def test_metrics_calculation():
     sample_obs = [

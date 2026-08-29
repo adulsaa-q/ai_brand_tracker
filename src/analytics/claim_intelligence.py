@@ -1,4 +1,5 @@
-from typing import List, Dict, Any
+from typing import Any
+
 
 class ClaimIntelligenceEngine:
     """Audits factual claims made by AI about brands to detect outdated info, policy conditions, or hallucinations."""
@@ -11,7 +12,7 @@ class ClaimIntelligenceEngine:
     ]
 
     @classmethod
-    def audit_claims(cls, observations: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def audit_claims(cls, observations: list[dict[str, Any]]) -> list[dict[str, Any]]:
         claim_alerts = []
         seen_claims = set()
 

@@ -1,18 +1,18 @@
-import urllib.request
 import json
 import os
-import time
-from typing import List, Dict, Any, Optional
+import urllib.request
+from typing import Any
+
 
 class OpenRouterModelRegistry:
     """Dynamically discovers, qualifies, and benchmarks free/low-cost AI models for Thai analytics."""
 
     ENDPOINT = "https://openrouter.ai/api/v1/models"
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: str | None = None):
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
 
-    def fetch_available_models(self) -> List[Dict[str, Any]]:
+    def fetch_available_models(self) -> list[dict[str, Any]]:
         headers = {"User-Agent": "Thailand-AI-Market-Intelligence/3.0"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
@@ -26,7 +26,7 @@ class OpenRouterModelRegistry:
             print(f"⚠️ Warning: Could not fetch OpenRouter models: {e}")
             return []
 
-    def get_free_tier_candidates(self) -> List[Dict[str, Any]]:
+    def get_free_tier_candidates(self) -> list[dict[str, Any]]:
         models = self.fetch_available_models()
         free_models = []
         for m in models:
@@ -44,7 +44,7 @@ class OpenRouterModelRegistry:
                 })
         return free_models
 
-    def benchmark_thai_competency(self, model_id: str) -> Dict[str, Any]:
+    def benchmark_thai_competency(self, model_id: str) -> dict[str, Any]:
         """Runs a standardized micro-benchmark to evaluate Thai comprehension and JSON formatting."""
         if not self.api_key:
             return {

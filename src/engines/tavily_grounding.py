@@ -1,22 +1,23 @@
 # src/engines/tavily_grounding.py
-import os
 import json
+import os
 import time
 import urllib.request
 from datetime import datetime
-from typing import List, Optional
+
 from src.engines.base import BaseObservationEngine
-from src.models.observations import RawObservation, BrandMentionDetail, CitationSource
+from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
+
 
 class TavilyGroundingEngine(BaseObservationEngine):
     """Web Search & Citation Grounding Engine using Tavily Search API."""
 
     ENDPOINT = "https://api.tavily.com/search"
 
-    def __init__(self, model_name: str = "tavily-search-v1", api_key: Optional[str] = None):
+    def __init__(self, model_name: str = "tavily-search-v1", api_key: str | None = None):
         super().__init__(model_name, api_key or os.getenv("TAVILY_API_KEY"))
 
-    def search(self, query_text: str, max_results: int = 5) -> List[CitationSource]:
+    def search(self, query_text: str, max_results: int = 5) -> list[CitationSource]:
         if not self.api_key:
             return []
         
@@ -49,7 +50,7 @@ class TavilyGroundingEngine(BaseObservationEngine):
             print(f"⚠️ Tavily search error: {e}")
             return []
 
-    def observe(self, query_id: str, query_text: str, target_brands: List[str]) -> RawObservation:
+    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
         start_time = time.time()
         citations = self.search(query_text)
         latency = int((time.time() - start_time) * 1000)
@@ -60,7 +61,7 @@ class TavilyGroundingEngine(BaseObservationEngine):
             mentions.append(BrandMentionDetail(
                 brand_id=brand.lower().replace(" ", "_"),
                 brand_name=brand,
-                mentioned=True if i <= 3 else False,
+                mentioned=(i <= 3),
                 rank=i if i <= 3 else None,
                 sentiment="positive" if i == 1 else "neutral",
                 recommendation_intent="recommended" if i <= 2 else "neutral_mention"

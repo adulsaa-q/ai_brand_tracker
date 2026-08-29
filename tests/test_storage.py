@@ -1,6 +1,5 @@
-import pytest
-import os
 from src.storage.duckdb_store import DuckDBStore
+
 
 def test_duckdb_store_initialization(tmp_path):
     test_db = str(tmp_path / "test_intel.duckdb")
@@ -19,4 +18,4 @@ def test_duckdb_store_initialization(tmp_path):
     df = store.get_brands(vertical="ecommerce")
     assert len(df) == 1
     assert df.iloc[0]["name"] == "Shopee Thailand"
-    assert df.iloc[0]["is_focal_brand"] == True
+    assert df.iloc[0]["is_focal_brand"]

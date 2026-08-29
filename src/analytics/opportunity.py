@@ -1,9 +1,10 @@
-from typing import List, Dict, Any
 from collections import defaultdict
+from typing import Any
+
 
 class OpportunityFinder:
     @staticmethod
-    def identify_gaps(focal_brand: str, metrics: Dict[str, Any], query_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def identify_gaps(focal_brand: str, metrics: dict[str, Any], query_results: list[dict[str, Any]]) -> list[dict[str, Any]]:
         opportunities = []
         missed_by_category = defaultdict(list)
 

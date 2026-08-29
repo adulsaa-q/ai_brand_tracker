@@ -1,16 +1,17 @@
-import os
 import json
+import os
 import time
 from datetime import datetime
-from typing import List, Optional
+
 from src.engines.base import BaseObservationEngine
-from src.models.observations import RawObservation, BrandMentionDetail, CitationSource
+from src.models.observations import BrandMentionDetail, RawObservation
+
 
 class OpenRouterEngine(BaseObservationEngine):
-    def __init__(self, model_name: str = "deepseek/deepseek-chat:free", api_key: Optional[str] = None):
+    def __init__(self, model_name: str = "deepseek/deepseek-chat:free", api_key: str | None = None):
         super().__init__(model_name, api_key or os.getenv("OPENROUTER_API_KEY"))
 
-    def observe(self, query_id: str, query_text: str, target_brands: List[str]) -> RawObservation:
+    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
         if not self.api_key:
             raise RuntimeError("OpenRouter API Key not configured. Set OPENROUTER_API_KEY.")
 

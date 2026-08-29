@@ -1,11 +1,21 @@
 # tests/test_engines.py
 import os
 import sys
+
 import pytest
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.engines import EngineFactory, MockObservationEngine, GeminiObservationEngine, OpenRouterEngine, TavilyGroundingEngine, SerperGoogleEngine
+from src.engines import (
+    EngineFactory,
+    GeminiObservationEngine,
+    MockObservationEngine,
+    OpenRouterEngine,
+    SerperGoogleEngine,
+    TavilyGroundingEngine,
+)
 from src.exceptions import EngineError
+
 
 def test_engine_factory_creation():
     mock_eng = EngineFactory.create("mock")

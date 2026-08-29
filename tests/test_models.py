@@ -1,6 +1,6 @@
-import pytest
-from src.models.entities import BrandEntity, VerticalConfig
-from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
+from src.models.entities import BrandEntity
+from src.models.observations import BrandMentionDetail, CitationSource
+
 
 def test_brand_entity_creation():
     brand = BrandEntity(

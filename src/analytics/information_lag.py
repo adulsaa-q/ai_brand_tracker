@@ -1,10 +1,11 @@
-from typing import List, Dict, Any
+from typing import Any
+
 
 class AIInformationLagTracker:
     """Measures the time lag between real-world brand news/events and AI perception updates."""
 
     @staticmethod
-    def measure_knowledge_freshness(observations: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def measure_knowledge_freshness(observations: list[dict[str, Any]]) -> dict[str, Any]:
         has_citations = sum(1 for obs in observations if len(obs.get("citations", [])) > 0)
         total = len(observations) or 1
         grounding_ratio = round((has_citations / total) * 100, 1)

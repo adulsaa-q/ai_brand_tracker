@@ -1,6 +1,9 @@
 from __future__ import annotations
-from typing import List, Optional, Literal
+
+from typing import Literal
+
 from pydantic import BaseModel, Field
+
 
 class ThaiPersona(BaseModel):
     id: str
@@ -9,7 +12,7 @@ class ThaiPersona(BaseModel):
     location_type: Literal["bkk", "urban_province", "rural", "any"] = "any"
     budget_tier: Literal["budget", "value", "premium", "luxury"] = "value"
     tech_savviness: Literal["low", "medium", "high"] = "medium"
-    primary_channels: List[str] = Field(default_factory=list)
+    primary_channels: list[str] = Field(default_factory=list)
     language_style: Literal["formal", "casual", "slang", "mixed_en_th"] = "casual"
 
 class QueryDimension(BaseModel):
@@ -17,8 +20,8 @@ class QueryDimension(BaseModel):
     category: str
     intent: Literal["informational", "comparison", "recommendation", "deal_seeking", "troubleshooting", "trust_verification"]
     persona: ThaiPersona
-    concern_points: List[str] = Field(default_factory=list)
-    budget_limit_thb: Optional[float] = None
+    concern_points: list[str] = Field(default_factory=list)
+    budget_limit_thb: float | None = None
     target_channel: str = "general"
 
 class QueryInstance(BaseModel):

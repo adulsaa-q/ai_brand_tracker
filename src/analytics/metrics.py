@@ -1,9 +1,10 @@
-from typing import List, Dict, Any
 from collections import defaultdict
+from typing import Any
+
 
 class MarketMetricsEngine:
     @staticmethod
-    def calculate_share_of_voice(observations: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def calculate_share_of_voice(observations: list[dict[str, Any]]) -> dict[str, Any]:
         total_queries = len(set(obs["query_id"] for obs in observations))
         if total_queries == 0:
             return {}

@@ -1,13 +1,14 @@
-import os
 import json
+import os
 import time
 from datetime import datetime
-from typing import List, Optional
+
 from src.engines.base import BaseObservationEngine
-from src.models.observations import RawObservation, BrandMentionDetail, CitationSource
+from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
+
 
 class GeminiObservationEngine(BaseObservationEngine):
-    def __init__(self, model_name: str = "gemini-2.5-flash", api_key: Optional[str] = None):
+    def __init__(self, model_name: str = "gemini-2.5-flash", api_key: str | None = None):
         super().__init__(model_name, api_key or os.getenv("GEMINI_API_KEY"))
         self.client = None
         if self.api_key:
@@ -17,7 +18,7 @@ class GeminiObservationEngine(BaseObservationEngine):
             except ImportError:
                 pass
 
-    def observe(self, query_id: str, query_text: str, target_brands: List[str]) -> RawObservation:
+    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
         if not self.client:
             raise RuntimeError("Gemini Client not initialized. Check GEMINI_API_KEY.")
 

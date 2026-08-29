@@ -1,6 +1,6 @@
-import calendar
-from datetime import datetime, date
-from typing import List, Dict, Any
+from datetime import date
+from typing import Any
+
 
 class ThailandTemporalEngine:
     """Injects Thailand-specific retail, cultural, and promotional events into query generation."""
@@ -16,7 +16,7 @@ class ThailandTemporalEngine:
     ]
 
     @classmethod
-    def get_active_events(cls, target_date: date = None) -> List[Dict[str, Any]]:
+    def get_active_events(cls, target_date: date = None) -> list[dict[str, Any]]:
         target = target_date or date.today()
         m = target.month
         active = []
@@ -26,7 +26,7 @@ class ThailandTemporalEngine:
         return active
 
     @classmethod
-    def get_event_query_modifiers(cls, target_date: date = None) -> List[str]:
+    def get_event_query_modifiers(cls, target_date: date = None) -> list[str]:
         events = cls.get_active_events(target_date)
         modifiers = []
         for e in events:

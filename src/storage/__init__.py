@@ -1,6 +1,4 @@
-try:
-    from .duckdb_store import DuckDBStore
-except ImportError:
-    DuckDBStore = None
-
+from .duckdb_store import DuckDBStore
 from .sqlite_store import SQLiteStore
+
+__all__ = ["DuckDBStore", "SQLiteStore"]

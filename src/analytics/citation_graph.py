@@ -1,5 +1,6 @@
-from typing import List, Dict, Any
 from collections import defaultdict
+from typing import Any
+
 
 class CitationInfluenceAnalyzer:
     """Analyzes which web domains and content sources exert the highest influence on AI answers."""
@@ -21,7 +22,7 @@ class CitationInfluenceAnalyzer:
     }
 
     @classmethod
-    def analyze_influence(cls, observations: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def analyze_influence(cls, observations: list[dict[str, Any]]) -> dict[str, Any]:
         domain_counts = defaultdict(int)
         domain_brand_correlations = defaultdict(lambda: defaultdict(int))
         

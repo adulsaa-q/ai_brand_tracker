@@ -1,12 +1,13 @@
 # scripts/migrate_v1_to_v3.py
-import os
-import csv
-import json
 import hashlib
-from datetime import datetime
+import json
+import os
+
 import pandas as pd
+
 from src.storage.duckdb_store import DuckDBStore
 from src.storage.sqlite_store import SQLiteStore
+
 
 def migrate_csv_to_stores(csv_path="sample_output/results_sample.csv", duckdb_path="data/intelligence.duckdb", sqlite_path="data/intelligence.db"):
     """Migrate historical v1/v2 results CSV into DuckDB Star Schema and SQLite."""

@@ -1,14 +1,15 @@
 import argparse
-import sys
 import os
+import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.universe import QueryUniverseGenerator
-from src.runner import run_intelligence_pipeline
-from src.engines.model_registry import OpenRouterModelRegistry
 from scripts.migrate_v1_to_v3 import migrate_csv_to_stores
+from src.engines.model_registry import OpenRouterModelRegistry
+from src.runner import run_intelligence_pipeline
+from src.universe import QueryUniverseGenerator
+
 
 def main():
     parser = argparse.ArgumentParser(description="🇹🇭 Thailand AI Market & Decision Intelligence CLI")
@@ -32,10 +33,10 @@ def main():
     mig_parser.add_argument("--csv", type=str, default="sample_output/results_sample.csv", help="Source CSV file")
 
     # models
-    mod_parser = subparsers.add_parser("models", help="Discover free AI models on OpenRouter")
+    subparsers.add_parser("models", help="Discover free AI models on OpenRouter")
 
     # dashboard
-    dash_parser = subparsers.add_parser("dashboard", help="Launch Executive Streamlit Dashboard")
+    subparsers.add_parser("dashboard", help="Launch Executive Streamlit Dashboard")
 
     args = parser.parse_args()
 
