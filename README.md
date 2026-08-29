@@ -42,7 +42,7 @@ Weekly Automated Cron]
 
 ---
 
-## 🚀 Quickstart (Local Offline Simulation)
+## 🚀 Quickstart & CLI Guide
 
 ```bash
 # 1. Clone and switch to upgrade branch
@@ -50,11 +50,21 @@ git clone https://github.com/adulsaa-q/ai_brand_tracker.git
 cd ai_brand_tracker
 git checkout upgrade/thailand-intelligence-v3
 
-# 2. Run simulation pipeline (0 API keys needed)
-python src/cli.py run --count 15 --engine mock
+# 2. Migrate Historical Data (v1 -> v3 DuckDB & SQLite)
+python src/cli.py migrate
 
-# 3. Launch Interactive Dashboard
-streamlit run dashboard/app.py
+# 3. Discover Available Free AI Models on OpenRouter
+python src/cli.py models
+
+# 4. Generate Thai Consumer Queries (Control + Exploratory)
+python src/cli.py generate --count 10 --seed 42 --control
+
+# 5. Run Full Intelligence Pipeline (Mock / Gemini / OpenRouter)
+python src/cli.py run --count 20 --engine mock
+
+# 6. Launch Executive Decision Dashboard
+python src/cli.py dashboard
+# Or: streamlit run dashboard/app.py
 ```
 
 ---

@@ -4,6 +4,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from src.analytics.metrics import MarketMetricsEngine
 from src.analytics.opportunity import OpportunityFinder
+from src.analytics.claim_intelligence import ClaimIntelligenceEngine
+from src.analytics.citation_graph import CitationInfluenceAnalyzer
 
 def test_metrics_calculation():
     sample_obs = [
@@ -36,10 +38,39 @@ def test_opportunity_finder():
             "query_text": "ซื้อเครื่องสำอางแท้ที่ไหนดี?",
             "category": "ความน่าเชื่อถือ",
             "brand_mentions": [
-                {"brand_name": "Konvy", "rank": 1, "sentiment": "positive"}
+                {"brand_name": "Konvy", "rank": 1, "sentiment": "positive", "mentioned": True}
             ]
         }
     ]
     gaps = OpportunityFinder.identify_gaps("Shopee", metrics, obs)
     assert len(gaps) == 1
-    assert gaps[0]["type"] == "VISIBILITY_GAP"
+    assert "CATEGORY_VISIBILITY_GAP" in gaps[0]["type"]
+    assert gaps[0]["category"] == "ความน่าเชื่อถือ"
+
+def test_claim_intelligence_audit():
+    obs = [
+        {
+            "query_id": "q_test",
+            "brand_mentions": [
+                {
+                    "brand_name": "Shopee Thailand",
+                    "key_strengths_mentioned": ["มีโค้ดส่งฟรีเยอะมาก"],
+                    "price_or_deal_claims": []
+                }
+            ]
+        }
+    ]
+    claims = ClaimIntelligenceEngine.audit_claims(obs)
+    assert len(claims) == 1
+    assert claims[0]["audit_verdict"] == "CONDITIONAL"
+
+def test_citation_influence():
+    obs = [
+        {
+            "brand_mentions": [{"brand_name": "Shopee", "mentioned": True}],
+            "citations": [{"domain": "pantip.com"}, {"domain": "wongnai.com"}]
+        }
+    ]
+    cit = CitationInfluenceAnalyzer.analyze_influence(obs)
+    assert cit["total_citations"] == 2
+    assert cit["unique_domains"] == 2

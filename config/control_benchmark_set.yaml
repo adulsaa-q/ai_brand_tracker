@@ -1,0 +1,123 @@
+version: 1.0.0
+description: Invariant 30 Thai Consumer Control Queries for Longitudinal GEO Benchmarking
+queries:
+- query_id: q_ctrl_01
+  text_th: แคมเปญ Double Day ซื้อสกินแคร์แบรนด์เนมที่ไหนลดเยอะที่สุด?
+  category: โปรโมชั่น
+  is_control_set: true
+- query_id: q_ctrl_02
+  text_th: Flash Sale เครื่องสำอางช่วง Mid-month แพลตฟอร์มไหนมีโค้ดส่วนลดคุ้มที่สุด?
+  category: โปรโมชั่น
+  is_control_set: true
+- query_id: q_ctrl_03
+  text_th: ช่วง 11.11 หรือ 12.12 ซื้อเครื่องสำอางแพลตฟอร์มไหนถูกกว่ากัน?
+  category: โปรโมชั่น
+  is_control_set: true
+- query_id: q_ctrl_04
+  text_th: ซื้อเซรั่มวิตามินซี ราคาหลักร้อย แพลตฟอร์มไหนมีให้เลือกเยอะที่สุด?
+  category: ราคา
+  is_control_set: true
+- query_id: q_ctrl_05
+  text_th: ของแถมจากแบรนด์เครื่องสำอาง แพลตฟอร์มไหนให้คุ้มที่สุด?
+  category: โปรโมชั่น
+  is_control_set: true
+- query_id: q_ctrl_06
+  text_th: ซื้อเครื่องสำอางแบรนด์เนมมั่นใจได้ว่าของแท้ ต้องซื้อที่ไหน?
+  category: ของแท้
+  is_control_set: true
+- query_id: q_ctrl_07
+  text_th: ซื้อน้ำหอม Chanel ออนไลน์ แพลตฟอร์มไหนรับประกันของแท้ 100%?
+  category: ของแท้
+  is_control_set: true
+- query_id: q_ctrl_08
+  text_th: เจอของปลอมบนแพลตฟอร์มออนไลน์บ่อยไหม แล้วไปซื้อที่ไหนปลอดภัย?
+  category: ของแท้
+  is_control_set: true
+- query_id: q_ctrl_09
+  text_th: เครื่องสำอางเกาหลีนำเข้าถูกต้อง แพลตฟอร์มไหนมี อย. ครบ?
+  category: ของแท้
+  is_control_set: true
+- query_id: q_ctrl_10
+  text_th: อยากหาแบรนด์เครื่องสำอางเกาหลีใหม่ๆ ที่ยังไม่มีขายในไทย ไปหาที่ไหนดี?
+  category: ความหลากหลาย
+  is_control_set: true
+- query_id: q_ctrl_11
+  text_th: แบรนด์สกินแคร์ญี่ปุ่นหายาก เช่น SKII, Shiseido แพลตฟอร์มไหนมีให้เลือกเยอะ?
+  category: ความหลากหลาย
+  is_control_set: true
+- query_id: q_ctrl_12
+  text_th: เครื่องสำอางจากประเทศไทย (indie brand) แพลตฟอร์มไหนรวมไว้เยอะที่สุด?
+  category: ความหลากหลาย
+  is_control_set: true
+- query_id: q_ctrl_13
+  text_th: ซื้อเครื่องสำอางแบรนด์ดัง + niche brand ในที่เดียว ไปที่ไหนดี?
+  category: ความหลากหลาย
+  is_control_set: true
+- query_id: q_ctrl_14
+  text_th: สั่งเครื่องสำอางออนไลน์ต้องการได้ภายใน 2-3 วัน แพลตฟอร์มไหนส่งไวที่สุด?
+  category: การจัดส่ง
+  is_control_set: true
+- query_id: q_ctrl_15
+  text_th: สั่งของออนไลน์แล้วบรรจุภัณฑ์ดี ของไม่แตก แพลตฟอร์มไหนดูแลดีที่สุด?
+  category: การจัดส่ง
+  is_control_set: true
+- query_id: q_ctrl_16
+  text_th: อยู่ต่างจังหวัด สั่งเครื่องสำอางออนไลน์แพลตฟอร์มไหนส่งฟรีหรือค่าส่งถูก?
+  category: การจัดส่ง
+  is_control_set: true
+- query_id: q_ctrl_17
+  text_th: แพลตฟอร์มไหนมี same day delivery สำหรับเครื่องสำอางในกรุงเทพ?
+  category: การจัดส่ง
+  is_control_set: true
+- query_id: q_ctrl_18
+  text_th: ซื้อเครื่องสำอางออนไลน์ผ่อน 0% แพลตฟอร์มไหนทำได้บ้าง?
+  category: การชำระเงิน
+  is_control_set: true
+- query_id: q_ctrl_19
+  text_th: จ่ายด้วยพอยท์บัตรเครดิตซื้อเครื่องสำอาง แพลตฟอร์มไหนรับ?
+  category: การชำระเงิน
+  is_control_set: true
+- query_id: q_ctrl_20
+  text_th: ซื้อเครื่องสำอางออนไลน์จ่ายปลายทางได้ไหม แพลตฟอร์มไหนรองรับ?
+  category: การชำระเงิน
+  is_control_set: true
+- query_id: q_ctrl_21
+  text_th: ไม่เคยซื้อของออนไลน์มาก่อน เริ่มต้นที่แพลตฟอร์มไหนดี?
+  category: ผู้ใช้งานใหม่
+  is_control_set: true
+- query_id: q_ctrl_22
+  text_th: ซื้อเครื่องสำอางออนไลน์ครั้งแรก กลัวโดนโกง ไปแพลตฟอร์มไหนปลอดภัย?
+  category: ผู้ใช้งานใหม่
+  is_control_set: true
+- query_id: q_ctrl_23
+  text_th: ถ้าซื้อเซรั่มมาแล้วแพ้ แพลตฟอร์มไหนรับคืนสินค้าง่ายที่สุด?
+  category: After-sales
+  is_control_set: true
+- query_id: q_ctrl_24
+  text_th: เครื่องสำอางมาแล้วผิดสี แพลตฟอร์มไหนเปลี่ยนสินค้าได้ไม่ยุ่งยาก?
+  category: After-sales
+  is_control_set: true
+- query_id: q_ctrl_25
+  text_th: ของที่สั่งมาแล้วหมดอายุ ติดต่อเคลมที่ไหนได้บ้าง?
+  category: After-sales
+  is_control_set: true
+- query_id: q_ctrl_26
+  text_th: เครื่องสำอางที่ซื้อมีตำหนิ ระบบรับเรื่องร้องเรียนแพลตฟอร์มไหนดีที่สุด?
+  category: After-sales
+  is_control_set: true
+- query_id: q_ctrl_27
+  text_th: มีปัญหาเรื่องสินค้า customer service แพลตฟอร์มไหนตอบเร็วที่สุด?
+  category: บริการลูกค้า
+  is_control_set: true
+- query_id: q_ctrl_28
+  text_th: แชทสอบถามเรื่องสินค้ากับแอดมิน แพลตฟอร์มไหนตอบได้เร็วและชัดเจน?
+  category: บริการลูกค้า
+  is_control_set: true
+- query_id: q_ctrl_29
+  text_th: ซื้อของขวัญเครื่องสำอางให้แฟน แพลตฟอร์มไหนมีบริการห่อของสวยๆ?
+  category: ของขวัญ
+  is_control_set: true
+- query_id: q_ctrl_30
+  text_th: ซื้อเครื่องสำอางส่งออกต่างประเทศ แพลตฟอร์มไหนจัดส่งได้?
+  category: ส่งต่างประเทศ
+  is_control_set: true

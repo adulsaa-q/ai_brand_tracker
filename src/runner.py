@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from src.universe import QueryUniverseGenerator
 from src.universe.temporal_events import ThailandTemporalEngine
 from src.engines import MockObservationEngine, GeminiObservationEngine, OpenRouterEngine
-from src.storage import SQLiteStore
+from src.storage import SQLiteStore, DuckDBStore
 from src.analytics import (
     MarketMetricsEngine,
     OpportunityFinder,
@@ -19,14 +19,18 @@ from src.analytics import (
 )
 
 def run_intelligence_pipeline(
-    count: int = 10,
+    count: int = 15,
     seed: int = 42,
     engine_type: str = "mock",
-    db_path: str = "data/intelligence.db"
+    db_path: str = "data/intelligence.db",
+    duckdb_path: str = "data/intelligence.duckdb",
+    include_control: bool = True
 ):
     print(f"🚀 Initializing Thailand AI Market Intelligence Pipeline [Engine: {engine_type.upper()}]...")
     
-    store = SQLiteStore(db_path=db_path)
+    sqlite_store = SQLiteStore(db_path=db_path)
+    duckdb_store = DuckDBStore(db_path=duckdb_path)
+
     with open("config/entities.yaml", "r", encoding="utf-8") as f:
         entities = yaml.safe_load(f)
     
@@ -37,8 +41,8 @@ def run_intelligence_pipeline(
     print(f"📅 Active Thailand Temporal Contexts: {[e['name_th'] for e in active_events]}")
 
     generator = QueryUniverseGenerator()
-    queries = generator.generate_queries(count=count, seed=seed)
-    print(f"✅ Generated {len(queries)} Thai Consumer Queries.")
+    queries = generator.generate_queries(count=count, seed=seed, include_control=include_control)
+    print(f"✅ Generated {len(queries)} Thai Consumer Queries (Control: {sum(1 for q in queries if q.get('is_control_set'))}, Exploratory: {sum(1 for q in queries if not q.get('is_control_set'))}).")
 
     if engine_type == "gemini":
         engine = GeminiObservationEngine()
@@ -53,6 +57,7 @@ def run_intelligence_pipeline(
         obs = engine.observe(query_id=q["query_id"], query_text=q["text_th"], target_brands=brands)
         obs_dict = obs.model_dump()
         obs_dict["category"] = q["category"]
+        obs_dict["is_control_set"] = q.get("is_control_set", False)
         observations.append(obs_dict)
 
     # 1. Share of Voice & Ranking
@@ -83,4 +88,4 @@ def run_intelligence_pipeline(
     return metrics, opportunities
 
 if __name__ == "__main__":
-    run_intelligence_pipeline(count=10, seed=100, engine_type="mock")
+    run_intelligence_pipeline(count=15, seed=100, engine_type="mock", include_control=True)
