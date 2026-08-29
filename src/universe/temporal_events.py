@@ -6,13 +6,55 @@ class ThailandTemporalEngine:
     """Injects Thailand-specific retail, cultural, and promotional events into query generation."""
 
     EVENTS = [
-        {"id": "double_day", "name_th": "แคมเปญ Double Day (เช่น 8.8, 9.9, 11.11)", "months": list(range(1, 13)), "multiplier": 2.5, "intent": "deal_seeking"},
-        {"id": "payday_sale", "name_th": "แคมเปญ Payday สิ้นเดือน (25-30 ของทุกเดือน)", "months": list(range(1, 13)), "multiplier": 1.8, "intent": "deal_seeking"},
-        {"id": "mid_year_sale", "name_th": "Mid-Year Mega Sale (มิถุนายน-กรกฎาคม)", "months": [6, 7], "multiplier": 1.5, "intent": "comparison"},
-        {"id": "songkran_summer", "name_th": "เทศกาลสงกรานต์ / หน้าร้อน (เมษายน)", "months": [4], "multiplier": 2.0, "focus_categories": ["กันแดดคุมมัน", "เครื่องสำอางกันน้ำ", "สกินแคร์กู้ผิวไหม้แดด"]},
-        {"id": "back_to_school", "name_th": "เปิดเทอม / Back to School (พฤษภาคม-มิถุนายน)", "months": [5, 6], "multiplier": 1.3, "focus_categories": ["สกินแคร์นักเรียน", "เครื่องสำอางราคาประหยัด"]},
-        {"id": "11_11_mega_sale", "name_th": "มหกรรม 11.11 Global Festival (พฤศจิกายน)", "months": [11], "multiplier": 3.0, "intent": "deal_seeking"},
-        {"id": "12_12_year_end", "name_th": "แคมเปญส่งท้ายปี 12.12 & ของขวัญปีใหม่ (ธันวาคม)", "months": [12], "multiplier": 2.8, "focus_categories": ["ของขวัญ", "น้ำหอมแท้", "เซ็ตสกินแคร์เคาน์เตอร์แบรนด์"]}
+        {
+            "id": "double_day",
+            "name_th": "แคมเปญ Double Day (เช่น 8.8, 9.9, 11.11)",
+            "months": list(range(1, 13)),
+            "multiplier": 2.5,
+            "intent": "deal_seeking",
+        },
+        {
+            "id": "payday_sale",
+            "name_th": "แคมเปญ Payday สิ้นเดือน (25-30 ของทุกเดือน)",
+            "months": list(range(1, 13)),
+            "multiplier": 1.8,
+            "intent": "deal_seeking",
+        },
+        {
+            "id": "mid_year_sale",
+            "name_th": "Mid-Year Mega Sale (มิถุนายน-กรกฎาคม)",
+            "months": [6, 7],
+            "multiplier": 1.5,
+            "intent": "comparison",
+        },
+        {
+            "id": "songkran_summer",
+            "name_th": "เทศกาลสงกรานต์ / หน้าร้อน (เมษายน)",
+            "months": [4],
+            "multiplier": 2.0,
+            "focus_categories": ["กันแดดคุมมัน", "เครื่องสำอางกันน้ำ", "สกินแคร์กู้ผิวไหม้แดด"],
+        },
+        {
+            "id": "back_to_school",
+            "name_th": "เปิดเทอม / Back to School (พฤษภาคม-มิถุนายน)",
+            "months": [5, 6],
+            "multiplier": 1.3,
+            "focus_categories": ["สกินแคร์นักเรียน", "เครื่องสำอางราคาประหยัด"],
+        },
+        {
+            "id": "11_11_mega_sale",
+            "name_th": "มหกรรม 11.11 Global Festival (พฤศจิกายน)",
+            "months": [11],
+            "multiplier": 3.0,
+            "intent": "deal_seeking",
+        },
+        {
+            "id": "12_12_year_end",
+            "name_th": "แคมเปญส่งท้ายปี 12.12 & ของขวัญปีใหม่ (ธันวาคม)",
+            "months": [12],
+            "multiplier": 2.8,
+            "focus_categories": ["ของขวัญ", "น้ำหอมแท้", "เซ็ตสกินแคร์เคาน์เตอร์แบรนด์"],
+        },
     ]
 
     @classmethod

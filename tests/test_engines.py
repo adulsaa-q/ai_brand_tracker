@@ -33,9 +33,11 @@ def test_engine_factory_creation():
     serp_eng = EngineFactory.create("serper")
     assert isinstance(serp_eng, SerperGoogleEngine)
 
+
 def test_engine_factory_invalid():
     with pytest.raises(EngineError):
         EngineFactory.create("invalid_engine_type")
+
 
 def test_mock_engine_observe():
     mock_eng = MockObservationEngine()

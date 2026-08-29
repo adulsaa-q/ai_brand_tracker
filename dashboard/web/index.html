@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thailand AI Market Intelligence | Executive Command Center</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: "#080C14",
+              card: "rgba(15, 23, 42, 0.75)",
+              border: "rgba(51, 65, 85, 0.5)",
+              cyan: "#06B6D4",
+              indigo: "#6366F1",
+              purple: "#A855F7",
+              emerald: "#10B981"
+            }
+          },
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "Prompt", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 0%, #131B2E 0%, #080C14 100%);
+      min-height: 100vh;
+      color: #F1F5F9;
+      font-family: "Plus Jakarta Sans", "Prompt", sans-serif;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(51, 65, 85, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .glass-card:hover {
+      border-color: rgba(6, 182, 212, 0.4);
+      box-shadow: 0 12px 40px 0 rgba(6, 182, 212, 0.15);
+    }
+    .neon-text-cyan {
+      text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(51, 65, 85, 0.8);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-white custom-scrollbar">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-4">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-purple-500 p-0.5 shadow-lg shadow-cyan-500/20">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-5 h-5 text-cyan-400"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-cyan-400">
+              THAILAND AI MARKET INTELLIGENCE
+            </h1>
+            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-cyan-950/80 text-cyan-400 border border-cyan-500/30">v3.0.0</span>
+          </div>
+          <p class="text-xs text-slate-400">Executive GEO, Search & Consumer Decision Command Center (Style Q)</p>
+        </div>
+      </div>
+
+      <!-- Action Badges & Live Status -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Lakehouse: Connected</span>
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 text-xs font-medium">
+          <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span id="activeEventBadge">Double Day & Payday Active</span>
+        </div>
+        <button onclick="refreshData()" class="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold shadow-lg shadow-cyan-600/30 transition flex items-center gap-1.5">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Refresh Scan</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+    <!-- KPI Summary Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- Card 1: SoV Leader -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
+        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl group-hover:bg-cyan-500/20 transition"></div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">AI Share of Voice Leader</span>
+          <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i data-lucide="trophy" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="text-3xl font-extrabold text-white tracking-tight">Shopee Thailand</div>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-emerald-400 text-sm font-bold flex items-center gap-0.5">
+            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> 76.7%
+          </span>
+          <span class="text-xs text-slate-400">Mentioned in 23/30 Prompts</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Trust & Recommendation -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
+        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl group-hover:bg-indigo-500/20 transition"></div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Highest Trust Index (NRS)</span>
+          <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="text-3xl font-extrabold text-white tracking-tight">Konvy</div>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-indigo-400 text-sm font-bold">100.0% Positive</span>
+          <span class="text-xs text-slate-400">Zero negative sentiment</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Citation Influence Nodes -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
+        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition"></div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Influential Web Citations</span>
+          <div class="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+            <i data-lucide="globe" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="text-3xl font-extrabold text-white tracking-tight">268 Citations</div>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-purple-400 text-sm font-semibold">10 Domains</span>
+          <span class="text-xs text-slate-400">Pantip, Wongnai, YouTube, Mall</span>
+        </div>
+      </div>
+
+      <!-- Card 4: AI Grounding Freshness -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden group">
+        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition"></div>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Knowledge Freshness</span>
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="text-3xl font-extrabold text-white tracking-tight">0-2 Days Lag</div>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-emerald-400 text-sm font-bold">100% Grounded</span>
+          <span class="text-xs text-slate-400">Live Google Search sync</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="flex items-center gap-2 border-b border-slate-800 pb-3 overflow-x-auto custom-scrollbar">
+      <button onclick="switchTab(tab-sov)" id="btn-tab-sov" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+        <span>Share of Voice & Rankings</span>
+      </button>
+      <button onclick="switchTab(tab-citations)" id="btn-tab-citations" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
+        <i data-lucide="network" class="w-4 h-4"></i>
+        <span>Citation Influence Graph</span>
+      </button>
+      <button onclick="switchTab(tab-opportunities)" id="btn-tab-opportunities" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
+        <i data-lucide="lightbulb" class="w-4 h-4"></i>
+        <span>Strategic Opportunity Engine</span>
+      </button>
+      <button onclick="switchTab(tab-simulator)" id="btn-tab-simulator" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
+        <i data-lucide="sliders" class="w-4 h-4"></i>
+        <span>What-If Strategy Simulator</span>
+      </button>
+      <button onclick="switchTab(tab-explorer)" id="btn-tab-explorer" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
+        <i data-lucide="search" class="w-4 h-4"></i>
+        <span>Evidence & Prompt Explorer</span>
+      </button>
+    </div>
+
+    <!-- Tab 1: Share of Voice & Rankings -->
+    <div id="tab-sov" class="tab-content space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Bar Chart (2 Cols) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-bold text-white">AI Share of Voice (SoV %) across 9 Major Platforms</h2>
+              <p class="text-xs text-slate-400">สัดส่วนที่ AI หยิบยกและแนะนำแบรนด์ต่อคำถามผู้บริโภคไทย 30 ข้อ</p>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Baseline 270 AI Responses</span>
+          </div>
+          <div class="h-72">
+            <canvas id="sovBarChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Leaderboard Table (1 Col) -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="award" class="w-5 h-5 text-cyan-400"></i>
+            <span>Leaderboard Summary</span>
+          </h2>
+          <div class="space-y-3 overflow-y-auto max-h-72 pr-1 custom-scrollbar" id="leaderboardContainer">
+            <!-- Dynamically Rendered -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Citation Influence Graph -->
+    <div id="tab-citations" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Donut Chart -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <h2 class="text-lg font-bold text-white">Web Citation Influence Share (%)</h2>
+          <p class="text-xs text-slate-400">แหล่งข้อมูลที่ AI ใช้ในการ Grounding และดึงมาสร้าง Consensus</p>
+          <div class="h-72 flex items-center justify-center">
+            <canvas id="citationDonutChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Citation Node Breakdown -->
+        <div class="glass-card rounded-2xl p-6 space-y-4">
+          <h2 class="text-lg font-bold text-white">Top Influential Domains for AI Answers</h2>
+          <p class="text-xs text-slate-400">โดเมนที่แบรนด์ต้องสร้าง Digital Presence เพื่อเพิ่มอันดับ AI Search</p>
+          <div class="space-y-2.5 max-h-72 overflow-y-auto custom-scrollbar" id="citationsList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Strategic Opportunity Engine -->
+    <div id="tab-opportunities" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Action Card 1 -->
+        <div class="glass-card rounded-2xl p-6 border-l-4 border-cyan-500 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 text-xs font-bold rounded bg-cyan-950 text-cyan-400 border border-cyan-500/30">PRIORITY 1</span>
+            <span class="text-xs text-slate-400">Category Gap</span>
+          </div>
+          <h3 class="text-base font-bold text-white">แก้จุดบอดหมวด "ความน่าเชื่อถือ & ของแท้ 100%"</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            <strong>What:</strong> ในคำถามหมวดของแท้ Konvy และ Sephora ถูกแนะนำเป็นอันดับ 1 นำหน้า Marketplace<br>
+            <strong>Why:</strong> AI กังวลเรื่องร้านค้าบุคคลที่สาม (3rd party sellers)<br>
+            <strong>Now What:</strong> เพิ่ม Schema Markup และดึงรีวิว LazMall / Shopee Mall Official เข้าสู่เว็บรีวิวหลัก
+          </p>
+        </div>
+
+        <!-- Action Card 2 -->
+        <div class="glass-card rounded-2xl p-6 border-l-4 border-purple-500 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 text-xs font-bold rounded bg-purple-950 text-purple-400 border border-purple-500/30">PRIORITY 2</span>
+            <span class="text-xs text-slate-400">Competitor Threat</span>
+          </div>
+          <h3 class="text-base font-bold text-white">รับมือ Sephora ในคำถาม Luxury & Gift</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            <strong>What:</strong> Sephora กวาด Rank #1 ในคำถามซื้อของขวัญให้น้ำหอมเคาน์เตอร์แบรนด์<br>
+            <strong>Why:</strong> AI เชื่อถือบริการห่อของขวัญและแพ็กเกจของ Sephora<br>
+            <strong>Now What:</strong> เพิ่มแคมเปญ Gift Wrapping & Certificate บนหน้าค้นหา AI
+          </p>
+        </div>
+
+        <!-- Action Card 3 -->
+        <div class="glass-card rounded-2xl p-6 border-l-4 border-emerald-500 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 text-xs font-bold rounded bg-emerald-950 text-emerald-400 border border-emerald-500/30">PRIORITY 3</span>
+            <span class="text-xs text-slate-400">Invisibility Rescue</span>
+          </div>
+          <h3 class="text-base font-bold text-white">กู้ชีพแบรนด์ Allnii (SoV 0%)</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            <strong>What:</strong> แบรนด์ Allnii ไม่ถูกกล่าวถึงเลยแม้แต่ครั้งเดียว (0% SoV)<br>
+            <strong>Why:</strong> ขาด Semantic Footprint บน Pantip, Lemon8, Wongnai<br>
+            <strong>Now What:</strong> ทำ Seed Review บน YouTube Shorts & Lemon8 เพื่อสร้าง Node ให้ AI Index
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: What-If Strategy Simulator -->
+    <div id="tab-simulator" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Controls (1 Col) -->
+        <div class="glass-card rounded-2xl p-6 space-y-5">
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="sliders" class="w-5 h-5 text-cyan-400"></i>
+            <span>Intervention Levers</span>
+          </h2>
+          <p class="text-xs text-slate-400">เลือกกลยุทธ์เพื่อจำลองผลกระทบต่อ AI Share of Voice และ Net Recommendation Score</p>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="text-xs font-semibold text-slate-300 mb-1.5 block">Select Target Brand:</label>
+              <select id="simBrandSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500">
+                <option value="Shopee Thailand">Shopee Thailand (Current: 76.7%)</option>
+                <option value="Lazada Thailand">Lazada Thailand (Current: 66.7%)</option>
+                <option value="Watsons Thailand">Watsons Thailand (Current: 50.0%)</option>
+                <option value="Konvy">Konvy (Current: 26.7%)</option>
+                <option value="Boots Thailand">Boots Thailand (Current: 6.7%)</option>
+                <option value="Allnii">Allnii (Current: 0.0%)</option>
+              </select>
+            </div>
+
+            <div class="space-y-2.5 pt-2">
+              <label class="text-xs font-semibold text-slate-300 block">Activate Marketing Levers:</label>
+              <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                <input type="checkbox" id="levForum" onchange="runSimulation()" class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0" checked>
+                <span>Pantip Forum & Discussion Advocacy (+15% SoV)</span>
+              </label>
+              <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                <input type="checkbox" id="levCreator" onchange="runSimulation()" class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0" checked>
+                <span>YouTube / Lemon8 Creator Unboxing (+20% SoV)</span>
+              </label>
+              <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                <input type="checkbox" id="levMall" onchange="runSimulation()" class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
+                <span>100% Authentic Official Mall Badge (+35 NRS)</span>
+              </label>
+              <label class="flex items-center gap-2.5 text-xs text-slate-200 cursor-pointer">
+                <input type="checkbox" id="levSchema" onchange="runSimulation()" class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0">
+                <span>Structured Schema Markup & FAQ Nodes (+18% SoV)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulation Forecast Output (2 Cols) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-6">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-white">Forecasted AI Visibility Gain</h2>
+            <span class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-3 py-1 rounded-full" id="simGainBadge">+35.0% Projected SoV</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="text-xs text-slate-400 mb-1">Baseline Share of Voice</div>
+              <div class="text-2xl font-extrabold text-slate-300" id="simBaseSoV">50.0%</div>
+            </div>
+            <div class="p-4 rounded-xl bg-cyan-950/40 border border-cyan-500/40">
+              <div class="text-xs text-cyan-300 mb-1">Simulated Share of Voice</div>
+              <div class="text-2xl font-extrabold text-cyan-400" id="simProjSoV">85.0%</div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+              <span>Executive Simulation Recommendation:</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed" id="simRecText">
+              ดำเนินกลยุทธ์ Pantip Advocacy และ Creator Unboxing เพื่อเพิ่มการมองเห็นบน AI ได้สูงสุด +35% ภายในรอบแคมเปญถัดไป
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 5: Evidence & Prompt Explorer -->
+    <div id="tab-explorer" class="tab-content hidden space-y-4">
+      <div class="glass-card rounded-2xl p-6 space-y-4">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-bold text-white">Thai Consumer Prompts & AI Evidence Explorer</h2>
+            <p class="text-xs text-slate-400">คำถามผู้บริโภค 30 ข้อ พร้อมผลการตอบและอันดับของ AI แต่ละแพลตฟอร์ม</p>
+          </div>
+          <input type="text" id="querySearch" onkeyup="filterQueries()" placeholder="ค้นหาคำถาม, แบรนด์, หรือหมวดหมู่..." class="w-full md:w-72 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-4">Query ID</th>
+                <th class="py-3 px-4">Consumer Query (คำถามไทย)</th>
+                <th class="py-3 px-4">Category</th>
+                <th class="py-3 px-4">Top AI Recommendation</th>
+                <th class="py-3 px-4">Grounding Citations</th>
+              </tr>
+            </thead>
+            <tbody id="queryTableBody" class="divide-y divide-slate-800/60">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.remove("bg-cyan-500/20", "text-cyan-300", "border", "border-cyan-500/40");
+        btn.classList.add("text-slate-400");
+      });
+      document.getElementById(tabId).classList.remove("hidden");
+      const activeBtn = document.getElementById("btn-" + tabId);
+      activeBtn.classList.add("bg-cyan-500/20", "text-cyan-300", "border", "border-cyan-500/40");
+      activeBtn.classList.remove("text-slate-400");
+    }
+
+    // Leaderboard Data
+    const brandData = [
+      { name: "Shopee Thailand", sov: 76.7, avgRank: 2.13, sentiment: "87.5% Pos", color: "#06B6D4" },
+      { name: "Lazada Thailand", sov: 66.7, avgRank: 2.50, sentiment: "86.7% Pos", color: "#6366F1" },
+      { name: "Watsons Thailand", sov: 50.0, avgRank: 2.93, sentiment: "93.3% Pos", color: "#10B981" },
+      { name: "Sephora Thailand", sov: 40.0, avgRank: 2.17, sentiment: "91.7% Pos", color: "#A855F7" },
+      { name: "Beautrium", sov: 36.7, avgRank: 3.45, sentiment: "90.9% Pos", color: "#F59E0B" },
+      { name: "EVEANDBOY", sov: 33.3, avgRank: 2.90, sentiment: "90.0% Pos", color: "#EC4899" },
+      { name: "Konvy", sov: 26.7, avgRank: 3.13, sentiment: "100.0% Pos", color: "#14B8A6" },
+      { name: "Boots Thailand", sov: 6.7, avgRank: 5.50, sentiment: "100.0% Pos", color: "#64748B" },
+      { name: "Allnii", sov: 0.0, avgRank: "-", sentiment: "0.0% Pos", color: "#334155" }
+    ];
+
+    // Populate Leaderboard
+    const lbContainer = document.getElementById("leaderboardContainer");
+    brandData.forEach((b, idx) => {
+      lbContainer.innerHTML += `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-slate-500 w-4">#${idx + 1}</span>
+            <div>
+              <div class="text-xs font-bold text-white">${b.name}</div>
+              <div class="text-[10px] text-slate-400">Rank avg: ${b.avgRank} · ${b.sentiment}</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-bold" style="color: ${b.color}">${b.sov}%</span>
+          </div>
+        </div>
+      `;
+    });
+
+    // Render Bar Chart
+    const ctxBar = document.getElementById("sovBarChart").getContext("2d");
+    new Chart(ctxBar, {
+      type: "bar",
+      data: {
+        labels: brandData.map(b => b.name),
+        datasets: [{
+          label: "Share of Voice (%)",
+          data: brandData.map(b => b.sov),
+          backgroundColor: [
+            "#06B6D4", "#6366F1", "#10B981", "#A855F7", "#F59E0B", "#EC4899", "#14B8A6", "#64748B", "#334155"
+          ],
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "rgba(15, 23, 42, 0.9)",
+            titleColor: "#F1F5F9",
+            bodyColor: "#06B6D4",
+            borderColor: "rgba(51, 65, 85, 0.5)",
+            borderWidth: 1,
+            padding: 10
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: "#94A3B8", font: { size: 10 } }
+          },
+          y: {
+            grid: { color: "rgba(51, 65, 85, 0.3)" },
+            ticks: { color: "#94A3B8", font: { size: 10 } },
+            max: 100
+          }
+        }
+      }
+    });
+
+    // Citation Data
+    const citationData = [
+      { domain: "shopee.co.th", count: 14, pct: 5.2 },
+      { domain: "central.co.th", count: 12, pct: 4.5 },
+      { domain: "youtube.com", count: 10, pct: 3.7 },
+      { domain: "watsons.co.th", count: 10, pct: 3.7 },
+      { domain: "sephora.co.th", count: 9, pct: 3.4 },
+      { domain: "lemon8-app.com", count: 7, pct: 2.6 },
+      { domain: "konvy.com", count: 7, pct: 2.6 },
+      { domain: "wongnai.com", count: 7, pct: 2.6 },
+      { domain: "lazada.co.th", count: 7, pct: 2.6 },
+      { domain: "thebeautrium.com", count: 6, pct: 2.2 }
+    ];
+
+    // Populate Citation List
+    const citList = document.getElementById("citationsList");
+    citationData.forEach(c => {
+      citList.innerHTML += `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
+          <div class="flex items-center gap-2">
+            <i data-lucide="link" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span class="text-xs font-semibold text-slate-200">${c.domain}</span>
+          </div>
+          <span class="text-xs font-bold text-cyan-400">${c.count} citations (${c.pct}%)</span>
+        </div>
+      `;
+    });
+
+    // Render Donut Chart
+    const ctxDonut = document.getElementById("citationDonutChart").getContext("2d");
+    new Chart(ctxDonut, {
+      type: "doughnut",
+      data: {
+        labels: citationData.map(c => c.domain),
+        datasets: [{
+          data: citationData.map(c => c.count),
+          backgroundColor: [
+            "#06B6D4", "#6366F1", "#EC4899", "#10B981", "#A855F7", "#F59E0B", "#14B8A6", "#F43F5E", "#3B82F6", "#8B5CF6"
+          ],
+          borderColor: "#0F172A",
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "right", labels: { color: "#94A3B8", font: { size: 10 }, boxWidth: 12 } }
+        }
+      }
+    });
+
+    // Simulation Engine
+    function runSimulation() {
+      const brand = document.getElementById("simBrandSelect").value;
+      const bObj = brandData.find(b => b.name.includes(brand.split(" ")[0])) || { sov: 30 };
+      let delta = 0;
+      if (document.getElementById("levForum").checked) delta += 15;
+      if (document.getElementById("levCreator").checked) delta += 20;
+      if (document.getElementById("levMall").checked) delta += 10;
+      if (document.getElementById("levSchema").checked) delta += 18;
+
+      const proj = Math.min(100, Math.round((bObj.sov + delta) * 10) / 10);
+      document.getElementById("simBaseSoV").innerText = bObj.sov + "%";
+      document.getElementById("simProjSoV").innerText = proj + "%";
+      document.getElementById("simGainBadge").innerText = `+${delta.toFixed(1)}% Projected SoV`;
+      document.getElementById("simRecText").innerText = `การปรับปรุง levers ที่เลือกสำหรับ ${brand} จะเพิ่มความสามารถในการมองเห็นสู่ ${proj}% บนผลการตอบของ AI Search`;
+    }
+
+    // Queries Table Data
+    const sampleQueries = [
+      { id: "q_ctrl_01", text: "แคมเปญ Double Day ซื้อสกินแคร์แบรนด์เนมที่ไหนลดเยอะที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "facebook.com, pantip.com" },
+      { id: "q_ctrl_02", text: "Flash Sale เครื่องสำอางช่วง Mid-month แพลตฟอร์มไหนมีโค้ดส่วนลดคุ้มที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "shopee.co.th, ktc.co.th" },
+      { id: "q_ctrl_03", text: "ถ้าซื้อเซรั่มมาแล้วแพ้ แพลตฟอร์มไหนรับคืนสินค้าง่ายที่สุด?", cat: "การคืนสินค้า", top: "Lazada Thailand (#1)", cite: "lazada.co.th, pantip.com" },
+      { id: "q_ctrl_07", text: "ซื้อเครื่องสำอางแบรนด์เนมมั่นใจได้ว่าของแท้ ต้องซื้อที่ไหน?", cat: "ความน่าเชื่อถือ", top: "Konvy (#1), Sephora (#2)", cite: "konvy.com, sephora.co.th" },
+      { id: "q_ctrl_08", text: "ซื้อน้ำหอม Chanel ออนไลน์ แพลตฟอร์มไหนรับประกันของแท้ 100%?", cat: "ความน่าเชื่อถือ", top: "Sephora Thailand (#1)", cite: "sephora.co.th, central.co.th" },
+      { id: "q_ctrl_29", text: "ซื้อของขวัญเครื่องสำอางให้แฟน แพลตฟอร์มไหนมีบริการห่อของสวยๆ?", cat: "บริการพิเศษ", top: "Sephora Thailand (#1)", cite: "sephora.co.th, wongnai.com" }
+    ];
+
+    const qBody = document.getElementById("queryTableBody");
+    function renderQueries(list) {
+      qBody.innerHTML = "";
+      list.forEach(q => {
+        qBody.innerHTML += `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 px-4 font-mono text-cyan-400">${q.id}</td>
+            <td class="py-3 px-4 text-white font-medium">${q.text}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px]">${q.cat}</span></td>
+            <td class="py-3 px-4 text-emerald-400 font-semibold">${q.top}</td>
+            <td class="py-3 px-4 text-slate-400 text-[11px]">${q.cite}</td>
+          </tr>
+        `;
+      });
+    }
+    renderQueries(sampleQueries);
+
+    function filterQueries() {
+      const term = document.getElementById("querySearch").value.toLowerCase();
+      const filtered = sampleQueries.filter(q => q.text.toLowerCase().includes(term) || q.cat.toLowerCase().includes(term) || q.top.toLowerCase().includes(term));
+      renderQueries(filtered);
+    }
+
+    function refreshData() {
+      alert("Fetching latest scan from DuckDB Lakehouse...");
+    }
+  </script>
+</body>
+</html>\n

@@ -24,8 +24,8 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s — %(message)s",
     handlers=[
         logging.FileHandler("tracker.log", mode="w"),  # mode="w" = เขียนทับทุกรัน
-        logging.StreamHandler()
-    ]
+        logging.StreamHandler(),
+    ],
 )
 
 load_dotenv()
@@ -38,10 +38,12 @@ def get_ai_response(prompt):
             model=MODEL_NAME,
             contents=prompt,
             config=types.GenerateContentConfig(
-                tools=[types.Tool(
-                    google_search=types.GoogleSearch()  # ให้ Gemini ค้นเว็บก่อนตอบ
-                )]
-            )
+                tools=[
+                    types.Tool(
+                        google_search=types.GoogleSearch()  # ให้ Gemini ค้นเว็บก่อนตอบ
+                    )
+                ]
+            ),
         )
 
         sources = []
@@ -59,10 +61,7 @@ def get_ai_response(prompt):
         logging.error(f"⚠️ Error: {e}")
         logging.info("รอ 30 วินาทีแล้วลองใหม่...")
         time.sleep(30)
-        return client.models.generate_content(
-            model=MODEL_NAME,
-            contents=prompt
-        ).text, []
+        return client.models.generate_content(model=MODEL_NAME, contents=prompt).text, []
 
 
 def find_mentioned_brands(response_text, brands):
@@ -82,10 +81,7 @@ def calculate_ranks(response_text, brands):
         pos = response_text.lower().find(brand.lower())
         brand_positions[brand] = pos
 
-    mentioned_sorted = sorted(
-        [b for b in brands if brand_positions[b] != -1],
-        key=lambda b: brand_positions[b]
-    )
+    mentioned_sorted = sorted([b for b in brands if brand_positions[b] != -1], key=lambda b: brand_positions[b])
 
     brand_ranks = {}
     for i, brand in enumerate(mentioned_sorted):
@@ -111,10 +107,7 @@ brand | sentiment | reason
 Lazada | positive | ราคาถูก โปรโมชั่นเยอะ"""
 
     try:
-        sentiment_response = client.models.generate_content(
-            model=MODEL_NAME,
-            contents=sentiment_prompt
-        )
+        sentiment_response = client.models.generate_content(model=MODEL_NAME, contents=sentiment_prompt)
     except Exception as e:
         logging.error(f"⚠️ Sentiment error: {e} — ข้ามไป")
         return {}
@@ -124,10 +117,7 @@ Lazada | positive | ราคาถูก โปรโมชั่นเยอ�
         if "|" in line:
             parts = [p.strip() for p in line.split("|")]
             if len(parts) >= 3:
-                sentiment_data[parts[0]] = {
-                    "sentiment": parts[1],
-                    "reason": parts[2]
-                }
+                sentiment_data[parts[0]] = {"sentiment": parts[1], "reason": parts[2]}
     return sentiment_data
 
 
@@ -142,10 +132,7 @@ def save_results(rows):
 def export_sample_csv():
     limit = len(PROMPTS) * len(BRANDS)
     conn = sqlite3.connect("results.db")
-    df_sample = pd.read_sql(
-        f"SELECT * FROM results ORDER BY timestamp DESC LIMIT {limit}",
-        conn
-    )
+    df_sample = pd.read_sql(f"SELECT * FROM results ORDER BY timestamp DESC LIMIT {limit}", conn)
     conn.close()
     df_sample.to_csv("sample_output/results_sample.csv", index=False)
     logging.info("✅ อัพเดท sample_output แล้ว!")
@@ -169,20 +156,22 @@ if __name__ == "__main__":
         rows = []
         for brand in BRANDS:
             s = sentiment_data.get(brand, {})
-            rows.append({
-                "timestamp": timestamp,
-                "model": MODEL_NAME,
-                "prompt": prompt["text"],
-                "brand": brand,
-                "mentioned": brand in found_brands,
-                "position": brand_positions[brand] if brand in found_brands else None,
-                "rank": brand_ranks.get(brand) or None,
-                "sentiment": s.get("sentiment") or None,
-                "reason": s.get("reason") or None,
-                # sources คือแหล่งอ้างอิงของทั้ง response ไม่ใช่เฉพาะแบรนด์นั้น
-                "sources": ", ".join(sources) if (sources and brand in found_brands) else None,
-                "prompt_category": prompt.get("category")
-            })
+            rows.append(
+                {
+                    "timestamp": timestamp,
+                    "model": MODEL_NAME,
+                    "prompt": prompt["text"],
+                    "brand": brand,
+                    "mentioned": brand in found_brands,
+                    "position": brand_positions[brand] if brand in found_brands else None,
+                    "rank": brand_ranks.get(brand) or None,
+                    "sentiment": s.get("sentiment") or None,
+                    "reason": s.get("reason") or None,
+                    # sources คือแหล่งอ้างอิงของทั้ง response ไม่ใช่เฉพาะแบรนด์นั้น
+                    "sources": ", ".join(sources) if (sources and brand in found_brands) else None,
+                    "prompt_category": prompt.get("category"),
+                }
+            )
 
         save_results(rows)
         logging.info(f"\n✅ บันทึก prompt: {prompt}")

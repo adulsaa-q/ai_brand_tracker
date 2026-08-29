@@ -16,27 +16,36 @@ class OpenRouterEngine(BaseObservationEngine):
             raise RuntimeError("OpenRouter API Key not configured. Set OPENROUTER_API_KEY.")
 
         import urllib.request
+
         start_time = time.time()
-        
+
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "HTTP-Referer": "https://github.com/adulsaa-q/ai_brand_tracker",
             "X-Title": "Thailand AI Market Intelligence",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
 
         payload = {
             "model": self.model_name,
             "messages": [
-                {"role": "system", "content": "You are an expert Thai Market Intelligence Analyst. Always return JSON in ```json ... ```."},
-                {"role": "user", "content": f'Consumer Query: "{query_text}"\nTarget Brands: {", ".join(target_brands)}\n\nReturn JSON with brand_mentions array.'}
+                {
+                    "role": "system",
+                    "content": "You are an expert Thai Market Intelligence Analyst. Always return JSON in ```json ... ```.",
+                },
+                {
+                    "role": "user",
+                    "content": f'Consumer Query: "{query_text}"\nTarget Brands: {", ".join(target_brands)}\n\nReturn JSON with brand_mentions array.',
+                },
             ],
-            "temperature": 0.2
+            "temperature": 0.2,
         }
 
-        req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions", data=json.dumps(payload).encode('utf-8'), headers=headers)
+        req = urllib.request.Request(
+            "https://openrouter.ai/api/v1/chat/completions", data=json.dumps(payload).encode("utf-8"), headers=headers
+        )
         with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read().decode('utf-8'))
+            data = json.loads(resp.read().decode("utf-8"))
 
         latency = int((time.time() - start_time) * 1000)
         raw_text = data["choices"][0]["message"]["content"]
@@ -46,19 +55,21 @@ class OpenRouterEngine(BaseObservationEngine):
             if "```json" in raw_text:
                 json_str = raw_text.split("```json")[1].split("```")[0].strip()
             else:
-                json_str = raw_text[raw_text.find("{"):raw_text.rfind("}")+1]
+                json_str = raw_text[raw_text.find("{") : raw_text.rfind("}") + 1]
             parsed = json.loads(json_str)
             for m in parsed.get("brand_mentions", []):
-                mentions.append(BrandMentionDetail(
-                    brand_id=m["brand_name"].lower().replace(" ", "_"),
-                    brand_name=m["brand_name"],
-                    mentioned=m.get("mentioned", True),
-                    rank=m.get("rank"),
-                    recommendation_intent=m.get("recommendation_intent", "recommended"),
-                    sentiment=m.get("sentiment", "neutral"),
-                    key_strengths_mentioned=m.get("key_strengths", []),
-                    key_weaknesses_mentioned=m.get("key_weaknesses", [])
-                ))
+                mentions.append(
+                    BrandMentionDetail(
+                        brand_id=m["brand_name"].lower().replace(" ", "_"),
+                        brand_name=m["brand_name"],
+                        mentioned=m.get("mentioned", True),
+                        rank=m.get("rank"),
+                        recommendation_intent=m.get("recommendation_intent", "recommended"),
+                        sentiment=m.get("sentiment", "neutral"),
+                        key_strengths_mentioned=m.get("key_strengths", []),
+                        key_weaknesses_mentioned=m.get("key_weaknesses", []),
+                    )
+                )
         except Exception:
             pass
 
@@ -73,5 +84,5 @@ class OpenRouterEngine(BaseObservationEngine):
             response_raw_text=raw_text,
             response_latency_ms=latency,
             brand_mentions=mentions,
-            citations=[]
+            citations=[],
         )

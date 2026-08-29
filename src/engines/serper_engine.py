@@ -25,12 +25,7 @@ class SerperGoogleEngine(BaseObservationEngine):
         req = urllib.request.Request(
             self.ENDPOINT,
             headers={"X-API-KEY": self.api_key, "Content-Type": "application/json"},
-            data=json.dumps({
-                "q": query_text,
-                "gl": "th",
-                "hl": "th",
-                "num": 10
-            }).encode("utf-8")
+            data=json.dumps({"q": query_text, "gl": "th", "hl": "th", "num": 10}).encode("utf-8"),
         )
 
         with urllib.request.urlopen(req, timeout=15) as resp:
@@ -47,12 +42,14 @@ class SerperGoogleEngine(BaseObservationEngine):
             snippet = item.get("snippet", "")
             domain = link.split("//")[-1].split("/")[0] if link else "google"
 
-            citations.append(CitationSource(
-                url=link,
-                domain=domain,
-                title=title,
-                source_type="marketplace" if "shopee" in domain or "lazada" in domain else "news"
-            ))
+            citations.append(
+                CitationSource(
+                    url=link,
+                    domain=domain,
+                    title=title,
+                    source_type="marketplace" if "shopee" in domain or "lazada" in domain else "news",
+                )
+            )
 
             full_text = f"{title} {snippet}".lower()
             for brand in target_brands:
@@ -62,14 +59,20 @@ class SerperGoogleEngine(BaseObservationEngine):
         mentions = []
         for brand in target_brands:
             rank = brand_positions.get(brand)
-            mentions.append(BrandMentionDetail(
-                brand_id=brand.lower().replace(" ", "_"),
-                brand_name=brand,
-                mentioned=rank is not None,
-                rank=rank,
-                sentiment="positive" if rank and rank <= 3 else "neutral",
-                recommendation_intent="strongly_recommended" if rank and rank == 1 else "recommended" if rank and rank <= 3 else "neutral_mention"
-            ))
+            mentions.append(
+                BrandMentionDetail(
+                    brand_id=brand.lower().replace(" ", "_"),
+                    brand_name=brand,
+                    mentioned=rank is not None,
+                    rank=rank,
+                    sentiment="positive" if rank and rank <= 3 else "neutral",
+                    recommendation_intent="strongly_recommended"
+                    if rank and rank == 1
+                    else "recommended"
+                    if rank and rank <= 3
+                    else "neutral_mention",
+                )
+            )
 
         return RawObservation(
             observation_id=f"obs_serp_{int(time.time())}",
@@ -82,5 +85,5 @@ class SerperGoogleEngine(BaseObservationEngine):
             response_raw_text=f"Google Search SERP rankings for Thai query: {query_text} ({len(organic_results)} organic results)",
             response_latency_ms=latency,
             brand_mentions=mentions,
-            citations=citations
+            citations=citations,
         )

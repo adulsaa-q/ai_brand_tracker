@@ -18,12 +18,14 @@ class BrandMentionDetail(BaseModel):
     key_weaknesses_mentioned: list[str] = Field(default_factory=list)
     price_or_deal_claims: list[str] = Field(default_factory=list)
 
+
 class CitationSource(BaseModel):
     url: str | None = None
     domain: str
     title: str | None = None
     source_type: Literal["news", "blog", "marketplace", "social", "forum", "brand_official", "unknown"] = "unknown"
     authority_score: float = 0.5
+
 
 class RawObservation(BaseModel):
     observation_id: str

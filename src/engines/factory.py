@@ -12,6 +12,7 @@ from src.exceptions import EngineError
 
 EngineType = Literal["mock", "gemini", "openrouter", "tavily", "serper"]
 
+
 class EngineFactory:
     @staticmethod
     def create(engine_type: EngineType = "mock", model_name: str | None = None) -> BaseObservationEngine:

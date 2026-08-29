@@ -10,13 +10,9 @@ from src.storage.duckdb_store import DuckDBStore
 def test_migration_pipeline(tmp_path):
     test_duckdb = str(tmp_path / "test_intel.duckdb")
     test_sqlite = str(tmp_path / "test_intel.db")
-    
-    migrate_csv_to_stores(
-        csv_path="sample_output/results_sample.csv",
-        duckdb_path=test_duckdb,
-        sqlite_path=test_sqlite
-    )
-    
+
+    migrate_csv_to_stores(csv_path="sample_output/results_sample.csv", duckdb_path=test_duckdb, sqlite_path=test_sqlite)
+
     store = DuckDBStore(db_path=test_duckdb)
     brands = store.get_brands()
     assert len(brands) == 9

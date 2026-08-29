@@ -18,18 +18,18 @@ class CitationInfluenceAnalyzer:
         "cosmenet.in.th": "Dedicated Beauty Review Community",
         "lemon8-app.com": "Short-form Lifestyle Reviews",
         "thairath.co.th": "Mainstream News",
-        "khaosod.co.th": "Mainstream News"
+        "khaosod.co.th": "Mainstream News",
     }
 
     @classmethod
     def analyze_influence(cls, observations: list[dict[str, Any]]) -> dict[str, Any]:
         domain_counts = defaultdict(int)
         domain_brand_correlations = defaultdict(lambda: defaultdict(int))
-        
+
         for obs in observations:
             citations = obs.get("citations", [])
             mentions = [m["brand_name"] for m in obs.get("brand_mentions", []) if m.get("mentioned", True)]
-            
+
             for c in citations:
                 d = c.get("domain", "").lower().replace("www.", "")
                 if not d:
@@ -44,17 +44,15 @@ class CitationInfluenceAnalyzer:
             category = cls.DOMAIN_CATEGORIES.get(domain, "Other Web Source")
             share_pct = round((count / total_citations) * 100, 1)
             top_associated_brands = sorted(domain_brand_correlations[domain].items(), key=lambda x: x[1], reverse=True)
-            
-            rankings.append({
-                "domain": domain,
-                "category": category,
-                "citation_count": count,
-                "influence_share_pct": share_pct,
-                "top_associated_brand": top_associated_brands[0][0] if top_associated_brands else "N/A"
-            })
 
-        return {
-            "total_citations": total_citations,
-            "unique_domains": len(domain_counts),
-            "domain_rankings": rankings
-        }
+            rankings.append(
+                {
+                    "domain": domain,
+                    "category": category,
+                    "citation_count": count,
+                    "influence_share_pct": share_pct,
+                    "top_associated_brand": top_associated_brands[0][0] if top_associated_brands else "N/A",
+                }
+            )
+
+        return {"total_citations": total_citations, "unique_domains": len(domain_counts), "domain_rankings": rankings}

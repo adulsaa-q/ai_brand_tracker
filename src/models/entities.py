@@ -16,6 +16,7 @@ class BrandEntity(BaseModel):
     is_focal_brand: bool = Field(default=False, description="Primary audited entity")
     metadata: dict[str, Any] = Field(default_factory=dict)
 
+
 class VerticalConfig(BaseModel):
     model_config = ConfigDict(frozen=True, extra="forbid")
 

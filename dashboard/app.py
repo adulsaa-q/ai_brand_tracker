@@ -9,11 +9,7 @@ import streamlit as st
 # Ensure src path is accessible
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-st.set_page_config(
-    page_title="Thailand AI Market & Decision Intelligence Platform",
-    page_icon="🇹🇭",
-    layout="wide"
-)
+st.set_page_config(page_title="Thailand AI Market & Decision Intelligence Platform", page_icon="🇹🇭", layout="wide")
 
 st.title("🇹🇭 Thailand AI Market & Decision Intelligence Platform")
 st.caption("Enterprise GEO · Multi-Model Share of Voice · Citation Influence Graph · Consumer Intent Engine")
@@ -23,6 +19,7 @@ if not os.path.exists(summary_file):
     st.info("💡 ไม่พบข้อมูลการตรวจวัดล่าสุด กรุณากดปุ่มด้านล่างเพื่อรัน Intelligence Pipeline")
     if st.button("🚀 รัน Offline Simulation Pipeline ทันที (0 API Key)"):
         from src.runner import run_intelligence_pipeline
+
         run_intelligence_pipeline(count=20, seed=42, engine_type="mock", include_control=True)
         st.rerun()
     st.stop()
@@ -41,7 +38,15 @@ active_events = data.get("active_events", [])
 
 # Sidebar
 st.sidebar.header("⚙️ Market Controls & Context")
-selected_vertical = st.sidebar.selectbox("อุตสาหกรรม (Vertical)", ["E-Commerce & Beauty Retail", "Banking & FinTech (Coming Soon)", "Healthcare (Coming Soon)", "Automotive EV (Coming Soon)"])
+selected_vertical = st.sidebar.selectbox(
+    "อุตสาหกรรม (Vertical)",
+    [
+        "E-Commerce & Beauty Retail",
+        "Banking & FinTech (Coming Soon)",
+        "Healthcare (Coming Soon)",
+        "Automotive EV (Coming Soon)",
+    ],
+)
 
 st.sidebar.subheader("📅 Temporal Context Active")
 for ev in active_events:
@@ -50,18 +55,21 @@ for ev in active_events:
 st.sidebar.divider()
 if st.sidebar.button("🔄 รัน Pipeline รอบใหม่ (Re-run)"):
     from src.runner import run_intelligence_pipeline
+
     run_intelligence_pipeline(count=20, seed=100, engine_type="mock", include_control=True)
     st.rerun()
 
 # 6 Executive Tabs
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-    "📊 Share of Voice & Ranking",
-    "🔍 Query Universe & Evidence",
-    "🌐 Citation Influence Graph",
-    "🛡️ Claim & Policy Audit",
-    "💡 Strategic Opportunity Engine",
-    "⚡ AI Knowledge Freshness & Lag"
-])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+    [
+        "📊 Share of Voice & Ranking",
+        "🔍 Query Universe & Evidence",
+        "🌐 Citation Influence Graph",
+        "🛡️ Claim & Policy Audit",
+        "💡 Strategic Opportunity Engine",
+        "⚡ AI Knowledge Freshness & Lag",
+    ]
+)
 
 with tab1:
     st.subheader("📈 AI Share of Voice (SoV) & Net Recommendation Score (NRS)")
@@ -73,7 +81,7 @@ with tab1:
         c2.metric("Market Leader (SoV)", top_brand["brand"], f"{top_brand['share_of_voice_pct']}%")
         c3.metric("Top Recommendation NRS", f"{top_brand.get('net_recommendation_score', 0)}%", "Intent Weighted")
         c4.metric("Market Sentiment Index", f"{top_brand['net_sentiment_score']}%", "Positive Ratio")
-        
+
         col_c1, col_c2 = st.columns(2)
         with col_c1:
             fig_sov = px.bar(
@@ -82,7 +90,7 @@ with tab1:
                 y="share_of_voice_pct",
                 title="🏆 AI Share of Voice (Mention Rate %)",
                 color="share_of_voice_pct",
-                color_continuous_scale="Blues"
+                color_continuous_scale="Blues",
             )
             st.plotly_chart(fig_sov, use_container_width=True)
 
@@ -93,7 +101,7 @@ with tab1:
                 y="net_recommendation_score",
                 title="🎯 Net Recommendation Score (NRS %)",
                 color="net_recommendation_score",
-                color_continuous_scale="Viridis"
+                color_continuous_scale="Viridis",
             )
             st.plotly_chart(fig_nrs, use_container_width=True)
 
@@ -105,7 +113,7 @@ with tab2:
     st.subheader("🔍 Thai Consumer Queries & Evidence Drilldown")
     query_types = ["All Queries", "Control Benchmark Set", "Exploratory Dynamic Set"]
     selected_type = st.selectbox("Filter Query Set", query_types)
-    
+
     filtered_obs = observations
     if selected_type == "Control Benchmark Set":
         filtered_obs = [o for o in observations if o.get("is_control_set")]
@@ -133,7 +141,7 @@ with tab3:
                 names="domain",
                 values="citation_count",
                 title="🍩 Top Cited Web Domains by AI",
-                hole=0.4
+                hole=0.4,
             )
             st.plotly_chart(fig_donut, use_container_width=True)
         with col_c2:
@@ -148,7 +156,9 @@ with tab4:
     if claims_data:
         for cl in claims_data:
             badge = "⚠️ CONDITIONAL" if cl.get("audit_verdict") == "CONDITIONAL" else "✅ VERIFIED"
-            st.warning(f"**[{badge}] {cl.get('brand')}**: อ้างถึง '{cl.get('extracted_claim')}'\n\n**ข้อเท็จจริง:** {cl.get('note')}")
+            st.warning(
+                f"**[{badge}] {cl.get('brand')}**: อ้างถึง '{cl.get('extracted_claim')}'\n\n**ข้อเท็จจริง:** {cl.get('note')}"
+            )
     else:
         st.success("✅ ไม่พบข้อความ Hallucination หรือเงื่อนไขที่บิดเบือนในชุดตัวอย่าง")
 
@@ -157,10 +167,12 @@ with tab5:
     st.write("ค้นหาช่องว่างทางการตลาดและข้อเสนอแนะเชิงกลยุทธ์ตามกรอบ **What? Why? So What? Now What?:**")
     if opportunities:
         for opp in opportunities:
-            st.error(f"🚨 **{opp.get('title')}**  `{opp.get('priority', 'P1')}`\n\n"
-                     f"• **ผลกระทบ:** {opp.get('impact')}\n\n"
-                     f"• **หลักฐาน:** {opp.get('evidence', '')}\n\n"
-                     f"• **คำแนะนำเชิงกลยุทธ์:** {opp.get('recommended_action')}")
+            st.error(
+                f"🚨 **{opp.get('title')}**  `{opp.get('priority', 'P1')}`\n\n"
+                f"• **ผลกระทบ:** {opp.get('impact')}\n\n"
+                f"• **หลักฐาน:** {opp.get('evidence', '')}\n\n"
+                f"• **คำแนะนำเชิงกลยุทธ์:** {opp.get('recommended_action')}"
+            )
     else:
         st.success("✅ แบรนด์ครองความเป็นผู้นำในทุกคำถามสำคัญ")
 

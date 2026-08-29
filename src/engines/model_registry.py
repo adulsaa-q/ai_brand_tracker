@@ -20,7 +20,7 @@ class OpenRouterModelRegistry:
         req = urllib.request.Request(self.ENDPOINT, headers=headers)
         try:
             with urllib.request.urlopen(req, timeout=15) as resp:
-                data = json.loads(resp.read().decode('utf-8'))
+                data = json.loads(resp.read().decode("utf-8"))
                 return data.get("data", [])
         except Exception as e:
             print(f"⚠️ Warning: Could not fetch OpenRouter models: {e}")
@@ -33,15 +33,17 @@ class OpenRouterModelRegistry:
             pricing = m.get("pricing", {})
             prompt_price = float(pricing.get("prompt", 0))
             completion_price = float(pricing.get("completion", 0))
-            
+
             if (prompt_price == 0.0 and completion_price == 0.0) or ":free" in m.get("id", ""):
-                free_models.append({
-                    "id": m.get("id"),
-                    "name": m.get("name"),
-                    "context_length": m.get("context_length"),
-                    "description": m.get("description", ""),
-                    "is_free": True
-                })
+                free_models.append(
+                    {
+                        "id": m.get("id"),
+                        "name": m.get("name"),
+                        "context_length": m.get("context_length"),
+                        "description": m.get("description", ""),
+                        "is_free": True,
+                    }
+                )
         return free_models
 
     def benchmark_thai_competency(self, model_id: str) -> dict[str, Any]:
@@ -52,12 +54,12 @@ class OpenRouterModelRegistry:
                 "thai_comprehension_score": 92.5,
                 "json_reliability": 98.0,
                 "latency_ms": 420,
-                "tier": "S-TIER (RECOMMENDED)"
+                "tier": "S-TIER (RECOMMENDED)",
             }
         return {
             "model_id": model_id,
             "thai_comprehension_score": 90.0,
             "json_reliability": 95.0,
             "latency_ms": 350,
-            "tier": "A-TIER"
+            "tier": "A-TIER",
         }

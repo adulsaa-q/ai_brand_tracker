@@ -14,6 +14,7 @@ class GeminiObservationEngine(BaseObservationEngine):
         if self.api_key:
             try:
                 from google import genai
+
                 self.client = genai.Client(api_key=self.api_key)
             except ImportError:
                 pass
@@ -23,12 +24,13 @@ class GeminiObservationEngine(BaseObservationEngine):
             raise RuntimeError("Gemini Client not initialized. Check GEMINI_API_KEY.")
 
         from google.genai import types
+
         start_time = time.time()
-        
+
         prompt = f'''คุณคือผู้ช่วยช้อปปิ้งและวิเคราะห์ตลาดไทย
 คำถามจากผู้บริโภค: "{query_text}"
 
-รายชื่อแบรนด์/แพลตฟอร์มที่ต้องวิเคราะห์: {', '.join(target_brands)}
+รายชื่อแบรนด์/แพลตฟอร์มที่ต้องวิเคราะห์: {", ".join(target_brands)}
 
 กรุณาตอบคำถามอย่างเป็นธรรมชาติโดยอ้างอิงข้อมูลจริง และสรุป JSON ใน ```json ... ```:
 {{
@@ -48,14 +50,12 @@ class GeminiObservationEngine(BaseObservationEngine):
         response = self.client.models.generate_content(
             model=self.model_name,
             contents=prompt,
-            config=types.GenerateContentConfig(
-                tools=[types.Tool(google_search=types.GoogleSearch())]
-            )
+            config=types.GenerateContentConfig(tools=[types.Tool(google_search=types.GoogleSearch())]),
         )
-        
+
         latency = int((time.time() - start_time) * 1000)
         raw_text = response.text or ""
-        
+
         citations = []
         if response.candidates and response.candidates[0].grounding_metadata:
             meta = response.candidates[0].grounding_metadata
@@ -73,23 +73,25 @@ class GeminiObservationEngine(BaseObservationEngine):
             if "```json" in raw_text:
                 json_str = raw_text.split("```json")[1].split("```")[0].strip()
             elif "{" in raw_text:
-                json_str = raw_text[raw_text.find("{"):raw_text.rfind("}")+1]
+                json_str = raw_text[raw_text.find("{") : raw_text.rfind("}") + 1]
             else:
                 json_str = "{}"
-            
+
             parsed = json.loads(json_str)
             for m in parsed.get("brand_mentions", []):
                 b_name = m.get("brand_name", "")
-                mentions.append(BrandMentionDetail(
-                    brand_id=b_name.lower().replace(" ", "_"),
-                    brand_name=b_name,
-                    mentioned=m.get("mentioned", True),
-                    rank=m.get("rank"),
-                    recommendation_intent=m.get("recommendation_intent", "recommended"),
-                    sentiment=m.get("sentiment", "neutral"),
-                    key_strengths_mentioned=m.get("key_strengths", []),
-                    key_weaknesses_mentioned=m.get("key_weaknesses", [])
-                ))
+                mentions.append(
+                    BrandMentionDetail(
+                        brand_id=b_name.lower().replace(" ", "_"),
+                        brand_name=b_name,
+                        mentioned=m.get("mentioned", True),
+                        rank=m.get("rank"),
+                        recommendation_intent=m.get("recommendation_intent", "recommended"),
+                        sentiment=m.get("sentiment", "neutral"),
+                        key_strengths_mentioned=m.get("key_strengths", []),
+                        key_weaknesses_mentioned=m.get("key_weaknesses", []),
+                    )
+                )
         except Exception:
             pass
 
@@ -104,5 +106,5 @@ class GeminiObservationEngine(BaseObservationEngine):
             response_raw_text=raw_text,
             response_latency_ms=latency,
             brand_mentions=mentions,
-            citations=citations
+            citations=citations,
         )

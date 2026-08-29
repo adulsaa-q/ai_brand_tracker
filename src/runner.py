@@ -4,7 +4,7 @@ import sys
 
 import yaml
 
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.analytics import (
@@ -108,6 +108,7 @@ def run_intelligence_pipeline(
 
     logger.info(f"Pipeline Completed! Deep Results saved to {summary_path}")
     return metrics, opportunities
+
 
 if __name__ == "__main__":
     run_intelligence_pipeline(count=15, seed=100, engine_type="mock", include_control=True)

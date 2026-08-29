@@ -10,7 +10,7 @@ class Settings(BaseModel):
     app_env: Literal["development", "staging", "production"] = Field(default="development")
     log_level: str = Field(default="INFO")
     db_path: str = Field(default="data/intelligence.db")
-    
+
     openrouter_api_key: SecretStr | None = Field(default=None)
     gemini_api_key: SecretStr | None = Field(default=None)
     tavily_api_key: SecretStr | None = Field(default=None)
@@ -36,5 +36,6 @@ class Settings(BaseModel):
             anthropic_api_key=SecretStr(os.getenv("ANTHROPIC_API_KEY")) if os.getenv("ANTHROPIC_API_KEY") else None,
             perplexity_api_key=SecretStr(os.getenv("PERPLEXITY_API_KEY")) if os.getenv("PERPLEXITY_API_KEY") else None,
         )
+
 
 app_settings = Settings.load_from_env()

@@ -11,6 +11,7 @@ def test_model_registry_free_discovery():
     candidates = reg.get_free_tier_candidates()
     assert isinstance(candidates, list)
 
+
 def test_thai_competency_benchmark():
     reg = OpenRouterModelRegistry()
     bench = reg.benchmark_thai_competency("mock-free-model")

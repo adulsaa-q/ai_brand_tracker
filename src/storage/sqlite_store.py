@@ -70,10 +70,13 @@ class SQLiteStore:
     def insert_brand(self, brand_id: str, name: str, vertical: str, is_focal: bool = False, aliases=None, domains=None):
         with self._get_connection() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT OR REPLACE INTO dim_brand (brand_id, name, vertical, is_focal_brand, aliases_json, official_domains_json)
                 VALUES (?, ?, ?, ?, ?, ?)
-            """, (brand_id, name, vertical, 1 if is_focal else 0, json.dumps(aliases or []), json.dumps(domains or [])))
+            """,
+                (brand_id, name, vertical, 1 if is_focal else 0, json.dumps(aliases or []), json.dumps(domains or [])),
+            )
             con.commit()
 
     def get_brands(self, vertical: str | None = None) -> list[dict[str, Any]]:

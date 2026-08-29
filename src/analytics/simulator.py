@@ -44,5 +44,5 @@ class MarketStrategySimulator:
             },
             "activated_citation_nodes": list(set(activated_nodes)),
             "feasibility_score": round(max(0.6, 1.0 - (len(strategy_levers) * 0.08)), 2),
-            "executive_recommendation": f"ดำเนินกลยุทธ์ {", ".join(strategy_levers)} เพื่อเพิ่ม AI Visibility ได้ถึง +{round(projected_sov - current_sov_pct, 1)}% และความน่าเชื่อถือ +{round(projected_nrs - current_nrs, 1)} คะแนน",
+            "executive_recommendation": f"ดำเนินกลยุทธ์ {', '.join(strategy_levers)} เพื่อเพิ่ม AI Visibility ได้ถึง +{round(projected_sov - current_sov_pct, 1)}% และความน่าเชื่อถือ +{round(projected_nrs - current_nrs, 1)} คะแนน",
         }
