@@ -1,0 +1,463 @@
+{
+  "metrics": {
+    "total_queries": 2,
+    "brands": [
+      {
+        "brand": "Shopee Thailand",
+        "mentions": 1,
+        "share_of_voice_pct": 50.0,
+        "average_rank": 3.0,
+        "net_sentiment_score": 100.0,
+        "net_recommendation_score": 100.0,
+        "positive_pct": 100.0,
+        "negative_pct": 0.0
+      }
+    ]
+  },
+  "opportunities": [],
+  "citations_analysis": {
+    "total_citations": 12,
+    "unique_domains": 10,
+    "domain_rankings": [
+      {
+        "domain": "facebook.com",
+        "category": "Other Web Source",
+        "citation_count": 2,
+        "influence_share_pct": 16.7,
+        "top_associated_brand": "Shopee Thailand"
+      },
+      {
+        "domain": "mycloudfulfillment.com",
+        "category": "Other Web Source",
+        "citation_count": 2,
+        "influence_share_pct": 16.7,
+        "top_associated_brand": "Shopee Thailand"
+      },
+      {
+        "domain": "creativethailand.org",
+        "category": "Other Web Source",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "N/A"
+      },
+      {
+        "domain": "khaosod.co.th",
+        "category": "Mainstream News",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "N/A"
+      },
+      {
+        "domain": "plus.thairath.co.th",
+        "category": "Other Web Source",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "N/A"
+      },
+      {
+        "domain": "pantip.com",
+        "category": "Webboard / Forum (High Trust)",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "Shopee Thailand"
+      },
+      {
+        "domain": "shopee.co.th",
+        "category": "Direct Marketplace Mall",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "Shopee Thailand"
+      },
+      {
+        "domain": "ktc.co.th",
+        "category": "Other Web Source",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "Shopee Thailand"
+      },
+      {
+        "domain": "instagram.com",
+        "category": "Other Web Source",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "Shopee Thailand"
+      },
+      {
+        "domain": "thairath.co.th",
+        "category": "Mainstream News",
+        "citation_count": 1,
+        "influence_share_pct": 8.3,
+        "top_associated_brand": "Shopee Thailand"
+      }
+    ]
+  },
+  "claims_audit": [],
+  "information_lag": {
+    "grounding_realtime_rate": "100.0%",
+    "estimated_information_lag": "0-2 Days (Real-time Grounded via Google Search)",
+    "risk_assessment": "LOW_LAG",
+    "recommendation": "เปิดใช้งาน Search Grounding เสมอเพื่อให้ AI ตอบโปรโมชั่นปัจจุบันได้ถูกต้อง"
+  },
+  "active_events": [
+    {
+      "id": "double_day",
+      "name_th": "แคมเปญ Double Day (เช่น 8.8, 9.9, 11.11)",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "multiplier": 2.5,
+      "intent": "deal_seeking"
+    },
+    {
+      "id": "payday_sale",
+      "name_th": "แคมเปญ Payday สิ้นเดือน (25-30 ของทุกเดือน)",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "multiplier": 1.8,
+      "intent": "deal_seeking"
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "obs_serp_1787993936",
+      "timestamp": "2026-08-29 15:58:56",
+      "query_id": "q_ctrl_01",
+      "query_text": "แคมเปญ Double Day ซื้อสกินแคร์แบรนด์เนมที่ไหนลดเยอะที่สุด?",
+      "engine_provider": "google_gemini",
+      "model_name": "google-serp-organic",
+      "grounding_enabled": true,
+      "response_raw_text": "Google Search SERP rankings for Thai query: แคมเปญ Double Day ซื้อสกินแคร์แบรนด์เนมที่ไหนลดเยอะที่สุด? (5 organic results)",
+      "response_latency_ms": 1403,
+      "token_count": null,
+      "brand_mentions": [
+        {
+          "brand_id": "shopee_thailand",
+          "brand_name": "Shopee Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "lazada_thailand",
+          "brand_name": "Lazada Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "konvy",
+          "brand_name": "Konvy",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "eveandboy",
+          "brand_name": "EVEANDBOY",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "beautrium",
+          "brand_name": "Beautrium",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "sephora_thailand",
+          "brand_name": "Sephora Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "watsons_thailand",
+          "brand_name": "Watsons Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "boots_thailand",
+          "brand_name": "Boots Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "tiktok_shop_thailand",
+          "brand_name": "TikTok Shop Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        }
+      ],
+      "citations": [
+        {
+          "url": "https://www.facebook.com/WINcosmetics.official/posts/-double-day-1212-%E0%B8%A1%E0%B8%B2%E0%B9%81%E0%B8%A5%E0%B9%89%E0%B8%A7%E0%B8%A7%E0%B8%A7-%E0%B8%A1%E0%B8%AB%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%A5%E0%B8%94%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%AA%E0%B9%88%E0%B8%87%E0%B8%97%E0%B9%89%E0%B8%B2%E0%B8%A2%E0%B8%9B%E0%B8%B5%E0%B9%82%E0%B8%9B%E0%B8%A3%E0%B9%80%E0%B8%94%E0%B9%87%E0%B8%94-%E0%B9%81%E0%B8%9A%E0%B8%A3%E0%B8%99%E0%B8%94%E0%B9%8C%E0%B8%94%E0%B8%B1%E0%B8%87-%E0%B8%82%E0%B8%99%E0%B8%97%E0%B8%B1%E0%B8%9E%E0%B8%A1%E0%B8%B2%E0%B8%A5%E0%B8%94%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%AB%E0%B8%99%E0%B9%88%E0%B8%B3/1168753492115255/",
+          "domain": "www.facebook.com",
+          "title": "ราคาพิเศษ 1-31 ธ.ค. 68 ❤️ OLAY (โอเลย์) ช้อปครบ ...",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://www.creativethailand.org/article-read?article_id=34051",
+          "domain": "www.creativethailand.org",
+          "title": "Double Day Sale แคมเปญระดับโลกที่สร้างยอดขายแบบดับเบิล ...",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://www.mycloudfulfillment.com/blog/marketing/double-day",
+          "domain": "www.mycloudfulfillment.com",
+          "title": "5 เทคนิคโกยยอดขายให้พุ่ง ช่วง Double Day",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://www.khaosod.co.th/sentangsedtee/featured/article_297494",
+          "domain": "www.khaosod.co.th",
+          "title": "เปิดที่มา “วันช้อปสุดเดือด” Black Friday VS Double Day",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://plus.thairath.co.th/topic/business/100432",
+          "domain": "plus.thairath.co.th",
+          "title": "'Double Day' แคมเปญที่มีทุกเดือน ยังดึงดูดผู้บริโภคได้ผลเยอะอยู่ไหม",
+          "source_type": "news",
+          "authority_score": 0.5
+        }
+      ],
+      "category": "โปรโมชั่น",
+      "is_control_set": true
+    },
+    {
+      "observation_id": "obs_serp_1787993938",
+      "timestamp": "2026-08-29 15:58:58",
+      "query_id": "q_ctrl_02",
+      "query_text": "Flash Sale เครื่องสำอางช่วง Mid-month แพลตฟอร์มไหนมีโค้ดส่วนลดคุ้มที่สุด?",
+      "engine_provider": "google_gemini",
+      "model_name": "google-serp-organic",
+      "grounding_enabled": true,
+      "response_raw_text": "Google Search SERP rankings for Thai query: Flash Sale เครื่องสำอางช่วง Mid-month แพลตฟอร์มไหนมีโค้ดส่วนลดคุ้มที่สุด? (7 organic results)",
+      "response_latency_ms": 2076,
+      "token_count": null,
+      "brand_mentions": [
+        {
+          "brand_id": "shopee_thailand",
+          "brand_name": "Shopee Thailand",
+          "mentioned": true,
+          "rank": 3,
+          "recommendation_intent": "recommended",
+          "sentiment": "positive",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "lazada_thailand",
+          "brand_name": "Lazada Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "konvy",
+          "brand_name": "Konvy",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "eveandboy",
+          "brand_name": "EVEANDBOY",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "beautrium",
+          "brand_name": "Beautrium",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "sephora_thailand",
+          "brand_name": "Sephora Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "watsons_thailand",
+          "brand_name": "Watsons Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "boots_thailand",
+          "brand_name": "Boots Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "tiktok_shop_thailand",
+          "brand_name": "TikTok Shop Thailand",
+          "mentioned": false,
+          "rank": null,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "neutral",
+          "key_strengths_mentioned": [],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        }
+      ],
+      "citations": [
+        {
+          "url": "https://www.facebook.com/mycloudfulfillment/posts/%E0%B8%97%E0%B8%B3%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%A3%E0%B8%B9%E0%B9%89%E0%B8%88%E0%B8%B1%E0%B8%81-mid-month-sale-%E0%B9%81%E0%B8%84%E0%B8%A1%E0%B9%80%E0%B8%9B%E0%B8%8D%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88%E0%B8%A5%E0%B9%88%E0%B8%B2%E0%B8%AA%E0%B8%B8%E0%B8%94-%E0%B9%81%E0%B8%84%E0%B8%A1%E0%B9%80%E0%B8%9B%E0%B8%8D%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B9%81%E0%B8%AA%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%81%E0%B8%B3%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B9%84%E0%B8%94%E0%B9%89%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%99%E0%B8%B4%E0%B8%A2/1836199793234154/?locale=th_TH",
+          "domain": "www.facebook.com",
+          "title": "ทำความรู้จัก Mid-Month Sale แคมเปญใหม่ล่าสุด! แคมเปญ ...",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://pantip.com/topic/42806003",
+          "domain": "pantip.com",
+          "title": "Lazada Shopee ลดราคาช่วงไหน วันไหนของปีแจกโค้ดลดเยอะ ...",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://shopee.co.th/m/15-06-24-dday",
+          "domain": "shopee.co.th",
+          "title": "Shopee 6.15 Mid Month Sale โค้ดส่วนลด 2000 ลดมากกว่า 50 ...",
+          "source_type": "marketplace",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://www.mycloudfulfillment.com/blog/education/mid-month-sale-insight",
+          "domain": "www.mycloudfulfillment.com",
+          "title": "Mid Month Sale เจาะลึก insight ที่คนขายออนไลน์ต้องรู้ !",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://www.ktc.co.th/article/shopping/shop-online/code-shopee-sale",
+          "domain": "www.ktc.co.th",
+          "title": "Shopee ลดราคาวันไหนเยอะที่สุด มีโปรช่วงไหนบ้างในปี 2567",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://www.instagram.com/p/DTffMK2jLpV/",
+          "domain": "www.instagram.com",
+          "title": "Shopee 15.1 Mid-Month Sale ครึ่งเดือน ลดแรง! 🛍️ 🗓️วันที่ ...",
+          "source_type": "news",
+          "authority_score": 0.5
+        },
+        {
+          "url": "https://www.thairath.co.th/shopping/others/1000737",
+          "domain": "www.thairath.co.th",
+          "title": "แจกโค้ดส่วนลด Shopee-Lazada Mid Month Sale 7.15 ช็อป ...",
+          "source_type": "news",
+          "authority_score": 0.5
+        }
+      ],
+      "category": "โปรโมชั่น",
+      "is_control_set": true
+    }
+  ]
+}
