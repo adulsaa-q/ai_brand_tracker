@@ -53,3 +53,7 @@ Honest per-feature state. Updated after implementation, not before.
 - Inlined web assets (dashboard still loads Tailwind / Chart.js / fonts from CDN)
 - Real Thai-competency model eval to replace the removed `benchmark_thai_competency`
 - Temporal-context slicing UI (data is captured at run grain; no UI to compare runs across events)
+- **UX / UI rethink** — the dashboard is now honest and wired to the backend, but
+  the information architecture (tab structure, the "executive terminal" hero card,
+  how surfaces and the 4-stage memo are presented) needs a proper design pass.
+  Deliberately deferred — to be done gradually, not in this pass.
