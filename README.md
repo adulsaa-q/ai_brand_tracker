@@ -1,84 +1,127 @@
 <div align="center">
 
-  <h1 style="font-size: 2.3em; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px;">THAILAND AI MARKET &amp; DECISION INTELLIGENCE</h1>
-  <h3 style="font-weight: 600; margin-top: 0;">AI SHARE OF VOICE · GENERATIVE ENGINE OPTIMIZATION · CITATION AUTHORITY</h3>
+  <h1>Thailand AI Market &amp; Decision Intelligence</h1>
+  <p><b>Measure how generative AI answers recommend brands to Thai consumers — and turn it into a decision.</b></p>
 
-  <sub>How generative AI answers recommend Thai brands · Multi-surface observation · DuckDB star schema · 4-stage decision memos</sub>
+  <sub>AI Share of Voice · Generative Engine Optimization · Citation authority · Multi-surface observation</sub>
 
   <br/><br/>
 
-  <img src="https://img.shields.io/badge/Python-3.12+-0d1117?style=for-the-badge&logo=python&logoColor=F2F0EF" />&nbsp;
-  <img src="https://img.shields.io/badge/FastAPI-0d1117?style=for-the-badge&logo=fastapi&logoColor=F2F0EF" />&nbsp;
-  <img src="https://img.shields.io/badge/DuckDB-0d1117?style=for-the-badge&logo=duckdb&logoColor=F2F0EF" />&nbsp;
-  <img src="https://img.shields.io/badge/Tests-72_passing-success?style=for-the-badge" />&nbsp;
-  <img src="https://img.shields.io/badge/Cost-100%25_Free_Tier-004D40?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white" />&nbsp;
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />&nbsp;
+  <img src="https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black" />&nbsp;
+  <img src="https://img.shields.io/badge/tests-73_passing-success?style=for-the-badge" />&nbsp;
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" />
 
 </div>
 
 ---
 
-### <img src="https://api.iconify.design/lucide:target.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;What This Measures
+## Overview
 
-When a Thai consumer asks an AI *"ซื้อ / ใช้บริการ ที่ไหนดี"*, which brand gets recommended, at what rank, with what sentiment, and which web sources drove that answer. It runs a fixed query set against several answer surfaces, stores every observation in a star schema, and builds a **What → Why → So what → Now what** memo per market vertical.
+When a Thai consumer asks an AI assistant *"ซื้อ / ใช้บริการที่ไหนดี"*, the answer names some brands and not others. This tool measures that: for a fixed set of consumer-intent queries it records which brands each engine recommends, at what rank, with what sentiment, and which web sources the answer leaned on. Results are stored in a DuckDB star schema and summarised into a four-part memo — *what is happening, why, so what, now what* — per market vertical.
 
-<table width="100%">
-<tr>
-<td width="50%" valign="top">
-<br/>
-<img src="https://api.iconify.design/lucide:git-fork.svg?color=%23F3F4F6" width="20" valign="middle" /> &nbsp;<b>MULTI-SURFACE, NEVER MIXED</b>
-<br/><br/>
-<img src="https://img.shields.io/badge/SURFACE_TAXONOMY-generative_%7C_serp_%7C_retrieval-0d1117?style=for-the-badge&logoColor=F3F4F6" />
-<br/><br/>
-A Gemini recommendation rank and a Google SERP position are different signals. Share of Voice headline numbers use the <code>generative_answer</code> surface only; every other surface is kept in a separate breakdown, never averaged in.
-<br/><br/>
-</td>
-<td width="50%" valign="top">
-<br/>
-<img src="https://api.iconify.design/lucide:database.svg?color=%23F3F4F6" width="20" valign="middle" /> &nbsp;<b>ONE ANALYTICAL SOURCE OF TRUTH</b>
-<br/><br/>
-<img src="https://img.shields.io/badge/DUCKDB_STAR_SCHEMA-run_id_traced-0d1117?style=for-the-badge&logoColor=F3F4F6" />
-<br/><br/>
-<code>dim_brand · dim_query · fact_observation · fact_brand_mention · fact_citation</code>. Analytics read back from DuckDB by <code>run_id</code> — not the in-memory list — so a dropped mention shows up as dropped.
-<br/><br/>
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-<br/>
-<img src="https://api.iconify.design/lucide:fingerprint.svg?color=%23F3F4F6" width="20" valign="middle" /> &nbsp;<b>HONEST PROVENANCE</b>
-<br/><br/>
-<img src="https://img.shields.io/badge/EVERY_OBSERVATION-provider_+_surface_+_parse_status-0d1117?style=for-the-badge&logoColor=F3F4F6" />
-<br/><br/>
-UUID ids, correct provider labels, prompt version, retry count. A malformed model response is recorded as <code>parse_error</code> — never silently turned into "brand not mentioned".
-<br/><br/>
-</td>
-<td width="50%" valign="top">
-<br/>
-<img src="https://api.iconify.design/lucide:banknote.svg?color=%23F3F4F6" width="20" valign="middle" /> &nbsp;<b>FREE TIER, BRING YOUR OWN KEY</b>
-<br/><br/>
-<img src="https://img.shields.io/badge/OPENROUTER-live_free_model_list-0d1117?style=for-the-badge&logoColor=F3F4F6" />
-<br/><br/>
-The OpenRouter free tier changes constantly, so the model list is fetched live and probe-checked. Keys travel per request (<code>X-Provider-Key</code>) and are never logged or persisted.
-<br/><br/>
-</td>
-</tr>
-</table>
-
----
-
-### <img src="https://api.iconify.design/lucide:layout-dashboard.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;Executive Dashboard
+It supports several observation engines and keeps their signals separate, because a generative recommendation and a Google search-result position are not the same measurement.
 
 <div align="center">
-  <img src="docs/assets/dashboard.png" width="90%" alt="Executive dashboard — synthetic (mock) run, clearly banner-labelled" />
+  <img src="docs/assets/dashboard.png" width="88%" alt="Executive dashboard showing a live Serper run" />
   <br/>
-  <sub>Every view carries an explicit data-mode banner: <b>LIVE</b> · <b>SYNTHETIC (MOCK)</b> · <b>NO DATA</b> · <b>ERROR</b>. Nothing is presented as real unless a real scan produced it.</sub>
+  <sub>Every view is labelled with its data mode: <b>LIVE</b>, <b>SYNTHETIC (MOCK)</b>, <b>NO DATA</b>, or <b>ERROR</b>.</sub>
 </div>
 
 ---
 
-### <img src="https://api.iconify.design/lucide:workflow.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;Project Flow
+## <img src="https://api.iconify.design/lucide:list-checks.svg?color=%23888" width="20" valign="middle" /> Features
 
-Full diagram set (system map · scan sequence · star-schema ERD · surface taxonomy · BYOK flow) in **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+- **Query universe generator** — six consumer-intent pillars × Thai personas, seeded and reproducible.
+- **Five observation engines** — `mock` (synthetic), `gemini`, `openrouter`, `serper`, `tavily`. Each observation records its provider, answer surface, model, prompt version, and parse status.
+- **Answer-surface separation** — Share of Voice and Net Recommendation Score are reported per surface; the headline figure uses generative answers only.
+- **DuckDB star schema** — `dim_brand`, `dim_query`, `fact_observation`, `fact_brand_mention`, `fact_citation`, all tagged with a `run_id`. Analytics read back from the database, not an in-memory list.
+- **Decision memo** — competitor gap analysis in a *What → Why → So what → Now what* structure.
+- **Web dashboard + REST API** — background scans with live progress, CSV/JSON export, and an honest data-mode banner on every view.
+- **Live OpenRouter free-model discovery** — the free tier changes constantly, so the model list is fetched and probe-checked on demand.
+- **Bring-your-own-key** — pass a provider key per request via `X-Provider-Key`; it is used to build the engine and then discarded, never logged or persisted.
+
+---
+
+## <img src="https://api.iconify.design/lucide:rocket.svg?color=%23888" width="20" valign="middle" /> Installation
+
+Requires Python 3.11+.
+
+```bash
+git clone https://github.com/adulsaa-q/ai_brand_tracker
+cd ai_brand_tracker
+
+pip install -e ".[dev]"            # core + test tooling
+pip install -e ".[dev,dashboard]"  # also the Streamlit view
+
+cp .env.example .env               # add API keys (all optional — see Configuration)
+```
+
+---
+
+## <img src="https://api.iconify.design/lucide:terminal.svg?color=%23888" width="20" valign="middle" /> Usage
+
+```bash
+# synthetic run — deterministic, no network, clearly labelled
+python -m src.cli run --vertical ev_automotive_th --count 30 --engine mock
+
+# real runs
+python -m src.cli models                                        # live OpenRouter free models
+python -m src.cli run --vertical ecommerce_retail_th --engine serper --count 15
+python -m src.cli run --vertical ecommerce_retail_th --engine gemini --count 15
+
+# server + web dashboard on http://localhost:8000
+python -m src.cli serve --port 8000
+```
+
+| Engine | Answer surface | Typical speed | Free tier |
+| :--- | :--- | :--- | :--- |
+| `mock` | synthetic | instant | n/a — never a decision input |
+| `serper` | organic SERP position | ~2 s/query | 2,500 queries |
+| `tavily` | web retrieval / citations | ~5 s/query | 1,000 credits/month |
+| `gemini` | generative answer (search-grounded) | ~25 s/query | ~250 requests/day |
+| `openrouter` | generative answer | ~30–60 s/query | free models, rate-limited |
+
+> Generative engines are slow. Run large scans as a scheduled job, or keep `--count` low.
+
+---
+
+## <img src="https://api.iconify.design/lucide:sliders-horizontal.svg?color=%23888" width="20" valign="middle" /> Configuration
+
+All configuration is environment variables (see `.env.example`). Nothing is required to run a `mock` scan.
+
+| Variable | Purpose |
+| :--- | :--- |
+| `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `SERPER_API_KEY`, `TAVILY_API_KEY` | Engine keys. Only the engine you run needs one. |
+| `AIBT_API_KEYS` | Comma-separated API keys. Unset → open mode (writes allowed, logged). Set → writes require `X-API-Key` or `Authorization: Bearer`. |
+| `AIBT_REQUIRE_AUTH` | `true` also gates read endpoints. |
+| `AIBT_ALLOWED_ORIGINS` | Comma-separated CORS origins. Unset → `*` with a warning. |
+| `AIBT_MAX_CONCURRENT_SCANS`, `AIBT_MAX_RUNS_PER_DAY` | Scan abuse limits (default 2 / 200). |
+| `DATA_DIR`, `ENTITIES_PATH` | Output directory and vertical config path. |
+
+Security posture, including how untrusted provider/web content is handled, is documented in [SECURITY.md](SECURITY.md).
+
+---
+
+## <img src="https://api.iconify.design/lucide:server.svg?color=%23888" width="20" valign="middle" /> API
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/v1/health` | Liveness plus dependency checks and auth mode |
+| `GET` | `/api/v1/verticals` | List market sectors |
+| `GET` | `/api/v1/models` | Live OpenRouter free-model list |
+| `POST` | `/api/v1/verticals` | Create or replace a custom sector *(write)* |
+| `POST` | `/api/v1/scan` | Queue a background scan; `X-Provider-Key` for BYOK *(write)* |
+| `GET` | `/api/v1/scan/{id}/progress` | Progress and run statistics |
+| `GET` | `/api/v1/metrics/{vertical}` | Latest run summary |
+| `GET` | `/api/v1/export/{vertical}` | CSV or JSON export |
+
+---
+
+## <img src="https://api.iconify.design/lucide:workflow.svg?color=%23888" width="20" valign="middle" /> Architecture
+
+The full diagram set — system map, scan sequence, star-schema ERD, surface taxonomy, and the bring-your-own-key flow — is in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Design decisions are recorded as ADRs in [docs/adr/](docs/adr/).
 
 ```mermaid
 flowchart LR
@@ -89,133 +132,48 @@ flowchart LR
     E --> OBS["RawObservation<br/>provider · answer_surface · parse_status"]
     OBS --> DUCK[("DuckDB star schema")]
     DUCK --> REPO["AnalyticsRepository<br/>load_observations(run_id)"]
-    REPO --> AN["SoV/NRS per surface · 4-stage memo<br/>citation graph · claim audit"]
+    REPO --> AN["SoV / NRS per surface<br/>4-stage memo · citation graph"]
     AN --> OUT["atomic JSON summaries"]
     OUT --> API
-    OUT --> WEB["Web dashboard<br/>LIVE / SYNTHETIC / NO-DATA / ERROR"]
+    OUT --> WEB["Web dashboard"]
 ```
-
----
-
-### <img src="https://api.iconify.design/lucide:terminal.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;Quickstart
-
-```bash
-pip install -e ".[dev]"                 # core + tests
-pip install -e ".[dev,dashboard]"       # + Streamlit view
-
-cp .env.example .env                    # add GEMINI / OPENROUTER / SERPER / TAVILY keys (all optional)
-
-# deterministic, zero-cost, clearly labelled synthetic
-python -m src.cli run --vertical ev_automotive_th --count 30 --engine mock
-
-# real generative run
-python -m src.cli models                                    # live OpenRouter free list
-python -m src.cli run --engine openrouter --count 15 --vertical ecommerce_retail_th
-python -m src.cli run --engine gemini    --count 15 --vertical ecommerce_retail_th
-
-# full-stack server + web dashboard
-python -m src.cli serve --port 8000                         # http://localhost:8000
-```
-
-<table width="100%">
-<tr><td width="25%"><b>Engine</b></td><td width="20%"><b>Surface</b></td><td width="15%"><b>Speed</b></td><td><b>Notes</b></td></tr>
-<tr><td><code>mock</code></td><td>synthetic</td><td>instant</td><td>deterministic (SHA-256 seed), always labelled — never a decision input</td></tr>
-<tr><td><code>serper</code></td><td>organic_serp</td><td>~2s / query</td><td>Google SERP position · free 2,500 queries</td></tr>
-<tr><td><code>tavily</code></td><td>web_retrieval</td><td>~5s / query</td><td>citation grounding · free 1,000 credits/mo</td></tr>
-<tr><td><code>gemini</code></td><td>generative_answer</td><td>~25s / query</td><td>Google Search grounded · free tier ~250 req/day</td></tr>
-<tr><td><code>openrouter</code></td><td>generative_answer</td><td>~30-60s / query</td><td>auto-picks a working free model · slow but $0</td></tr>
-</table>
-
-> Generative engines are slow — run large scans as a background job / weekly cron, or keep `--count` small.
-
----
-
-### <img src="https://api.iconify.design/lucide:server.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;API
-
-| Method | Endpoint | |
-| :--- | :--- | :--- |
-| `GET` | `/api/v1/health` | liveness + dependency checks + auth mode |
-| `GET` | `/api/v1/verticals` | list market sectors |
-| `GET` | `/api/v1/models` | live OpenRouter free-model list |
-| `POST` | `/api/v1/verticals` | create/replace a custom sector · **write** |
-| `POST` | `/api/v1/scan` | queue a background scan (`X-Provider-Key` for BYOK) · **write** |
-| `GET` | `/api/v1/scan/{id}/progress` | live progress + run stats |
-| `GET` | `/api/v1/metrics/{vertical}` | last run summary |
-| `GET` | `/api/v1/export/{vertical}` | CSV / JSON |
-
-`AIBT_API_KEYS` unset → **open mode** (writes allowed, logged, `/health` says so). Set it to require `X-API-Key` on writes. Concurrency + daily-quota limits, CORS config, and the untrusted-content model are in **[SECURITY.md](SECURITY.md)**.
-
----
-
-### <img src="https://api.iconify.design/lucide:layers.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;Stack
-
-<table width="100%">
-<tr>
-<td width="25%"><b>Core</b></td>
-<td>
-  <img src="https://img.shields.io/badge/Python_3.12-3776AB?style=flat-square&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Pydantic_v2-E92063?style=flat-square&logo=pydantic&logoColor=white" />
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
-  <img src="https://img.shields.io/badge/DuckDB-FFF000?style=flat-square&logo=duckdb&logoColor=black" />
-  <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white" />
-</td>
-</tr>
-<tr>
-<td><b>Observation engines</b></td>
-<td>
-  <img src="https://img.shields.io/badge/Google_Gemini-8E75B2?style=flat-square&logo=googlegemini&logoColor=white" />
-  <img src="https://img.shields.io/badge/OpenRouter-0d1117?style=flat-square" />
-  <img src="https://img.shields.io/badge/Serper.dev-4285F4?style=flat-square&logo=google&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tavily-1E3E30?style=flat-square" />
-</td>
-</tr>
-<tr>
-<td><b>Quality</b></td>
-<td>
-  <img src="https://img.shields.io/badge/Ruff-D7FF64?style=flat-square&logo=ruff&logoColor=black" />
-  <img src="https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white" />
-  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white" />
-  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
-</td>
-</tr>
-</table>
-
----
-
-### <img src="https://api.iconify.design/lucide:folder-tree.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;Layout
 
 ```
 config/            entities.yaml · control_benchmark_set.yaml · thai_personas.yaml
 src/
-  runner.py        pipeline: generate → observe → persist → reload from DuckDB → analyse
-  api.py           FastAPI REST + static mount        security.py   auth + scan limiter
-  prompts.py       versioned prompt registry          brands.py     canonical brand identity
-  ids.py           UUID run / observation ids         env auto-load (.env)
-  universe/        QueryUniverseGenerator + Thai temporal calendar
-  engines/         mock · gemini · openrouter · serper · tavily   (+ _http retry, _parsing)
-  storage/         duckdb_store.py                    (SQLite dropped — ADR 0001)
-  analytics/       metrics · opportunity · citation_graph · claim_intelligence ·
-                   information_lag · simulator · repository
-docs/
-  ARCHITECTURE.md  6 mermaid diagrams        STATUS.md   per-feature Shipped/Experimental/Demo
-  adr/             0001 single store · 0002 answer surfaces + temporal context
+  runner.py        pipeline: generate → observe → persist → reload → analyse
+  api.py           REST + static mount        security.py   auth + scan limiter
+  prompts.py       versioned prompt registry  brands.py     canonical brand identity
+  universe/        query generator + Thai temporal calendar
+  engines/         mock · gemini · openrouter · serper · tavily  (+ _http, _parsing)
+  storage/         duckdb_store.py            (SQLite dropped — ADR 0001)
+  analytics/       metrics · opportunity · citation_graph · claim_intelligence · repository
+docs/              ARCHITECTURE.md · STATUS.md · adr/
 ```
 
 ---
 
-### <img src="https://api.iconify.design/lucide:flask-conical.svg?color=%23F3F4F6" width="22" valign="middle" /> &nbsp;Tests &amp; Quality
+## <img src="https://api.iconify.design/lucide:flask-conical.svg?color=%23888" width="20" valign="middle" /> Development
 
 ```bash
-pytest tests/ -q             # 72: unit · contract · integration · acceptance
+pytest tests/ -q                       # unit, contract, integration, acceptance
 ruff check . && ruff format --check .
-python -m build --wheel      # packaging smoke
+python -m build --wheel                 # packaging check
 ```
 
-CI runs editable install → wheel build → import smoke → ruff → full suite on every push.
-End-to-end reconciliation is asserted (generated queries = persisted observations = mention/citation grain = analytics input), and an acceptance test walks the whole scenario: auth → validate → scan → unique ids → provenance → persist → canonical analytics → export, plus *a failed engine is never reported as a successful insight*.
+CI runs an editable install, wheel build, import smoke test, linting, and the full
+suite on every push. The integration test asserts that generated queries, persisted
+observations, mention and citation rows, and analytics input all reconcile; the
+acceptance test walks the whole scenario end to end and checks that a failed engine
+is never reported as a successful result.
+
+Current per-feature status — what is shipped, experimental, demo-only, or planned —
+is tracked in [docs/STATUS.md](docs/STATUS.md).
 
 ---
 
-<div align="center">
-  <sub>Built by <b>Adul Sa-a (Q)</b> · MIT License · see <a href="docs/STATUS.md">docs/STATUS.md</a> for the honest per-feature state</sub>
-</div>
+## License
+
+MIT — see [LICENSE](LICENSE). Built by Adul Sa-a (Q).
+
+<sub>Developed with AI assistance (Claude); commits that were pair-written carry a <code>Co-Authored-By</code> trailer.</sub>

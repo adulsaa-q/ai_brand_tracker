@@ -1610,11 +1610,16 @@
 
     // Map the API run summary onto the dashboard's internal dataset shape.
     function adaptApiMetrics(api) {
+      // organic SERP / web-retrieval surfaces carry no sentiment signal
+      const surfaces = api.metrics?.surfaces_present || api.run_stats?.surfaces || [];
+      const hasSentiment = surfaces.some(s => s === "generative_answer" || s === "synthetic");
       const brands = (api.metrics?.brands || []).map(b => ({
         name: b.brand,
         sov: Number(b.share_of_voice_pct || 0),
         avgRank: b.average_rank == null ? 0 : Number(b.average_rank),
-        sentiment: `${(b.positive_pct == null ? b.net_sentiment_score : b.positive_pct) || 0}% Pos`,
+        sentiment: hasSentiment
+          ? `${(b.positive_pct == null ? b.net_sentiment_score : b.positive_pct) || 0}% Pos`
+          : "n/a",
         mentions: b.mentions || 0
       }));
       const citations = (api.citations_analysis?.domain_rankings || []).map(d => ({
