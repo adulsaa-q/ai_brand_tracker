@@ -23,7 +23,7 @@ def main():
     # run
     run_parser = subparsers.add_parser("run", help="Run full observation pipeline")
     run_parser.add_argument("--count", type=int, default=15, help="Number of queries to audit")
-    run_parser.add_argument("--engine", type=str, default="mock", choices=["mock", "gemini", "openrouter"], help="Observation Engine")
+    run_parser.add_argument("--engine", type=str, default="mock", choices=["mock", "gemini", "openrouter", "tavily", "serper"], help="Observation Engine")
     run_parser.add_argument("--seed", type=int, default=42, help="Random seed")
     run_parser.add_argument("--control", action="store_true", default=True, help="Include invariant control benchmark set")
 

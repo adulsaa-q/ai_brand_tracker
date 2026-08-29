@@ -97,6 +97,8 @@ class QueryUniverseGenerator:
     def generate_queries(self, count: int = 20, seed: int = 42, include_control: bool = False) -> List[Dict[str, Any]]:
         if include_control:
             ctrl = self.get_control_benchmark_set()
-            exp = self.generate_exploratory_queries(count=max(0, count - len(ctrl)), seed=seed)
+            if count <= len(ctrl):
+                return ctrl[:count]
+            exp = self.generate_exploratory_queries(count=count - len(ctrl), seed=seed)
             return ctrl + exp
         return self.generate_exploratory_queries(count=count, seed=seed)

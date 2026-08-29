@@ -44,12 +44,8 @@ def run_intelligence_pipeline(
     queries = generator.generate_queries(count=count, seed=seed, include_control=include_control)
     print(f"✅ Generated {len(queries)} Thai Consumer Queries (Control: {sum(1 for q in queries if q.get('is_control_set'))}, Exploratory: {sum(1 for q in queries if not q.get('is_control_set'))}).")
 
-    if engine_type == "gemini":
-        engine = GeminiObservationEngine()
-    elif engine_type == "openrouter":
-        engine = OpenRouterEngine()
-    else:
-        engine = MockObservationEngine(model_name="mock-gemini-2.5")
+    from src.engines import EngineFactory
+    engine = EngineFactory.create(engine_type=engine_type)
 
     observations = []
     print("⚡ Executing AI Observations...")

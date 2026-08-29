@@ -1,11 +1,14 @@
 import random
 import time
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 from src.engines.base import BaseObservationEngine
 from src.models.observations import RawObservation, BrandMentionDetail, CitationSource
 
 class MockObservationEngine(BaseObservationEngine):
+    def __init__(self, model_name: str = "gemini-2.5-flash-mock", api_key: Optional[str] = None):
+        super().__init__(model_name=model_name, api_key=api_key)
+
     def observe(self, query_id: str, query_text: str, target_brands: List[str]) -> RawObservation:
         start_time = time.time()
         rng = random.Random(hash(query_text) % 10000)

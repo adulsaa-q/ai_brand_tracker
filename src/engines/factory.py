@@ -4,9 +4,11 @@ from src.engines.base import BaseObservationEngine
 from src.engines.mock_engine import MockObservationEngine
 from src.engines.gemini_engine import GeminiObservationEngine
 from src.engines.openrouter_engine import OpenRouterEngine
+from src.engines.tavily_grounding import TavilyGroundingEngine
+from src.engines.serper_engine import SerperGoogleEngine
 from src.exceptions import EngineError
 
-EngineType = Literal["mock", "gemini", "openrouter"]
+EngineType = Literal["mock", "gemini", "openrouter", "tavily", "serper"]
 
 class EngineFactory:
     @staticmethod
@@ -14,7 +16,11 @@ class EngineFactory:
         if engine_type == "gemini":
             return GeminiObservationEngine(model_name=model_name or "gemini-2.5-flash")
         elif engine_type == "openrouter":
-            return OpenRouterEngine(model_name=model_name or "deepseek/deepseek-chat:free")
+            return OpenRouterEngine(model_name=model_name or "nvidia/nemotron-3.5-lightning:free")
+        elif engine_type == "tavily":
+            return TavilyGroundingEngine(model_name=model_name or "tavily-search-v1")
+        elif engine_type == "serper":
+            return SerperGoogleEngine(model_name=model_name or "google-serp-th")
         elif engine_type == "mock":
             return MockObservationEngine(model_name=model_name or "gemini-2.5-flash-mock")
         else:

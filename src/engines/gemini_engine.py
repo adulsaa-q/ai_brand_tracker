@@ -58,10 +58,12 @@ class GeminiObservationEngine(BaseObservationEngine):
         citations = []
         if response.candidates and response.candidates[0].grounding_metadata:
             meta = response.candidates[0].grounding_metadata
-            for chunk in getattr(meta, "grounding_chunks", []):
-                if hasattr(chunk, "web") and chunk.web:
-                    title = getattr(chunk.web, "title", "Web Source")
-                    url = getattr(chunk.web, "uri", None)
+            chunks = getattr(meta, "grounding_chunks", None) or []
+            for chunk in chunks:
+                web = getattr(chunk, "web", None)
+                if web:
+                    title = getattr(web, "title", "Web Source") or "Web Source"
+                    url = getattr(web, "uri", None)
                     domain = url.split("//")[-1].split("/")[0] if url else "web"
                     citations.append(CitationSource(url=url, domain=domain, title=title, source_type="news"))
 
