@@ -31,6 +31,7 @@ from src.universe.temporal_events import ThailandTemporalEngine
 logger = get_logger("runner")
 
 ENTITIES_PATH = os.getenv("ENTITIES_PATH", "config/entities.yaml")
+DATA_DIR = os.getenv("DATA_DIR", "data")
 
 
 def _atomic_write_json(path: str, payload: dict) -> None:
@@ -55,10 +56,11 @@ def run_intelligence_pipeline(
     include_control: bool = True,
     progress_callback: Any = None,
     entities_path: str | None = None,
-    output_dir: str = "data",
+    output_dir: str | None = None,
 ) -> dict[str, Any]:
     run_id = new_run_id()
     entities_path = entities_path or ENTITIES_PATH
+    output_dir = output_dir or DATA_DIR
     duckdb_path = duckdb_path or os.path.join(output_dir, "intelligence.duckdb")
     logger.info("Starting run %s [vertical=%s engine=%s count=%s]", run_id, vertical_id, engine_type.upper(), count)
 
