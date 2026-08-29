@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 
 from src.engines._http import request_json
-from src.engines.base import BaseObservationEngine
+from src.engines.base import BaseObservationEngine, match_terms
 from src.exceptions import EngineError
 from src.ids import new_observation_id
 from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
@@ -32,7 +32,13 @@ class TavilyGroundingEngine(BaseObservationEngine):
     def __init__(self, model_name: str = "tavily-search-v1", api_key: str | None = None):
         super().__init__(model_name, api_key or os.getenv("TAVILY_API_KEY"))
 
-    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
+    def observe(
+        self,
+        query_id: str,
+        query_text: str,
+        target_brands: list[str],
+        brand_aliases: dict[str, list[str]] | None = None,
+    ) -> RawObservation:
         if not self.api_key:
             raise EngineError("Tavily engine requires TAVILY_API_KEY", {"engine": "tavily"})
 
@@ -78,7 +84,7 @@ class TavilyGroundingEngine(BaseObservationEngine):
             BrandMentionDetail(
                 brand_id=brand.lower().replace(" ", "_"),
                 brand_name=brand,
-                mentioned=brand.lower() in corpus,
+                mentioned=any(term in corpus for term in match_terms(brand, brand_aliases)),
                 rank=None,
                 sentiment="neutral",
                 recommendation_intent="neutral_mention",

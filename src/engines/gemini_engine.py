@@ -38,7 +38,13 @@ class GeminiObservationEngine(BaseObservationEngine):
             config=types.GenerateContentConfig(tools=[types.Tool(google_search=types.GoogleSearch())]),
         )
 
-    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
+    def observe(
+        self,
+        query_id: str,
+        query_text: str,
+        target_brands: list[str],
+        brand_aliases: dict[str, list[str]] | None = None,
+    ) -> RawObservation:
         if not self.api_key:
             raise EngineError("Gemini engine requires GEMINI_API_KEY", {"engine": "gemini"})
         if not self.client:
@@ -47,7 +53,7 @@ class GeminiObservationEngine(BaseObservationEngine):
             )
 
         start_time = time.time()
-        prompt = self._prompt.render(query_text=query_text, brands=", ".join(target_brands))
+        prompt = self._prompt.render(query_text=query_text, brands=_brand_list(target_brands, brand_aliases))
         response, retries = retry_call(lambda: self._generate(prompt), engine="gemini")
 
         raw_text = response.text or ""
@@ -89,6 +95,15 @@ class GeminiObservationEngine(BaseObservationEngine):
             brand_mentions=mentions,
             citations=citations,
         )
+
+
+def _brand_list(names: list[str], aliases: dict[str, list[str]] | None) -> str:
+    """Render brands with their alt spellings so the model recognises Thai / short forms."""
+    parts = []
+    for n in names:
+        alts = [a for a in (aliases or {}).get(n, []) if a and a.lower() != n.lower()]
+        parts.append(f"{n} ({', '.join(alts)})" if alts else n)
+    return "; ".join(parts)
 
 
 def _extract_citations(response) -> list[CitationSource]:

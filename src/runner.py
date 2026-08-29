@@ -80,6 +80,7 @@ def run_intelligence_pipeline(
         logger.warning("Vertical not found; falling back to %s", vertical_id)
 
     brands = [b["name"] for b in target_vertical.get("brands", [])]
+    brand_aliases = {b["name"]: b.get("aliases", []) for b in target_vertical.get("brands", [])}
     focal = resolve_focal_brand(target_vertical)
     logger.info("Focal brand resolved: %s (id=%s)", focal.name, focal.brand_id)
 
@@ -136,7 +137,12 @@ def run_intelligence_pipeline(
             progress_callback(idx + 1, total_q, q["text_th"])
 
         try:
-            obs = engine.observe(query_id=q["query_id"], query_text=q["text_th"], target_brands=brands)
+            obs = engine.observe(
+                query_id=q["query_id"],
+                query_text=q["text_th"],
+                target_brands=brands,
+                brand_aliases=brand_aliases,
+            )
         except EngineError as exc:
             stats["provider_errors"] += 1
             logger.error("Provider error on %s: %s", q["query_id"], exc, exc_info=False)

@@ -143,3 +143,26 @@ def _pop(seq):
     if isinstance(item, Exception):
         raise item
     return item
+
+
+# --- alias-aware brand detection (serper/tavily substring surfaces) --------
+def test_serper_matches_brand_aliases(monkeypatch):
+    from src.engines import serper_engine
+
+    fake = {
+        "organic": [
+            {"link": "https://x.th/a", "title": "รีวิว ช้อปปี้ ส่งไว", "snippet": "ซื้อที่ ช้อปปี้ ดีสุด"},
+            {"link": "https://y.th/b", "title": "Lazada promo", "snippet": "แอพน้ำเงิน"},
+        ]
+    }
+    monkeypatch.setattr(serper_engine, "request_json", lambda *a, **k: (fake, 0))
+    eng = serper_engine.SerperGoogleEngine(api_key="k")
+    obs = eng.observe(
+        query_id="q",
+        query_text="ซื้อของที่ไหนดี",
+        target_brands=["Shopee Thailand", "Lazada Thailand"],
+        brand_aliases={"Shopee Thailand": ["ช้อปปี้", "shopee"], "Lazada Thailand": ["ลาซาด้า", "แอพน้ำเงิน"]},
+    )
+    m = {x.brand_name: x for x in obs.brand_mentions}
+    assert m["Shopee Thailand"].mentioned and m["Shopee Thailand"].rank == 1
+    assert m["Lazada Thailand"].mentioned and m["Lazada Thailand"].rank == 2  # matched via alias only

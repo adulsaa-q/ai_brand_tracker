@@ -19,19 +19,28 @@ class OpenRouterEngine(BaseObservationEngine):
         self._system = get_prompt("openrouter.system")
         self._user = get_prompt("openrouter.brand_audit")
 
-    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
+    def observe(
+        self,
+        query_id: str,
+        query_text: str,
+        target_brands: list[str],
+        brand_aliases: dict[str, list[str]] | None = None,
+    ) -> RawObservation:
         if not self.api_key:
             raise EngineError("OpenRouter engine requires OPENROUTER_API_KEY", {"engine": "openrouter"})
 
         start_time = time.time()
+        brands = "; ".join(
+            f"{n} ({', '.join(a for a in (brand_aliases or {}).get(n, []) if a.lower() != n.lower())})"
+            if (brand_aliases or {}).get(n)
+            else n
+            for n in target_brands
+        )
         payload = {
             "model": self.model_name,
             "messages": [
                 {"role": "system", "content": self._system.template},
-                {
-                    "role": "user",
-                    "content": self._user.render(query_text=query_text, brands=", ".join(target_brands)),
-                },
+                {"role": "user", "content": self._user.render(query_text=query_text, brands=brands)},
             ],
             "temperature": 0.2,
         }

@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 
 from src.engines._http import request_json
-from src.engines.base import BaseObservationEngine
+from src.engines.base import BaseObservationEngine, match_terms
 from src.exceptions import EngineError
 from src.ids import new_observation_id
 from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
@@ -23,7 +23,13 @@ class SerperGoogleEngine(BaseObservationEngine):
     def __init__(self, model_name: str = "google-serp-th", api_key: str | None = None):
         super().__init__(model_name, api_key or os.getenv("SERPER_API_KEY"))
 
-    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
+    def observe(
+        self,
+        query_id: str,
+        query_text: str,
+        target_brands: list[str],
+        brand_aliases: dict[str, list[str]] | None = None,
+    ) -> RawObservation:
         if not self.api_key:
             raise EngineError("Serper engine requires SERPER_API_KEY", {"engine": "serper"})
 
@@ -55,7 +61,9 @@ class SerperGoogleEngine(BaseObservationEngine):
             )
             full_text = f"{title} {snippet}".lower()
             for brand in target_brands:
-                if brand.lower() in full_text and brand not in brand_positions:
+                if brand in brand_positions:
+                    continue
+                if any(term in full_text for term in match_terms(brand, brand_aliases)):
                     brand_positions[brand] = idx
 
         mentions = [

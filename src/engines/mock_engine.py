@@ -27,7 +27,13 @@ class MockObservationEngine(BaseObservationEngine):
     def __init__(self, model_name: str = "mock-synthetic-v1", api_key: str | None = None):
         super().__init__(model_name=model_name, api_key=api_key)
 
-    def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
+    def observe(
+        self,
+        query_id: str,
+        query_text: str,
+        target_brands: list[str],
+        brand_aliases: dict[str, list[str]] | None = None,
+    ) -> RawObservation:
         start_time = time.time()
         rng = random.Random(_stable_seed(query_text, ",".join(sorted(target_brands))))
 
