@@ -12,7 +12,7 @@ import uuid
 from typing import Any, Literal
 
 import yaml
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from src.logger import get_logger
 from src.runner import run_intelligence_pipeline
+from src.security import auth_mode, require_read_auth, require_write_auth, scan_limiter
 
 logger = get_logger("api")
 
@@ -29,7 +30,6 @@ logger = get_logger("api")
 ENTITIES_PATH = os.getenv("ENTITIES_PATH", "config/entities.yaml")
 DATA_DIR = os.getenv("DATA_DIR", "data")
 MAX_TASK_HISTORY = 100
-VALID_ENGINES = ("mock", "gemini", "openrouter", "tavily", "serper")
 
 app = FastAPI(
     title="Thailand AI Market & Decision Intelligence API",
@@ -37,11 +37,20 @@ app = FastAPI(
     version="5.0.0",
 )
 
+
+def _allowed_origins() -> list[str]:
+    raw = os.getenv("AIBT_ALLOWED_ORIGINS", "").strip()
+    if not raw:
+        logger.warning("AIBT_ALLOWED_ORIGINS not set - CORS allows all origins")
+        return ["*"]
+    return [o.strip() for o in raw.split(",") if o.strip()]
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Phase 3: tighten per-environment
+    allow_origins=_allowed_origins(),
     allow_credentials=False,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -50,10 +59,10 @@ tasks_lock = threading.Lock()
 
 
 class BrandInput(BaseModel):
-    id: str
-    name: str
-    aliases: list[str] = Field(default_factory=list)
-    official_domains: list[str] = Field(default_factory=list)
+    id: str = Field(min_length=1, max_length=64, pattern=r"^[a-zA-Z0-9_\-]+$")
+    name: str = Field(min_length=1, max_length=120)
+    aliases: list[str] = Field(default_factory=list, max_length=20)
+    official_domains: list[str] = Field(default_factory=list, max_length=20)
     is_focal_brand: bool = False
 
 
@@ -62,8 +71,8 @@ class VerticalCreateRequest(BaseModel):
     name_th: str = Field(min_length=1, max_length=200)
     name_en: str = Field(min_length=1, max_length=200)
     focal_brand: str = Field(min_length=1, max_length=120)
-    categories: list[str] = Field(default_factory=list)
-    brands: list[BrandInput] = Field(default_factory=list, max_length=40)
+    categories: list[str] = Field(default_factory=list, max_length=40)
+    brands: list[BrandInput] = Field(default_factory=list, min_length=1, max_length=40)
 
 
 class ScanTriggerRequest(BaseModel):
@@ -140,8 +149,15 @@ def _run_scan_background_task(
     except Exception as exc:
         logger.exception("Background task %s failed", task_id)
         with tasks_lock:
-            tasks_state[task_id].update(status="FAILED", error=str(exc), finished_at=time.time())
+            tasks_state[task_id].update(
+                status="FAILED",
+                error=str(exc),
+                error_type=type(exc).__name__,
+                finished_at=time.time(),
+            )
             _prune_tasks_locked()
+    finally:
+        scan_limiter.release()
 
 
 # ---------------------------------------------------------------- REST
@@ -149,20 +165,40 @@ def _run_scan_background_task(
 
 @app.get("/api/v1/health")
 def get_health():
+    """Liveness is always 'ok' if this responds. 'dependencies' is the real check."""
+    deps: dict[str, Any] = {}
+    try:
+        cfg = _get_entities_config()
+        deps["entities_config"] = "ok" if cfg.get("verticals") else "empty"
+    except Exception as exc:  # noqa: BLE001 - health must never raise
+        deps["entities_config"] = f"error: {exc}"
+    try:
+        from src.storage import DuckDBStore
+
+        DuckDBStore(db_path=os.path.join(DATA_DIR, "intelligence.duckdb")).count_rows("dim_brand")
+        deps["duckdb"] = "ok"
+    except Exception as exc:  # noqa: BLE001
+        deps["duckdb"] = f"error: {exc}"
+
+    healthy = all(v == "ok" or v == "empty" for v in deps.values())
     return {
-        "status": "healthy",
+        "status": "healthy" if healthy else "degraded",
+        "liveness": "ok",
         "version": "5.0.0",
+        "auth_mode": auth_mode(),
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "active_tasks": len([t for t in tasks_state.values() if t.get("status") == "RUNNING"]),
+        "scan_limiter": scan_limiter.snapshot(),
+        "dependencies": deps,
     }
 
 
-@app.get("/api/v1/verticals")
+@app.get("/api/v1/verticals", dependencies=[Depends(require_read_auth)])
 def get_verticals():
     return _get_entities_config().get("verticals", [])
 
 
-@app.post("/api/v1/verticals")
+@app.post("/api/v1/verticals", dependencies=[Depends(require_write_auth)])
 def create_vertical(req: VerticalCreateRequest):
     config = _get_entities_config()
     verticals = config.setdefault("verticals", [])
@@ -177,12 +213,13 @@ def create_vertical(req: VerticalCreateRequest):
     return {"status": "CREATED", "vertical": payload}
 
 
-@app.post("/api/v1/scan")
+@app.post("/api/v1/scan", dependencies=[Depends(require_write_auth)])
 def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
     known = {v["vertical_id"] for v in _get_entities_config().get("verticals", [])}
     if req.vertical_id not in known:
         raise HTTPException(status_code=404, detail=f"Unknown vertical: {req.vertical_id}")
 
+    scan_limiter.acquire()  # raises 429 on concurrency / daily-quota limit
     task_id = f"scan_{uuid.uuid4().hex[:8]}"
     with tasks_lock:
         tasks_state[task_id] = {
@@ -212,7 +249,7 @@ def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
     return {"task_id": task_id, "status": "QUEUED", "vertical_id": req.vertical_id, "data_mode": data_mode}
 
 
-@app.get("/api/v1/scan/{task_id}/progress")
+@app.get("/api/v1/scan/{task_id}/progress", dependencies=[Depends(require_read_auth)])
 def get_scan_progress(task_id: str):
     with tasks_lock:
         if task_id not in tasks_state:
@@ -220,7 +257,7 @@ def get_scan_progress(task_id: str):
         return tasks_state[task_id]
 
 
-@app.get("/api/v1/metrics/{vertical_id}")
+@app.get("/api/v1/metrics/{vertical_id}", dependencies=[Depends(require_read_auth)])
 def get_vertical_metrics(vertical_id: str):
     path = os.path.join(DATA_DIR, f"latest_run_summary_{vertical_id}.json")
     if os.path.exists(path):
@@ -238,7 +275,7 @@ def get_vertical_metrics(vertical_id: str):
     }
 
 
-@app.get("/api/v1/export/{vertical_id}")
+@app.get("/api/v1/export/{vertical_id}", dependencies=[Depends(require_read_auth)])
 def export_vertical_data(vertical_id: str, format: str = "csv"):
     path = os.path.join(DATA_DIR, f"latest_run_summary_{vertical_id}.json")
     if not os.path.exists(path):
