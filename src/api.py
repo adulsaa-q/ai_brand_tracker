@@ -132,6 +132,10 @@ def _run_scan_background_task(
                 current_query=query_text,
             )
 
+    def cancel_check() -> bool:
+        with tasks_lock:
+            return bool(tasks_state.get(task_id, {}).get("cancel_requested"))
+
     try:
         result = run_intelligence_pipeline(
             vertical_id=vertical_id,
@@ -144,11 +148,13 @@ def _run_scan_background_task(
             output_dir=DATA_DIR,
             engine_model=model_name,
             engine_api_key=provider_key,
+            cancel_check=cancel_check,
         )
+        final = "CANCELLED" if result.get("run_stats", {}).get("cancelled") else "COMPLETED"
         with tasks_lock:
             tasks_state[task_id].update(
-                status="COMPLETED",
-                progress_pct=100.0,
+                status=final,
+                progress_pct=tasks_state[task_id].get("progress_pct", 0.0) if final == "CANCELLED" else 100.0,
                 run_id=result.get("run_id"),
                 data_mode=result.get("data_mode"),
                 run_stats=result.get("run_stats"),
@@ -294,6 +300,21 @@ def get_scan_progress(task_id: str):
         if task_id not in tasks_state:
             raise HTTPException(status_code=404, detail="Task ID not found")
         return tasks_state[task_id]
+
+
+@app.post("/api/v1/scan/{task_id}/cancel", dependencies=[Depends(require_write_auth)])
+def cancel_scan(task_id: str):
+    """Cooperative cancel: the run stops before its next query, keeps whatever it
+    already persisted, and finishes with status CANCELLED."""
+    with tasks_lock:
+        task = tasks_state.get(task_id)
+        if task is None:
+            raise HTTPException(status_code=404, detail="Task ID not found")
+        if task["status"] in ("COMPLETED", "FAILED", "CANCELLED"):
+            return {"task_id": task_id, "status": task["status"], "note": "already finished"}
+        task["cancel_requested"] = True
+        task["status"] = "CANCELLING"
+    return {"task_id": task_id, "status": "CANCELLING"}
 
 
 @app.get("/api/v1/metrics/{vertical_id}", dependencies=[Depends(require_read_auth)])

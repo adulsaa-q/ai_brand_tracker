@@ -762,12 +762,14 @@
 
         <div class="p-3 bg-canvas hairline-all font-mono text-[11px] space-y-1 max-h-32 overflow-y-auto">
           <span class="text-ink-faint block uppercase text-[9px] font-bold">Telemetry Log Stream:</span>
-          <p id="scanCurrentQuery" class="text-ink font-thai leading-relaxed">Initializing multi-engine observation worker...</p>
+          <p id="scanCurrentQuery" class="text-ink font-thai leading-relaxed">Initializing observation worker...</p>
         </div>
 
-        <div class="pt-2 text-[11px] text-ink-muted italic flex items-center justify-between">
-          <span>Demo animation only — not persisting.</span>
-          <span class="font-mono text-[10px] text-midnight font-bold">PORT: 8000</span>
+        <div class="pt-2 flex items-center justify-between">
+          <span id="scanModalNote" class="text-[11px] text-ink-muted italic">Persisting observations to DuckDB by run_id.</span>
+          <button id="scanCancelBtn" onclick="cancelScan()" class="px-3 py-1.5 text-[11px] font-bold bg-crimson-light text-crimson hairline-all border-crimson hover:bg-crimson hover:text-surface transition-colors">
+            Cancel scan
+          </button>
         </div>
       </div>
     </div>
@@ -1437,11 +1439,28 @@
       }
     }
 
+    let currentScanTaskId = null;
+
+    async function cancelScan() {
+      if (!currentScanTaskId) { closeModal("modalScanProgress"); return; }
+      document.getElementById("scanCancelBtn").disabled = true;
+      document.getElementById("scanModalNote").innerText = "Cancelling — the run stops before its next query…";
+      try {
+        const extra = PROVIDER_KEY() ? { "X-Provider-Key": PROVIDER_KEY() } : {};
+        await apiPost(`/api/v1/scan/${currentScanTaskId}/cancel`, {}, extra);
+      } catch (err) {
+        document.getElementById("scanModalNote").innerText = "Cancel request failed: " + (err.message || err);
+      }
+    }
+
     // POST /scan -> poll /scan/{id}/progress -> GET /metrics/{vertical} -> render
     async function runScanFlow(verticalId, engine, count, includeControl, modelName) {
       document.getElementById("modalScanProgress").classList.remove("hidden");
       document.getElementById("scanStatusBadge").innerText = "QUEUED";
       document.getElementById("scanProgressBar").style.width = "0%";
+      document.getElementById("scanCancelBtn").disabled = false;
+      document.getElementById("scanModalNote").innerText =
+        engine === "mock" ? "Synthetic run — labelled, not for decisions." : "Persisting observations to DuckDB by run_id.";
       setScanBanner(`Scan queued (${engine}${modelName ? " · " + modelName : ""}) for ${verticalId}…`);
 
       const extra = PROVIDER_KEY() ? { "X-Provider-Key": PROVIDER_KEY() } : {};
@@ -1450,9 +1469,10 @@
         include_control_set: includeControl, model_name: modelName || null
       }, extra);
       const taskId = start.task_id;
+      currentScanTaskId = taskId;
 
-      let done = false;
-      while (!done) {
+      let outcome = null;
+      while (!outcome) {
         await new Promise(r => setTimeout(r, 900));
         const p = await apiGet(`/api/v1/scan/${taskId}/progress`);
         const pct = Number(p.progress_pct || 0);
@@ -1464,14 +1484,17 @@
         document.getElementById("scanCurrentQuery").innerText =
           `[${(p.engine_type || engine).toUpperCase()}] ${p.current_query || ""}`;
 
-        if (p.status === "COMPLETED") { done = true; }
-        else if (p.status === "FAILED") {
-          throw new Error(p.error || "scan failed on the server");
-        }
+        if (p.status === "COMPLETED" || p.status === "CANCELLED") { outcome = p.status; }
+        else if (p.status === "FAILED") { throw new Error(p.error || "scan failed on the server"); }
       }
 
+      currentScanTaskId = null;
       closeModal("modalScanProgress");
-      await loadLive(verticalId);
+      if (outcome === "CANCELLED") {
+        setBanner("bg-[#66615E] text-[#FAF9F8]", `Scan cancelled — showing whatever was persisted for ${verticalId}`);
+      }
+      try { await loadLive(verticalId); }
+      catch (_e) { if (outcome === "CANCELLED") setNoDataBanner(verticalId); else throw _e; }
     }
 
     function exportData() {

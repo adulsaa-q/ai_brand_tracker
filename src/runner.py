@@ -59,6 +59,7 @@ def run_intelligence_pipeline(
     output_dir: str | None = None,
     engine_model: str | None = None,
     engine_api_key: str | None = None,
+    cancel_check: Any = None,
 ) -> dict[str, Any]:
     run_id = new_run_id()
     entities_path = entities_path or ENTITIES_PATH
@@ -131,8 +132,13 @@ def run_intelligence_pipeline(
     }
     observations: list[dict[str, Any]] = []
     total_q = len(queries)
+    cancelled = False
 
     for idx, q in enumerate(queries):
+        if cancel_check and cancel_check():
+            cancelled = True
+            logger.warning("Run %s cancelled by request after %d/%d queries", run_id, idx, total_q)
+            break
         if progress_callback:
             progress_callback(idx + 1, total_q, q["text_th"])
 
@@ -169,9 +175,26 @@ def run_intelligence_pipeline(
         observations.append(obs_dict)
         stats["successful_observations"] += 1
 
+    stats["cancelled"] = cancelled
     logger.info("Run %s stats: %s", run_id, stats)
 
     if stats["successful_observations"] == 0:
+        if cancelled:
+            return {
+                "run_id": run_id,
+                "vertical_id": vertical_id,
+                "engine_type": engine_type,
+                "data_mode": "synthetic" if engine_type == "mock" else "live",
+                "status": "CANCELLED",
+                "total_queries": len(queries),
+                "run_stats": stats,
+                "metrics": {"primary_surface": None, "total_queries": 0, "brands": [], "by_surface": {}},
+                "opportunities": [],
+                "citations_analysis": {"total_citations": 0, "domain_rankings": []},
+                "claims_audit": [],
+                "information_lag": {"grounded_rate_pct": 0.0},
+                "observations": [],
+            }
         raise RuntimeError(
             f"Run {run_id} produced 0 persisted observations "
             f"(provider_errors={stats['provider_errors']}, persistence_failures={stats['persistence_failures']})"
@@ -202,6 +225,7 @@ def run_intelligence_pipeline(
         "engine_model": resolved_model,
         "byok": bool(engine_api_key),
         "data_mode": "synthetic" if engine_type == "mock" else "live",
+        "status": "CANCELLED_PARTIAL" if cancelled else "COMPLETED",
         "total_queries": len(queries),
         "run_stats": stats,
         "active_events": active_events,

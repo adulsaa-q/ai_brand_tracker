@@ -92,3 +92,38 @@ def test_custom_workspace_flow_create_then_scan():
     assert data["run_id"]
     assert {b["brand"] for b in data["metrics"]["brands"]} <= {"TestBrand", "RivalCo"}
     assert data["focal_brand"]["name"] == "TestBrand"
+
+
+def test_scan_can_be_cancelled():
+    """Cooperative cancel: mock is instant so we mostly assert the endpoint
+    contract and that an already-finished task reports that."""
+    started = client.post(
+        "/api/v1/scan",
+        json={"vertical_id": "ecommerce_retail_th", "engine_type": "mock", "count": 6},
+    )
+    task_id = started.json()["task_id"]
+    r = client.post(f"/api/v1/scan/{task_id}/cancel")
+    assert r.status_code == 200
+    assert r.json()["status"] in ("CANCELLING", "COMPLETED", "CANCELLED")
+    assert client.post("/api/v1/scan/does_not_exist/cancel").status_code == 404
+
+
+def test_runner_stops_early_on_cancel(tmp_path):
+    from src.runner import run_intelligence_pipeline
+
+    calls = {"n": 0}
+
+    def cancel_after_3():
+        calls["n"] += 1
+        return calls["n"] > 3
+
+    result = run_intelligence_pipeline(
+        vertical_id="ecommerce_retail_th",
+        count=20,
+        engine_type="mock",
+        output_dir=str(tmp_path),
+        cancel_check=cancel_after_3,
+    )
+    assert result["run_stats"]["cancelled"] is True
+    assert result["run_stats"]["successful_observations"] == 3
+    assert result["status"] == "CANCELLED_PARTIAL"
