@@ -1,3 +1,4 @@
+# src/cli.py
 import argparse
 import os
 import sys
@@ -12,17 +13,24 @@ from src.universe import QueryUniverseGenerator
 
 
 def main():
-    parser = argparse.ArgumentParser(description="🇹🇭 Thailand AI Market & Decision Intelligence CLI")
+    parser = argparse.ArgumentParser(description="🇹🇭 Thailand AI Market & Decision Intelligence Platform CLI")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # serve (FastAPI + Web UI unified)
+    serve_parser = subparsers.add_parser("serve", help="Launch Full-Stack Production Server (FastAPI + Web App)")
+    serve_parser.add_argument("--port", type=int, default=8000, help="Port to bind server (default: 8000)")
+    serve_parser.add_argument("--host", type=str, default="127.0.0.1", help="Host address")
 
     # generate
     gen_parser = subparsers.add_parser("generate", help="Generate Thai consumer queries")
+    gen_parser.add_argument("--vertical", type=str, default="ecommerce_retail_th", help="Target vertical ID")
     gen_parser.add_argument("--count", type=int, default=10, help="Number of queries to generate")
     gen_parser.add_argument("--seed", type=int, default=42, help="Random seed")
     gen_parser.add_argument("--control", action="store_true", help="Include invariant 30 benchmark control set")
 
     # run
     run_parser = subparsers.add_parser("run", help="Run full observation pipeline")
+    run_parser.add_argument("--vertical", type=str, default="ecommerce_retail_th", help="Target vertical ID")
     run_parser.add_argument("--count", type=int, default=15, help="Number of queries to audit")
     run_parser.add_argument(
         "--engine",
@@ -47,21 +55,33 @@ def main():
     subparsers.add_parser("dashboard", help="Launch Executive Streamlit Dashboard")
 
     # web
-    subparsers.add_parser("web", help="Launch Modern HTML5/JS Executive Web Command Center (Style Q)")
+    subparsers.add_parser("web", help="Launch Executive Web Dashboard")
 
     args = parser.parse_args()
 
-    if args.command == "generate":
+    if args.command == "serve":
+        import uvicorn
+
+        print(f"🚀 Starting Thailand AI Market & Decision Intelligence Server at http://{args.host}:{args.port}")
+        uvicorn.run("src.api:app", host=args.host, port=args.port, reload=False)
+
+    elif args.command == "generate":
         gen = QueryUniverseGenerator()
-        queries = gen.generate_queries(count=args.count, seed=args.seed, include_control=args.control)
-        print(f"\n🎯 Generated {len(queries)} Queries:")
+        queries = gen.generate_queries(
+            vertical_id=args.vertical, count=args.count, seed=args.seed, include_control=args.control
+        )
+        print(f"\n🎯 Generated {len(queries)} Queries for Vertical [{args.vertical}]:")
         for q in queries:
             tag = "[CONTROL]" if q.get("is_control_set") else "[EXPLORATORY]"
-            print(f"- {tag} [{q['query_id']}] ({q['category']}): {q['text_th']}")
+            print(f"- {tag} [{q['query_id']}] ({q.get('category')}): {q['text_th']}")
 
     elif args.command == "run":
         run_intelligence_pipeline(
-            count=args.count, seed=args.seed, engine_type=args.engine, include_control=args.control
+            vertical_id=args.vertical,
+            count=args.count,
+            seed=args.seed,
+            engine_type=args.engine,
+            include_control=args.control,
         )
 
     elif args.command == "migrate":
@@ -81,22 +101,10 @@ def main():
         subprocess.run(["streamlit", "run", "dashboard/app.py"])
 
     elif args.command == "web":
-        import http.server
-        import os
-        import socketserver
-        import webbrowser
+        import uvicorn
 
-        web_dir = os.path.abspath("dashboard/web")
-        os.chdir(web_dir)
-        PORT = 8080
-        handler = http.server.SimpleHTTPRequestHandler
-        print(f"🌐 Modern Executive Web Command Center (Style Q) running at http://localhost:{PORT}")
-        webbrowser.open(f"http://localhost:{PORT}")
-        with socketserver.TCPServer(("", PORT), handler) as httpd:
-            try:
-                httpd.serve_forever()
-            except KeyboardInterrupt:
-                print("\nWeb server stopped.")
+        print("🌐 Modern Executive Web Command Center (Style Q) running at http://127.0.0.1:8000")
+        uvicorn.run("src.api:app", host="127.0.0.1", port=8000, reload=False)
 
     else:
         parser.print_help()

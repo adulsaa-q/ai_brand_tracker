@@ -1,52 +1,480 @@
 verticals:
-  - vertical_id: "ecommerce_retail_th"
-    name_th: "แพลตฟอร์มอีคอมเมิร์ซและร้านค้าปลีกความงามไทย"
-    name_en: "Thailand E-Commerce & Beauty Retail"
-    focal_brand: "shopee"
-    brands:
-      - id: "shopee"
-        name: "Shopee Thailand"
-        vertical: "ecommerce_retail_th"
-        is_focal_brand: true
-        aliases: ["ช้อปปี้", "shopee", "แอพส้ม", "ชอปปี้"]
-        official_domains: ["shopee.co.th"]
-      - id: "lazada"
-        name: "Lazada Thailand"
-        vertical: "ecommerce_retail_th"
-        aliases: ["ลาซาด้า", "lazada", "แอพน้ำเงิน"]
-        official_domains: ["lazada.co.th"]
-      - id: "konvy"
-        name: "Konvy"
-        vertical: "ecommerce_retail_th"
-        aliases: ["คอนวี่", "konvy"]
-        official_domains: ["konvy.com"]
-      - id: "eveandboy"
-        name: "EVEANDBOY"
-        vertical: "ecommerce_retail_th"
-        aliases: ["อีฟแอนด์บอย", "eveandboy"]
-        official_domains: ["eveandboy.com"]
-      - id: "beautrium"
-        name: "Beautrium"
-        vertical: "ecommerce_retail_th"
-        aliases: ["บิวเทรี่ยม", "beautrium"]
-        official_domains: ["thebeautrium.com"]
-      - id: "sephora"
-        name: "Sephora Thailand"
-        vertical: "ecommerce_retail_th"
-        aliases: ["เซโฟร่า", "sephora"]
-        official_domains: ["sephora.co.th"]
-      - id: "watsons"
-        name: "Watsons Thailand"
-        vertical: "ecommerce_retail_th"
-        aliases: ["วัตสัน", "watsons"]
-        official_domains: ["watsons.co.th"]
-      - id: "boots"
-        name: "Boots Thailand"
-        vertical: "ecommerce_retail_th"
-        aliases: ["บู๊ทส์", "boots"]
-        official_domains: ["store.boots.co.th"]
-      - id: "tiktok_shop"
-        name: "TikTok Shop Thailand"
-        vertical: "ecommerce_retail_th"
-        aliases: ["ติ๊กต๊อกช็อป", "tiktok shop"]
-        official_domains: ["tiktok.com"]
+- vertical_id: ecommerce_retail_th
+  name_th: แพลตฟอร์มอีคอมเมิร์ซและร้านค้าปลีกความงามไทย
+  name_en: Thailand E-Commerce & Beauty Retail
+  focal_brand: shopee
+  categories:
+  - สกินแคร์เคาน์เตอร์แบรนด์
+  - เครื่องสำอางเกาหลี
+  - กันแดดคุมมัน
+  - เซรั่มลดรอยสิว
+  - ลิปสติก
+  - น้ำหอมแท้
+  - อาหารเสริมวิตามิน
+  - มอยส์เจอไรเซอร์
+  brands:
+  - id: shopee
+    name: Shopee Thailand
+    vertical: ecommerce_retail_th
+    is_focal_brand: true
+    aliases:
+    - ช้อปปี้
+    - shopee
+    - แอพส้ม
+    - ชอปปี้
+    official_domains:
+    - shopee.co.th
+  - id: lazada
+    name: Lazada Thailand
+    vertical: ecommerce_retail_th
+    aliases:
+    - ลาซาด้า
+    - lazada
+    - แอพน้ำเงิน
+    official_domains:
+    - lazada.co.th
+  - id: watsons
+    name: Watsons Thailand
+    vertical: ecommerce_retail_th
+    aliases:
+    - วัตสัน
+    - watsons
+    official_domains:
+    - watsons.co.th
+  - id: sephora
+    name: Sephora Thailand
+    vertical: ecommerce_retail_th
+    aliases:
+    - เซโฟร่า
+    - sephora
+    official_domains:
+    - sephora.co.th
+  - id: beautrium
+    name: Beautrium
+    vertical: ecommerce_retail_th
+    aliases:
+    - บิวเทรี่ยม
+    - beautrium
+    official_domains:
+    - thebeautrium.com
+  - id: eveandboy
+    name: EVEANDBOY
+    vertical: ecommerce_retail_th
+    aliases:
+    - อีฟแอนด์บอย
+    - eveandboy
+    official_domains:
+    - eveandboy.com
+  - id: konvy
+    name: Konvy
+    vertical: ecommerce_retail_th
+    aliases:
+    - คอนวี่
+    - konvy
+    official_domains:
+    - konvy.com
+  - id: boots
+    name: Boots Thailand
+    vertical: ecommerce_retail_th
+    aliases:
+    - บู๊ทส์
+    - boots
+    official_domains:
+    - store.boots.co.th
+  - id: allnii
+    name: Allnii
+    vertical: ecommerce_retail_th
+    aliases:
+    - ออลนิอิ
+    - allnii
+    official_domains:
+    - allnii.com
+- vertical_id: ev_automotive_th
+  name_th: ตลาดยานยนต์ไฟฟ้าและรถยนต์ไทย (EV & Auto)
+  name_en: Thailand EV & Automotive Market
+  focal_brand: byd
+  categories:
+  - รถยนต์ไฟฟ้า EV งบประหยัด
+  - SUV ไฟฟ้าสำหรับครอบครัว
+  - สถานีชาร์จ DC Fast Charge
+  - ประกันภัยและรับประกันแบตเตอรี่ 8 ปี
+  - รถเก๋งไฟฟ้าเดินทางไกล
+  - ศูนย์บริการและอะไหล่
+  - ระบบขับขี่อัจฉริยะ ADAS
+  brands:
+  - id: byd
+    name: BYD Thailand
+    vertical: ev_automotive_th
+    is_focal_brand: true
+    aliases:
+    - บีวายดี
+    - BYD
+    - Dolphin
+    - Atto 3
+    - Seal
+    official_domains:
+    - reverautomotive.com
+  - id: tesla
+    name: Tesla Thailand
+    vertical: ev_automotive_th
+    aliases:
+    - เทสลา
+    - Tesla
+    - Model 3
+    - Model Y
+    official_domains:
+    - tesla.com/th_th
+  - id: mg
+    name: MG Thailand
+    vertical: ev_automotive_th
+    aliases:
+    - เอ็มจี
+    - MG EV
+    - MG4
+    - MG ZS EV
+    official_domains:
+    - mgcars.com
+  - id: gac_aion
+    name: GAC AION Thailand
+    vertical: ev_automotive_th
+    aliases:
+    - ไอออน
+    - AION
+    - AION Y Plus
+    official_domains:
+    - aionauto.com
+  - id: changan
+    name: Changan Deepal
+    vertical: ev_automotive_th
+    aliases:
+    - ฉางอัน
+    - Deepal
+    - Deepal S07
+    - Deepal L07
+    official_domains:
+    - changan.co.th
+  - id: gwm
+    name: GWM Thailand (ORA)
+    vertical: ev_automotive_th
+    aliases:
+    - เกรทวอลล์
+    - GWM
+    - ORA Good Cat
+    - Tank 300
+    official_domains:
+    - gwm.co.th
+  - id: toyota
+    name: Toyota Thailand
+    vertical: ev_automotive_th
+    aliases:
+    - โตโยต้า
+    - Toyota
+    - bZ4X
+    - Yaris Cross Hybrid
+    official_domains:
+    - toyota.co.th
+  - id: honda
+    name: Honda Thailand
+    vertical: ev_automotive_th
+    aliases:
+    - ฮอนด้า
+    - Honda
+    - e:N1
+    - HR-V e:HEV
+    official_domains:
+    - honda.co.th
+- vertical_id: banking_fintech_th
+  name_th: ธุรกิจการเงิน ธนาคารดิจิทัล และฟินเทค (Banking & FinTech)
+  name_en: Thailand Banking & Digital FinTech
+  focal_brand: kbank
+  categories:
+  - บัญชีเงินฝากดิจิทัลดอกเบี้ยสูง
+  - บัตรเครดิตสะสมพอยท์และเงินคืน
+  - สินเชื่อส่วนบุคคลอนุมัติไว
+  - แอปพลิเคชัน Mobile Banking
+  - การลงทุนหุ้นและกองทุนรวม
+  - กระเป๋าเงินดิจิทัล E-Wallet
+  brands:
+  - id: kbank
+    name: KBank (Kasikornbank)
+    vertical: banking_fintech_th
+    is_focal_brand: true
+    aliases:
+    - กสิกร
+    - KBank
+    - K PLUS
+    - Make by KBank
+    official_domains:
+    - kasikornbank.com
+  - id: scb
+    name: SCB (Siam Commercial Bank)
+    vertical: banking_fintech_th
+    aliases:
+    - ไทยพาณิชย์
+    - SCB
+    - SCB EASY
+    - InnovestX
+    official_domains:
+    - scb.co.th
+  - id: ktb
+    name: Krungthai Bank (KTB)
+    vertical: banking_fintech_th
+    aliases:
+    - กรุงไทย
+    - Krungthai
+    - Krungthai NEXT
+    - เป๋าตัง
+    official_domains:
+    - krungthai.com
+  - id: bbl
+    name: Bangkok Bank (BBL)
+    vertical: banking_fintech_th
+    aliases:
+    - กรุงเทพ
+    - BBL
+    - Bangkok Bank Mobile Banking
+    official_domains:
+    - bangkokbank.com
+  - id: ttb
+    name: ttb (TMBThanachart)
+    vertical: banking_fintech_th
+    aliases:
+    - ทีทีบี
+    - ttb
+    - ttb touch
+    official_domains:
+    - ttbbank.com
+  - id: truemoney
+    name: TrueMoney Wallet
+    vertical: banking_fintech_th
+    aliases:
+    - ทรูมันนี่
+    - TrueMoney
+    official_domains:
+    - truemoney.com
+  - id: dime
+    name: Dime! by KKP
+    vertical: banking_fintech_th
+    aliases:
+    - ไดม์
+    - Dime
+    - KKP Dime
+    official_domains:
+    - dime.co.th
+- vertical_id: real_estate_th
+  name_th: ตลาดอสังหาริมทรัพย์และคอนโดมิเนียม (Real Estate)
+  name_en: Thailand Real Estate & Condominiums
+  focal_brand: sansiri
+  categories:
+  - คอนโดมิเนียมติดรถไฟฟ้า BTS/MRT
+  - บ้านเดี่ยวโครงการใหม่สำหรับครอบครัว
+  - ทาวน์โฮมทำเลเมือง
+  - บริการหลังการขายและการบริหารนิติบุคคล
+  - โปรโมชั่นฟรีค่าโอนและส่วนลด
+  - ตรวจรับบ้านและงานก่อสร้าง
+  brands:
+  - id: sansiri
+    name: Sansiri (แสนสิริ)
+    vertical: real_estate_th
+    is_focal_brand: true
+    aliases:
+    - แสนสิริ
+    - Sansiri
+    - Habitia
+    - dcondo
+    - XT
+    official_domains:
+    - sansiri.com
+  - id: ap_thailand
+    name: AP Thailand (เอพี)
+    vertical: real_estate_th
+    aliases:
+    - เอพี
+    - AP Thailand
+    - Life Condominium
+    - Centro
+    - Pleno
+    official_domains:
+    - apthai.com
+  - id: land_and_houses
+    name: Land & Houses (LH)
+    vertical: real_estate_th
+    aliases:
+    - แลนด์แอนด์เฮ้าส์
+    - LH
+    - Land and Houses
+    - The Bangkok
+    official_domains:
+    - lh.co.th
+  - id: sc_asset
+    name: SC Asset
+    vertical: real_estate_th
+    aliases:
+    - เอสซี แอสเสท
+    - SC Asset
+    - Bangkok Boulevard
+    - Centric
+    official_domains:
+    - scasset.com
+  - id: supalai
+    name: Supalai (ศุภาลัย)
+    vertical: real_estate_th
+    aliases:
+    - ศุภาลัย
+    - Supalai
+    - Supalai Premier
+    - Supalai Park
+    official_domains:
+    - supalai.com
+  - id: ananda
+    name: Ananda Development
+    vertical: real_estate_th
+    aliases:
+    - อนันดา
+    - Ananda
+    - Ideo
+    - Ashton
+    official_domains:
+    - ananda.co.th
+- vertical_id: hospital_healthcare_th
+  name_th: โรงพยาบาลเอกชนและศูนย์สุขภาพการแพทย์ (Hospitals & Healthcare)
+  name_en: Thailand Private Hospitals & Healthcare
+  focal_brand: bumrungrad
+  categories:
+  - แพ็กเกจตรวจสุขภาพประจำปี
+  - การคลอดบุตรเหมาจ่าย
+  - ศูนย์รักษาโรคหัวใจและมะเร็ง
+  - บริการคนไข้ชาวต่างชาติและล่าม
+  - ห้องพักผู้ป่วยและการบริการ
+  - การผ่าตัดผ่านกล้องแผลเล็ก
+  brands:
+  - id: bumrungrad
+    name: Bumrungrad International (บำรุงราษฎร์)
+    vertical: hospital_healthcare_th
+    is_focal_brand: true
+    aliases:
+    - บำรุงราษฎร์
+    - Bumrungrad
+    official_domains:
+    - bumrungrad.com
+  - id: bdms
+    name: BDMS Bangkok Hospital (กรุงเทพ)
+    vertical: hospital_healthcare_th
+    aliases:
+    - รพ.กรุงเทพ
+    - BDMS
+    - Bangkok Hospital
+    official_domains:
+    - bangkokhospital.com
+  - id: samitivej
+    name: Samitivej Hospital (สมิติเวช)
+    vertical: hospital_healthcare_th
+    aliases:
+    - สมิติเวช
+    - Samitivej
+    - สมิติเวช สุขุมวิท
+    official_domains:
+    - samitivejhospitals.com
+  - id: medpark
+    name: MedPark Hospital (เมดพาร์ค)
+    vertical: hospital_healthcare_th
+    aliases:
+    - เมดพาร์ค
+    - MedPark
+    official_domains:
+    - medparkhospital.com
+  - id: thonburi
+    name: Thonburi Hospital Group (ธนบุรี)
+    vertical: hospital_healthcare_th
+    aliases:
+    - รพ.ธนบุรี
+    - Thonburi Hospital
+    - THG
+    official_domains:
+    - thonburihospital.com
+  - id: phyathai
+    name: Phyathai Hospital (พญาไท)
+    vertical: hospital_healthcare_th
+    aliases:
+    - รพ.พญาไท
+    - Phyathai
+    - พญาไท 2
+    official_domains:
+    - phyathai.com
+- vertical_id: fnb_coffee_th
+  name_th: เชนร้านอาหาร กาแฟ และเครื่องดื่ม (F&B & Coffee Retail)
+  name_en: Thailand F&B & Coffee Chains
+  focal_brand: cafe_amazon
+  categories:
+  - เมล็ดกาแฟคั่วพิเศษ Specialty
+  - เมนูเครื่องดื่มทางเลือกเพื่อสุขภาพ/นมโอ๊ต
+  - สาขาไดร์ฟทรู (Drive-Thru)
+  - ระบบสะสมแต้มและโปรโมชั่นสมาชิก
+  - เบเกอรี่และของว่างสดใหม่
+  - ความสะดวกในการสั่งผ่านแอพเดลิเวอรี่
+  brands:
+  - id: cafe_amazon
+    name: Cafe Amazon
+    vertical: fnb_coffee_th
+    is_focal_brand: true
+    aliases:
+    - อเมซอน
+    - Cafe Amazon
+    - คาเฟ่ อเมซอน
+    official_domains:
+    - cafe-amazon.com
+  - id: starbucks
+    name: Starbucks Thailand
+    vertical: fnb_coffee_th
+    aliases:
+    - สตาร์บัคส์
+    - Starbucks
+    - Starbucks Rewards
+    official_domains:
+    - starbucks.co.th
+  - id: inthanin
+    name: Inthanin Coffee
+    vertical: fnb_coffee_th
+    aliases:
+    - อินทนิล
+    - Inthanin
+    - Inthanin Organic
+    official_domains:
+    - inthanincoffee.com
+  - id: punthai
+    name: PunThai Coffee (พันธุ์ไทย)
+    vertical: fnb_coffee_th
+    aliases:
+    - พันธุ์ไทย
+    - PunThai
+    - กาแฟพันธุ์ไทย
+    official_domains:
+    - punthaicoffee.com
+  - id: flash_coffee
+    name: Flash Coffee
+    vertical: fnb_coffee_th
+    aliases:
+    - แฟลช คอฟฟี่
+    - Flash Coffee
+    official_domains:
+    - flash-coffee.com
+- vertical_id: test_luxury_watch_th
+  name_th: ตลาดนาฬิกาหรู
+  name_en: Luxury Watch Market
+  focal_brand: rolex
+  categories:
+  - นาฬิกาดำน้ำ
+  - Dress Watch
+  brands:
+  - id: rolex
+    name: Rolex
+    aliases:
+    - โรเล็กซ์
+    official_domains: []
+    is_focal_brand: true
+  - id: omega
+    name: Omega
+    aliases:
+    - โอเมก้า
+    official_domains: []
+    is_focal_brand: false

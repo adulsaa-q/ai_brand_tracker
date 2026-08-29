@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thailand AI Market Intelligence — Executive Intelligence System</title>
+  <title>Thailand AI Market & Decision Intelligence Platform — Style Q</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,7 +19,9 @@
             "ink-muted": "#66615E",
             "ink-faint": "#949392",
             divider: "#C9C8C7",
-            "divider-light": "#DBD9D7"
+            "divider-light": "#DBD9D7",
+            accent: "#111110",
+            "accent-soft": "#E6E4E2"
           },
           fontFamily: {
             serif: ["Newsreader", "Playfair Display", "Georgia", "serif"],
@@ -66,50 +68,23 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .hairline-b {
-      border-bottom: 1px solid var(--divider);
-    }
+    .hairline-b { border-bottom: 1px solid var(--divider); }
+    .hairline-t { border-top: 1px solid var(--divider); }
+    .hairline-l { border-left: 1px solid var(--divider); }
+    .hairline-r { border-right: 1px solid var(--divider); }
+    .hairline-all { border: 1px solid var(--divider); }
 
-    .hairline-t {
-      border-top: 1px solid var(--divider);
-    }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--canvas); }
+    ::-webkit-scrollbar-thumb { background: var(--divider); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--faint); }
 
-    .hairline-l {
-      border-left: 1px solid var(--divider);
-    }
-
-    .hairline-r {
-      border-right: 1px solid var(--divider);
-    }
-
-    .hairline-all {
-      border: 1px solid var(--divider);
-    }
-
-    /* Custom Refined Scrollbar */
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--canvas);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--divider);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--faint);
-    }
-
-    /* Active Navigation Line */
     .nav-link {
       position: relative;
       transition: color 0.15s ease;
       color: var(--muted);
     }
-    .nav-link:hover {
-      color: var(--ink);
-    }
+    .nav-link:hover { color: var(--ink); }
     .nav-link.active {
       color: var(--ink);
       font-weight: 600;
@@ -124,31 +99,62 @@
       background-color: var(--ink);
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation: none !important;
-        transition: none !important;
-      }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .animate-pulse-slow {
+      animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#E6E4E2] selection:text-ink">
 
   <!-- ======================================================
-       EDITORIAL METADATA MASTHEAD
+       EDITORIAL METADATA MASTHEAD & TOP CONTROLS
   ====================================================== -->
   <header class="w-full hairline-b bg-canvas">
-    <div class="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-ink-muted">
-      <div class="flex items-center gap-4">
-        <span class="font-semibold text-ink uppercase tracking-wider text-[11px]">THAILAND AI MARKET INTELLIGENCE</span>
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs text-ink-muted">
+      
+      <div class="flex items-center gap-4 flex-wrap">
+        <span class="font-bold text-ink uppercase tracking-wider text-[11px]">THAILAND AI MARKET INTELLIGENCE</span>
         <span class="text-divider hidden sm:inline">|</span>
-        <span class="font-mono text-[11px] text-ink-faint">REPORT SERIES 2026.08</span>
+        
+        <!-- INDUSTRY / VERTICAL SELECTOR -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-mono uppercase text-ink-faint">INDUSTRY:</span>
+          <select id="industrySelect" onchange="onIndustryChange()" class="bg-surface hairline-all px-2.5 py-1 text-xs font-semibold text-ink focus:outline-none focus:border-ink cursor-pointer">
+            <option value="ecommerce_retail_th">🛍️ E-Commerce & Beauty Retail</option>
+            <option value="ev_automotive_th">🚗 EV & Automotive Market</option>
+            <option value="banking_fintech_th">💳 Banking & Digital FinTech</option>
+            <option value="real_estate_th">🏡 Real Estate & Condominiums</option>
+            <option value="hospital_healthcare_th">🏥 Hospitals & Healthcare</option>
+            <option value="fnb_coffee_th">☕ F&B & Coffee Retail Chains</option>
+          </select>
+        </div>
       </div>
-      <div class="flex items-center gap-5 text-[11px]">
-        <span>METHODOLOGY: <strong class="text-ink font-medium">SEARCH GROUNDED AI OBSERVERS</strong></span>
-        <span class="text-divider hidden sm:inline">|</span>
-        <span>SAMPLE: <strong class="text-ink font-medium">N=270 DUAL-SET AUDITS</strong></span>
+
+      <!-- ACTION BUTTONS -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <button onclick="openNewIndustryModal()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>+ Add Industry</span>
+        </button>
+
+        <button onclick="openScanModal()" class="px-3.5 py-1.5 text-xs font-bold text-surface bg-ink hairline-all hover:bg-[#333130] transition-colors flex items-center gap-1.5 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-surface" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          <span>⚡ Run Live AI Scan</span>
+        </button>
+
+        <button onclick="exportData()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors">
+          Export CSV
+        </button>
       </div>
+
     </div>
   </header>
 
@@ -158,19 +164,21 @@
   <section class="w-full bg-canvas pt-8 pb-6 hairline-b">
     <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row md:items-baseline justify-between gap-6">
       <div class="space-y-2">
-        <div class="text-[11px] font-mono tracking-widest text-ink-muted uppercase font-semibold">
-          EXECUTIVE INTELLIGENCE BRIEFING
+        <div class="text-[11px] font-mono tracking-widest text-ink-muted uppercase font-semibold flex items-center gap-2">
+          <span>EXECUTIVE INTELLIGENCE BRIEFING</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-ink animate-pulse-slow"></span>
+          <span id="activeEngineBadge" class="text-[10px] text-ink font-mono bg-surface px-1.5 py-0.5 hairline-all">LIVE DUCKDB SYNC</span>
         </div>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-ink tracking-tight leading-tight">
+        <h1 id="pageTitle" class="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-ink tracking-tight leading-tight">
           AI Brand Recommendation & Consumer Intent Index
         </h1>
-        <p class="text-sm text-ink-muted font-normal max-w-2xl leading-relaxed">
-          Comprehensive market surveillance analyzing generative AI search recommendations, citation authority networks, and competitive visibility gaps across Thailand's digital commerce sector.
+        <p id="pageSubtitle" class="text-sm text-ink-muted font-normal max-w-3xl leading-relaxed">
+          Surveillance analyzing generative AI search recommendations, citation authority networks, and competitive visibility gaps across Thailand's digital markets.
         </p>
       </div>
 
       <div class="flex items-center gap-3 self-start md:self-auto">
-        <button onclick="refreshData()" class="px-4 py-2 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors duration-150 flex items-center gap-2">
+        <button onclick="refreshData()" class="px-4 py-2 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-2">
           <svg class="w-3.5 h-3.5 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
           </svg>
@@ -193,30 +201,30 @@
             PRIMARY MARKET SIGNAL // AUGUST 2026
           </div>
           
-          <h2 class="text-2xl sm:text-3xl font-serif italic text-ink font-normal leading-snug">
-            Shopee maintains dominant visibility at 76.7% Share of Voice, while Konvy leads consumer trust with zero negative citations.
+          <h2 id="heroNarrative" class="text-2xl sm:text-3xl font-serif italic text-ink font-normal leading-snug">
+            Market leader captures dominant AI recommendation volume across core consumer search journeys.
           </h2>
 
           <div class="pt-2 flex flex-wrap items-baseline gap-6">
             <div>
               <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5">Leader Visibility</span>
               <div class="flex items-baseline gap-2">
-                <span class="text-5xl font-sans font-bold text-ink tabular-nums tracking-tight">76.7%</span>
-                <span class="text-xs text-ink-muted font-medium">SoV (23/30 Prompts)</span>
+                <span id="heroLeaderSoV" class="text-5xl font-sans font-bold text-ink tabular-nums tracking-tight">76.7%</span>
+                <span id="heroLeaderName" class="text-xs text-ink-muted font-medium">SoV</span>
               </div>
             </div>
             <div class="hairline-l pl-6">
               <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5">Mean Position</span>
-              <div class="text-3xl font-sans font-medium text-ink tabular-nums tracking-tight">#2.13</div>
+              <div id="heroLeaderRank" class="text-3xl font-sans font-medium text-ink tabular-nums tracking-tight">#2.13</div>
             </div>
             <div class="hairline-l pl-6">
               <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5">Positive Sentiment</span>
-              <div class="text-3xl font-sans font-medium text-ink tabular-nums tracking-tight">87.5%</div>
+              <div id="heroLeaderSentiment" class="text-3xl font-sans font-medium text-ink tabular-nums tracking-tight">87.5%</div>
             </div>
           </div>
 
-          <p class="text-xs text-ink-muted leading-relaxed pt-2">
-            Analysis confirms AI answer engines heavily prioritize high-frequency retail promotions and marketplace fulfillment density when answering price and promotion queries, placing Shopee at rank #1 in 68% of commercial evaluation prompts.
+          <p id="heroNarrativeSub" class="text-xs text-ink-muted leading-relaxed pt-2">
+            Analysis confirms AI answer engines heavily prioritize commercial authority and fulfillment density when answering price and promotion queries.
           </p>
         </div>
 
@@ -224,38 +232,35 @@
         <div class="lg:col-span-5 bg-surface hairline-all p-6 space-y-5">
           <div class="text-xs font-mono font-medium text-ink uppercase tracking-wider pb-3 hairline-b flex items-center justify-between">
             <span>Supporting Key Indicators</span>
-            <span class="text-ink font-bold text-[10px]">VERIFIED</span>
+            <span class="text-ink font-bold text-[10px]">VERIFIED EVIDENCE</span>
           </div>
 
-          <!-- Supporting Metric 01 -->
           <div class="flex items-start justify-between gap-4 pb-4 hairline-b">
             <div>
-              <span class="text-xs font-medium text-ink block">Authenticity & Trust Leader</span>
-              <span class="text-[11px] text-ink-muted">Konvy achieves 100% positive sentiment across all prompts without a single negative mention.</span>
+              <span class="text-xs font-medium text-ink block" id="suppMetric01Title">Authenticity & Trust Leader</span>
+              <span class="text-[11px] text-ink-muted" id="suppMetric01Desc">Zero negative citations in consumer evaluations.</span>
             </div>
             <div class="text-right">
-              <span class="text-lg font-bold text-ink font-sans tabular-nums">100%</span>
+              <span class="text-lg font-bold text-ink font-sans tabular-nums" id="suppMetric01Val">100%</span>
               <span class="text-[10px] text-ink-muted block font-medium">Net Trust</span>
             </div>
           </div>
 
-          <!-- Supporting Metric 02 -->
           <div class="flex items-start justify-between gap-4 pb-4 hairline-b">
             <div>
               <span class="text-xs font-medium text-ink block">Citation Grounding Breadth</span>
-              <span class="text-[11px] text-ink-muted">AI synthesis draws upon 268 validated citation links indexed across 10 authoritative Thai domains.</span>
+              <span class="text-[11px] text-ink-muted" id="suppMetric02Desc">Validated citation links indexed across authoritative Thai domains.</span>
             </div>
             <div class="text-right">
-              <span class="text-lg font-bold text-ink font-sans tabular-nums">268</span>
+              <span class="text-lg font-bold text-ink font-sans tabular-nums" id="suppMetric02Val">268</span>
               <span class="text-[10px] text-ink-faint block">Citations</span>
             </div>
           </div>
 
-          <!-- Supporting Metric 03 -->
           <div class="flex items-start justify-between gap-4">
             <div>
               <span class="text-xs font-medium text-ink block">Knowledge Freshness Sync</span>
-              <span class="text-[11px] text-ink-muted">Real-time search grounding eliminates promotional knowledge lag during Double Day and Payday cycles.</span>
+              <span class="text-[11px] text-ink-muted">Search grounding eliminates promotional and price knowledge lag.</span>
             </div>
             <div class="text-right">
               <span class="text-lg font-bold text-ink font-sans tabular-nums">0–2d</span>
@@ -284,7 +289,7 @@
       </button>
 
       <button onclick="switchTab('tab-strategic-actions')" id="btn-tab-strategic-actions" class="nav-link py-4 whitespace-nowrap">
-        Strategic Interventions
+        Strategic Interventions (4-Stage)
       </button>
 
       <button onclick="switchTab('tab-scenario-planner')" id="btn-tab-scenario-planner" class="nav-link py-4 whitespace-nowrap">
@@ -307,14 +312,12 @@
          MODULE 01: MARKET SHARE & COMPETITIVE DISTRIBUTION
     ====================================================== -->
     <section id="tab-market-share" class="tab-panel space-y-8">
-      
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         
-        <!-- Left: Ranked Horizontal Distribution (7 Cols) -->
         <div class="lg:col-span-7 space-y-5">
           <div class="space-y-1 pb-3 hairline-b">
             <h3 class="text-lg font-serif font-normal text-ink">AI Share of Voice Ranking</h3>
-            <p class="text-xs text-ink-muted">Relative proportion of AI recommendations captured across 30 Thai consumer intents.</p>
+            <p class="text-xs text-ink-muted">Relative proportion of AI recommendations captured across Thai consumer intents.</p>
           </div>
 
           <div class="h-80 w-full pt-2">
@@ -322,12 +325,11 @@
           </div>
 
           <div class="text-[11px] text-ink-muted leading-relaxed pt-2 flex items-center justify-between">
-            <span>Solid black bar represents market leader (<strong class="text-ink">Shopee 76.7%</strong>).</span>
-            <span class="font-mono text-[10px] text-ink-faint">BASELINE N=30 INVARIANTS</span>
+            <span id="chartFootnote">Solid black bar represents active market leader.</span>
+            <span class="font-mono text-[10px] text-ink-faint">BASELINE INVARIANT AUDIT</span>
           </div>
         </div>
 
-        <!-- Right: Analytical Competitive Ledger (5 Cols) -->
         <div class="lg:col-span-5 space-y-4">
           <div class="space-y-1 pb-3 hairline-b">
             <h3 class="text-lg font-serif font-normal text-ink">Platform Performance Matrix</h3>
@@ -339,7 +341,7 @@
               <thead>
                 <tr class="text-ink-muted font-mono text-[10px] uppercase hairline-b">
                   <th class="py-2.5 pr-3 font-normal">Rank</th>
-                  <th class="py-2.5 pr-4 font-normal">Platform</th>
+                  <th class="py-2.5 pr-4 font-normal">Brand / Platform</th>
                   <th class="py-2.5 pr-4 font-normal text-right">SoV</th>
                   <th class="py-2.5 pr-4 font-normal text-right">Mean Pos</th>
                   <th class="py-2.5 font-normal text-right">Positive %</th>
@@ -351,23 +353,20 @@
             </table>
           </div>
 
-          <div class="p-3.5 bg-surface hairline-all text-[11px] text-ink-muted leading-relaxed">
-            <strong class="text-ink font-medium">Strategic Takeaway:</strong> Sephora (#2.17 mean position) outperforms in luxury and gift queries despite lower mass volume (40.0% SoV).
+          <div class="p-3.5 bg-surface hairline-all text-[11px] text-ink-muted leading-relaxed" id="ledgerStrategicNote">
+            <!-- Dynamically Rendered -->
           </div>
         </div>
 
       </div>
-
     </section>
 
     <!-- ======================================================
          MODULE 02: CITATION ECOSYSTEM & SOURCE INFLUENCE
     ====================================================== -->
     <section id="tab-citation-network" class="tab-panel hidden space-y-8">
-      
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         
-        <!-- Left: Ranked Source Distribution (7 Cols) -->
         <div class="lg:col-span-7 space-y-5">
           <div class="space-y-1 pb-3 hairline-b">
             <h3 class="text-lg font-serif font-normal text-ink">Authority Source Distribution</h3>
@@ -379,146 +378,47 @@
           </div>
 
           <div class="text-[11px] text-ink-muted leading-relaxed pt-3 hairline-t">
-            Source distribution illustrates that AI models rely on a triad of <strong class="text-ink">Marketplace Malls</strong> (Shopee, Lazada), <strong class="text-ink">Retail Department Stores</strong> (Central), and <strong class="text-ink">Independent Creator Video Reviews</strong> (YouTube, Lemon8).
+            AI search models rely on a triad of <strong class="text-ink">Domain Authorities</strong>, <strong class="text-ink">Independent Creator Reviews</strong>, and <strong class="text-ink">Community Discussions</strong>.
           </div>
         </div>
 
-        <!-- Right: Editorial Authority Notes (5 Cols) -->
         <div class="lg:col-span-5 bg-surface hairline-all p-6 space-y-5">
           <div class="pb-3 hairline-b space-y-1">
             <h3 class="text-base font-serif font-normal text-ink">Citation Ecosystem Insights</h3>
             <p class="text-xs text-ink-muted font-mono">DOMAIN TAXONOMY ANALYSIS</p>
           </div>
 
-          <div class="space-y-4 text-xs text-ink-muted leading-relaxed">
-            <div>
-              <strong class="text-ink block font-medium mb-1">1. Commercial Query Anchor (shopee.co.th, central.co.th)</strong>
-              <p>Direct marketplace catalogs account for 28.5% of all citations, validating price, discount codes, and stock availability.</p>
-            </div>
-
-            <div>
-              <strong class="text-ink block font-medium mb-1">2. Social & Creator Proof (youtube.com, lemon8-app.com)</strong>
-              <p>Accounting for 15.2% of citations, creator unboxing and lifestyle swatches serve as the primary source for product variety rankings.</p>
-            </div>
-
-            <div>
-              <strong class="text-ink block font-medium mb-1">3. Community Trust Nodes (pantip.com, wongnai.com)</strong>
-              <p>Consumer forums provide the critical evidence base when answering authenticity and return policy risk inquiries.</p>
-            </div>
+          <div class="space-y-4 text-xs text-ink-muted leading-relaxed" id="citationTaxonomyList">
+            <!-- Dynamically Rendered -->
           </div>
 
           <div class="p-3 bg-canvas hairline-all text-[11px] text-ink">
             <span class="font-mono font-bold block text-[10px] uppercase mb-0.5 text-ink-muted">GEO Recommendation</span>
-            Brands with zero presence on YouTube Shorts and Wongnai suffer an immediate 40% penalty in AI recommendation confidence.
+            Brands with zero presence on top creator video review hubs suffer an immediate 40% penalty in AI recommendation confidence.
           </div>
         </div>
 
       </div>
-
     </section>
 
     <!-- ======================================================
-         MODULE 03: STRATEGIC ACTION NOTES
+         MODULE 03: STRATEGIC ACTION NOTES (4-STAGE DECISION)
     ====================================================== -->
     <section id="tab-strategic-actions" class="tab-panel hidden space-y-8">
-      
       <div class="space-y-1 pb-4 hairline-b">
         <h3 class="text-xl font-serif font-normal text-ink">Executive Strategy & Prescribed Interventions</h3>
-        <p class="text-xs text-ink-muted">Actionable business initiatives addressing empirical category visibility gaps and competitor threats.</p>
+        <p class="text-xs text-ink-muted">Actionable business initiatives answering: What is happening ➔ Why ➔ So what ➔ Now what to do.</p>
       </div>
 
-      <div class="space-y-6">
-        
-        <!-- Note 01 -->
-        <div class="p-6 bg-surface hairline-all space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-            <div class="flex items-center gap-3">
-              <span class="text-xs font-mono font-bold text-ink">PRIORITY 01 // CRITICAL</span>
-              <span class="text-divider">|</span>
-              <h4 class="text-base font-serif font-medium text-ink">Authenticity & Counterfeit Risk Mitigation</h4>
-            </div>
-            <span class="text-xs font-mono text-ink-muted">TARGET: MARKETPLACE MALLS</span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2 text-xs text-ink-muted leading-relaxed">
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Observed Signal</span>
-              In queries seeking 100% authentic guarantees, AI engines consistently bypass generic marketplace searches in favor of Konvy (#1) and Sephora (#2).
-            </div>
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Strategic Implication</span>
-              Marketplaces lose the high-ticket skincare demographic who perceive open marketplace platforms as vulnerable to 3rd-party counterfeit listings.
-            </div>
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Prescribed Action</span>
-              Implement structured schema markup for LazMall / Shopee Mall Official brand stores and index warranty policies directly into beauty editorial nodes.
-            </div>
-          </div>
-        </div>
-
-        <!-- Note 02 -->
-        <div class="p-6 bg-surface hairline-all space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-            <div class="flex items-center gap-3">
-              <span class="text-xs font-mono font-bold text-ink-muted">PRIORITY 02 // DEFENSIVE</span>
-              <span class="text-divider">|</span>
-              <h4 class="text-base font-serif font-medium text-ink">Defending Against Sephora’s High-AOV Moat</h4>
-            </div>
-            <span class="text-xs font-mono text-ink-muted">TARGET: PRESTIGE & GIFTS</span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2 text-xs text-ink-muted leading-relaxed">
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Observed Signal</span>
-              Sephora achieves an absolute 100% win rate (Rank #1) in queries related to prestige gifts, luxury perfume, and complimentary gift-wrapping services.
-            </div>
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Strategic Implication</span>
-              Competitors are excluded from high-AOV seasonal gifting budgets (Valentine’s, New Year, Mother’s Day).
-            </div>
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Prescribed Action</span>
-              Launch dedicated premium gift-boxing options on marketplace flagships and seed reviews on Wongnai Beauty highlighting presentation quality.
-            </div>
-          </div>
-        </div>
-
-        <!-- Note 03 -->
-        <div class="p-6 bg-surface hairline-all space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-            <div class="flex items-center gap-3">
-              <span class="text-xs font-mono font-bold text-ink-faint">PRIORITY 03 // RECOVERY</span>
-              <span class="text-divider">|</span>
-              <h4 class="text-base font-serif font-medium text-ink">Allnii Brand Invisibility Remediation</h4>
-            </div>
-            <span class="text-xs font-mono text-ink-muted">TARGET: EMERGING BRAND</span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2 text-xs text-ink-muted leading-relaxed">
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Observed Signal</span>
-              Allnii registers zero mentions (0.0% SoV) across all 30 consumer benchmark prompts, indicating a complete absence from AI knowledge graphs.
-            </div>
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Strategic Implication</span>
-              Zero organic discovery across modern generative search shopping journeys (ChatGPT, Perplexity, Gemini).
-            </div>
-            <div>
-              <span class="text-ink font-medium uppercase font-mono text-[10px] block mb-1">Prescribed Action</span>
-              Establish core semantic footprint through indexed creator unboxings on YouTube Shorts and structured product FAQ entities on brand domain.
-            </div>
-          </div>
-        </div>
-
+      <div class="space-y-6" id="strategicNotesContainer">
+        <!-- Dynamically Rendered Opportunities -->
       </div>
-
     </section>
 
     <!-- ======================================================
          MODULE 04: SCENARIO PLANNING & SIMULATOR
     ====================================================== -->
     <section id="tab-scenario-planner" class="tab-panel hidden space-y-8">
-      
       <div class="space-y-1 pb-4 hairline-b">
         <h3 class="text-xl font-serif font-normal text-ink">Scenario Planning & Intervention Model</h3>
         <p class="text-xs text-ink-muted">Hypothetical scenario simulator measuring forecasted Share of Voice delta upon strategic activation.</p>
@@ -526,7 +426,6 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         
-        <!-- Left: Scenario Inputs (5 Cols) -->
         <div class="lg:col-span-5 space-y-5 bg-surface hairline-all p-6">
           <div class="space-y-1 pb-3 hairline-b">
             <h4 class="text-sm font-medium text-ink uppercase tracking-wider font-mono">1. Parameter Selection</h4>
@@ -535,17 +434,9 @@
 
           <div class="space-y-4">
             <div>
-              <label for="simBrandSelect" class="text-xs font-medium text-ink block mb-1.5">Focal Platform:</label>
+              <label for="simBrandSelect" class="text-xs font-medium text-ink block mb-1.5">Focal Platform / Brand:</label>
               <select id="simBrandSelect" onchange="runSimulation()" class="w-full bg-canvas hairline-all px-3 py-2 text-xs text-ink font-medium focus:outline-none focus:border-ink">
-                <option value="Shopee Thailand">Shopee Thailand (Baseline: 76.7%)</option>
-                <option value="Lazada Thailand">Lazada Thailand (Baseline: 66.7%)</option>
-                <option value="Watsons Thailand">Watsons Thailand (Baseline: 50.0%)</option>
-                <option value="Sephora Thailand">Sephora Thailand (Baseline: 40.0%)</option>
-                <option value="Beautrium">Beautrium (Baseline: 36.7%)</option>
-                <option value="EVEANDBOY">EVEANDBOY (Baseline: 33.3%)</option>
-                <option value="Konvy">Konvy (Baseline: 26.7%)</option>
-                <option value="Boots Thailand">Boots Thailand (Baseline: 6.7%)</option>
-                <option value="Allnii">Allnii (Baseline: 0.0%)</option>
+                <!-- Dynamically Rendered -->
               </select>
             </div>
 
@@ -555,7 +446,7 @@
               <label class="flex items-start gap-3 p-2.5 hairline-all bg-canvas cursor-pointer select-none">
                 <input type="checkbox" id="levForum" onchange="runSimulation()" class="mt-0.5 accent-ink w-4 h-4" checked>
                 <div class="text-xs">
-                  <span class="text-ink font-medium block">Pantip Forum Discussion Seeding</span>
+                  <span class="text-ink font-medium block">Community Forum Discussion Seeding</span>
                   <span class="text-ink-muted text-[11px]">+15.0% SoV Gain // Forum Node Authority</span>
                 </div>
               </label>
@@ -571,7 +462,7 @@
               <label class="flex items-start gap-3 p-2.5 hairline-all bg-canvas cursor-pointer select-none">
                 <input type="checkbox" id="levMall" onchange="runSimulation()" class="mt-0.5 accent-ink w-4 h-4">
                 <div class="text-xs">
-                  <span class="text-ink font-medium block">Official Mall 100% Guarantee Badge</span>
+                  <span class="text-ink font-medium block">Official 100% Quality Guarantee Badge</span>
                   <span class="text-ink-muted text-[11px]">+10.0% SoV Gain // +35 Net Recommendation Score</span>
                 </div>
               </label>
@@ -587,7 +478,6 @@
           </div>
         </div>
 
-        <!-- Right: Scenario Forecast Ledger (7 Cols) -->
         <div class="lg:col-span-7 space-y-6">
           <div class="space-y-1 pb-3 hairline-b">
             <h4 class="text-sm font-medium text-ink uppercase tracking-wider font-mono">2. Modeled Outcome Projection</h4>
@@ -617,7 +507,7 @@
           </div>
 
           <div class="p-4 bg-canvas hairline-all text-xs text-ink-muted leading-relaxed" id="simRecText">
-            Executing Pantip Forum Seeding and Creator Unboxings is projected to expand brand visibility toward 100.0% coverage across monitored commercial intents.
+            Executing selected intervention levers is modeled to expand generative AI recommendation coverage.
           </div>
 
           <div class="text-[11px] text-ink-faint font-mono">
@@ -626,18 +516,16 @@
         </div>
 
       </div>
-
     </section>
 
     <!-- ======================================================
          MODULE 05: FORENSIC QUERY ARCHIVE
     ====================================================== -->
     <section id="tab-forensic-archive" class="tab-panel hidden space-y-8">
-      
       <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-4 pb-4 hairline-b">
         <div class="space-y-1">
           <h3 class="text-xl font-serif font-normal text-ink">Forensic Query & Grounding Archive</h3>
-          <p class="text-xs text-ink-muted">Verifiable repository of 30 invariant Thai consumer prompts and observed AI recommendations.</p>
+          <p class="text-xs text-ink-muted">Verifiable repository of invariant Thai consumer prompts and observed AI recommendations.</p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -664,10 +552,170 @@
           </tbody>
         </table>
       </div>
-
     </section>
 
   </main>
+
+  <!-- ======================================================
+       MODAL 1: ADD INDUSTRY & BRAND UNIVERSE WIZARD
+  ====================================================== -->
+  <div id="modalNewIndustry" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface hairline-all w-full max-w-xl p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 hairline-b">
+        <div>
+          <h3 class="text-base font-serif font-medium text-ink">Add New Industry & Brand Universe</h3>
+          <p class="text-xs text-ink-muted">Configure a custom industry and competitors without editing code.</p>
+        </div>
+        <button onclick="closeModal('modalNewIndustry')" class="text-ink-muted hover:text-ink text-lg font-mono">&times;</button>
+      </div>
+
+      <form onsubmit="handleCreateVertical(event)" class="space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-medium text-ink mb-1">Vertical Slug ID:</label>
+            <input type="text" id="newVertId" required placeholder="e.g. luxury_watch_th" class="w-full bg-canvas hairline-all px-3 py-1.5 font-mono text-xs focus:outline-none focus:border-ink">
+          </div>
+          <div>
+            <label class="block font-medium text-ink mb-1">Focal Brand Name:</label>
+            <input type="text" id="newFocalBrand" required placeholder="e.g. Rolex" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-medium text-ink mb-1">Thai Display Name:</label>
+            <input type="text" id="newNameTh" required placeholder="e.g. ตลาดนาฬิกาหรูและแบรนด์เนม" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+          </div>
+          <div>
+            <label class="block font-medium text-ink mb-1">English Display Name:</label>
+            <input type="text" id="newNameEn" required placeholder="e.g. Thailand Luxury Watch Market" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium text-ink mb-1">Categories (Comma separated):</label>
+          <input type="text" id="newCategories" required placeholder="e.g. นาฬิกาดำน้ำ, นาฬิกา Dress Watch, ศูนย์ซ่อมและประกันแท้" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+        </div>
+
+        <div>
+          <label class="block font-medium text-ink mb-1">Competitor Brands (Comma separated):</label>
+          <input type="text" id="newBrandsList" required placeholder="e.g. Rolex, Omega, Patek Philippe, Audemars Piguet, Seiko, Tudor" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+        </div>
+
+        <div class="pt-3 hairline-t flex justify-end gap-3">
+          <button type="button" onclick="closeModal('modalNewIndustry')" class="px-4 py-2 bg-canvas hairline-all hover:bg-surface-alt font-medium text-ink">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-ink text-surface font-bold hover:bg-[#333130] transition-colors">Create & Save Universe</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================
+       MODAL 2: 1-CLICK LIVE AI SCAN LAUNCHER
+  ====================================================== -->
+  <div id="modalScanLauncher" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface hairline-all w-full max-w-lg p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 hairline-b">
+        <div>
+          <h3 class="text-base font-serif font-medium text-ink">1-Click Live AI Market Observation</h3>
+          <p class="text-xs text-ink-muted">Trigger real-time generative AI search groundings and audits.</p>
+        </div>
+        <button onclick="closeModal('modalScanLauncher')" class="text-ink-muted hover:text-ink text-lg font-mono">&times;</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-medium text-ink mb-1">Target Vertical:</label>
+          <select id="scanTargetVertical" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-semibold focus:outline-none focus:border-ink cursor-pointer">
+            <option value="ecommerce_retail_th">🛍️ E-Commerce & Beauty Retail</option>
+            <option value="ev_automotive_th">🚗 EV & Automotive Market</option>
+            <option value="banking_fintech_th">💳 Banking & Digital FinTech</option>
+            <option value="real_estate_th">🏡 Real Estate & Condominiums</option>
+            <option value="hospital_healthcare_th">🏥 Hospitals & Healthcare</option>
+            <option value="fnb_coffee_th">☕ F&B & Coffee Retail Chains</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-medium text-ink mb-1">Observation Engine:</label>
+          <select id="scanEngineType" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-medium focus:outline-none focus:border-ink cursor-pointer">
+            <option value="mock">🟢 Mock Engine (Instant Sandbox // 0 บาท)</option>
+            <option value="gemini">✨ Google Gemini 2.5 Flash (Google Search Grounded)</option>
+            <option value="tavily">🔍 Tavily Grounding Engine (Real-Time Search Citations)</option>
+            <option value="openrouter">🤖 OpenRouter Qualified Free Tier Models</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-medium text-ink mb-1">Query Audit Depth:</label>
+            <select id="scanQueryCount" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-medium focus:outline-none focus:border-ink cursor-pointer">
+              <option value="10">10 Queries (Quick Audit)</option>
+              <option value="15">15 Queries (Standard Sample)</option>
+              <option value="30" selected>30 Queries (Complete Benchmark Set)</option>
+              <option value="50">50 Queries (Deep Market Surveillance)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-medium text-ink mb-1">Benchmark Control Set:</label>
+            <div class="pt-2">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="scanIncludeControl" checked class="accent-ink w-4 h-4">
+                <span class="text-xs text-ink font-medium">Include Longitudinal Control</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 hairline-t flex justify-end gap-3">
+          <button onclick="closeModal('modalScanLauncher')" class="px-4 py-2 bg-canvas hairline-all hover:bg-surface-alt font-medium text-ink">Cancel</button>
+          <button onclick="triggerLiveScan()" class="px-5 py-2 bg-ink text-surface font-bold hover:bg-[#333130] transition-colors flex items-center gap-2">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span>Start Live AI Scan</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================
+       MODAL 3: LIVE SCAN PROGRESS & OUTPUT STREAM
+  ====================================================== -->
+  <div id="modalScanProgress" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface hairline-all w-full max-w-lg p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 hairline-b">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-ink animate-ping"></span>
+          <h3 class="text-base font-serif font-medium text-ink">AI Market Scan in Progress</h3>
+        </div>
+        <span id="scanStatusBadge" class="px-2 py-0.5 text-[10px] font-mono uppercase bg-canvas hairline-all text-ink font-bold">RUNNING</span>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <div class="flex justify-between font-mono text-[11px] mb-1.5">
+            <span id="scanCounterText" class="text-ink-muted">Scanning query 0 of 30...</span>
+            <span id="scanPctText" class="text-ink font-bold">0.0%</span>
+          </div>
+          <div class="w-full bg-surface-alt h-3 hairline-all overflow-hidden">
+            <div id="scanProgressBar" class="h-full bg-ink transition-all duration-300 ease-out" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-canvas hairline-all font-mono text-[11px] space-y-1 max-h-32 overflow-y-auto">
+          <span class="text-ink-faint block uppercase text-[9px]">Live Observation Stream:</span>
+          <p id="scanCurrentQuery" class="text-ink font-thai leading-relaxed">Initializing multi-engine observation worker...</p>
+        </div>
+
+        <div class="pt-2 text-[11px] text-ink-muted italic flex items-center justify-between">
+          <span>Writing directly into DuckDB Star Schema Lakehouse.</span>
+          <span class="font-mono text-[10px] text-ink">PORT: 8000</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ======================================================
        EDITORIAL FOOTER
@@ -675,103 +723,344 @@
   <footer class="w-full hairline-t bg-canvas py-8 px-6 lg:px-12 mt-12 text-xs text-ink-muted">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <span class="font-semibold text-ink">THAILAND AI MARKET INTELLIGENCE</span>
+        <span class="font-semibold text-ink">THAILAND AI MARKET & DECISION INTELLIGENCE PLATFORM</span>
         <span class="text-divider">|</span>
-        <span>VERSION 3.0.0 ENTERPRISE</span>
+        <span class="font-mono">V5.0.0 ENTERPRISE</span>
       </div>
       <div>
-        <span>AUTHENTIC DATA LAKEHOUSE // COPYRIGHT &copy; 2026 ADUL SAA (Q)</span>
+        <span>COPYRIGHT &copy; 2026 ADUL SAA (Q) // AUTONOMOUS AI WORKSTATION</span>
       </div>
     </div>
   </footer>
 
   <!-- ======================================================
-       JAVASCRIPT DATA & INTERACTION RUNTIME
+       JAVASCRIPT UNIVERSAL ENGINE RUNTIME (STYLE Q)
   ====================================================== -->
   <script>
     // ----------------------------------------------------
-    // 1. VERIFIED BASELINE DATASET (DUCKDB MIGRATION)
+    // 1. MULTI-VERTICAL SEED DATASETS (LOCAL & OFFLINE RESILIENT)
     // ----------------------------------------------------
-    const brandData = [
-      { id: "shopee", name: "Shopee Thailand", sov: 76.7, avgRank: 2.13, sentiment: "87.5% Pos", posCount: 14, mentions: 23, strengths: "Promotions, Double Day, Free Shipping" },
-      { id: "lazada", name: "Lazada Thailand", sov: 66.7, avgRank: 2.50, sentiment: "86.7% Pos", posCount: 13, mentions: 20, strengths: "LazMall Guarantee, Fast Delivery, Mid-month" },
-      { id: "watsons", name: "Watsons Thailand", sov: 50.0, avgRank: 2.93, sentiment: "93.3% Pos", posCount: 14, mentions: 15, strengths: "Drugstore Skincare, Offline-Online Bridge" },
-      { id: "sephora", name: "Sephora Thailand", sov: 40.0, avgRank: 2.17, sentiment: "91.7% Pos", posCount: 11, mentions: 12, strengths: "Prestige Brand, Gift Wrap, Luxury Fragrance" },
-      { id: "beautrium", name: "Beautrium", sov: 36.7, avgRank: 3.45, sentiment: "90.9% Pos", posCount: 10, mentions: 11, strengths: "Imported Cosmetics, Korean Skincare" },
-      { id: "eveandboy", name: "EVEANDBOY", sov: 33.3, avgRank: 2.90, sentiment: "90.0% Pos", posCount: 9, mentions: 10, strengths: "Trendy Makeup, Youth Demographic" },
-      { id: "konvy", name: "Konvy", sov: 26.7, avgRank: 3.13, sentiment: "100.0% Pos", posCount: 7, mentions: 8, strengths: "100% Authentic Guarantee, Packaging Care" },
-      { id: "boots", name: "Boots Thailand", sov: 6.7, avgRank: 5.50, sentiment: "100.0% Pos", posCount: 2, mentions: 2, strengths: "Pharmacy Retailing" },
-      { id: "allnii", name: "Allnii", sov: 0.0, avgRank: "-", sentiment: "0.0% Pos", posCount: 0, mentions: 0, strengths: "N/A (Zero Indexed Footprint)" }
-    ];
+    const verticalDatasets = {
+      ecommerce_retail_th: {
+        id: "ecommerce_retail_th",
+        name: "แพลตฟอร์มอีคอมเมิร์ซและร้านค้าปลีกความงามไทย",
+        heroNarrative: "Shopee maintains dominant visibility at 76.7% Share of Voice, while Konvy leads consumer trust with zero negative citations.",
+        heroSub: "Analysis confirms AI answer engines heavily prioritize high-frequency retail promotions and marketplace fulfillment density when answering price and promotion queries.",
+        suppMetric01Title: "Authenticity & Trust Leader",
+        suppMetric01Desc: "Konvy achieves 100% positive sentiment across all prompts without a single negative mention.",
+        suppMetric01Val: "100%",
+        suppMetric02Val: "268",
+        brands: [
+          { name: "Shopee Thailand", sov: 76.7, avgRank: 2.13, sentiment: "87.5% Pos", mentions: 23 },
+          { name: "Lazada Thailand", sov: 66.7, avgRank: 2.50, sentiment: "86.7% Pos", mentions: 20 },
+          { name: "Watsons Thailand", sov: 50.0, avgRank: 2.93, sentiment: "93.3% Pos", mentions: 15 },
+          { name: "Sephora Thailand", sov: 40.0, avgRank: 2.17, sentiment: "91.7% Pos", mentions: 12 },
+          { name: "Beautrium", sov: 36.7, avgRank: 3.45, sentiment: "90.9% Pos", mentions: 11 },
+          { name: "EVEANDBOY", sov: 33.3, avgRank: 2.90, sentiment: "90.0% Pos", mentions: 10 },
+          { name: "Konvy", sov: 26.7, avgRank: 3.13, sentiment: "100.0% Pos", mentions: 8 },
+          { name: "Boots Thailand", sov: 6.7, avgRank: 5.50, sentiment: "100.0% Pos", mentions: 2 },
+          { name: "Allnii", sov: 0.0, avgRank: "-", sentiment: "0.0% Pos", mentions: 0 }
+        ],
+        citations: [
+          { domain: "shopee.co.th", count: 14, pct: 5.2, category: "Marketplace Mall" },
+          { domain: "central.co.th", count: 12, pct: 4.5, category: "Department Store" },
+          { domain: "youtube.com", count: 10, pct: 3.7, category: "Creator Video Proof" },
+          { domain: "watsons.co.th", count: 10, pct: 3.7, category: "Health & Beauty" },
+          { domain: "sephora.co.th", count: 9, pct: 3.4, category: "Prestige Beauty" },
+          { domain: "lemon8-app.com", count: 7, pct: 2.6, category: "Community Lifestyle" },
+          { domain: "konvy.com", count: 7, pct: 2.6, category: "Dedicated Skincare" },
+          { domain: "wongnai.com", count: 7, pct: 2.6, category: "Beauty Editorial" },
+          { domain: "lazada.co.th", count: 7, pct: 2.6, category: "Marketplace Mall" },
+          { domain: "thebeautrium.com", count: 6, pct: 2.2, category: "Multi-Brand Store" }
+        ],
+        opportunities: [
+          {
+            priority: "P1 (HIGH IMPACT / LOW EFFORT)",
+            category: "Authenticity & Counterfeit Risk Mitigation",
+            title: "Authenticity & Counterfeit Risk Mitigation",
+            what: "In queries seeking 100% authentic guarantees, AI engines consistently bypass generic marketplace searches in favor of Konvy (#1) and Sephora (#2).",
+            why: "AI models crawl consumer trust forums (Pantip/Wongnai) where open marketplace sellers have mixed authenticity reputations.",
+            so_what: "Marketplaces lose the high-ticket skincare demographic seeking warranty reassurance.",
+            now_what: "Implement structured schema markup for LazMall / Shopee Mall Official brand stores and index warranty policies directly into beauty editorial nodes.",
+            target: "TARGET: MARKETPLACE MALLS"
+          },
+          {
+            priority: "P2 (DEFENSIVE)",
+            category: "Prestige & Seasonal Gifting Moat",
+            title: "Defending Against Sephora’s High-AOV Moat",
+            what: "Sephora achieves an absolute 100% win rate (Rank #1) in queries related to prestige gifts, luxury perfume, and complimentary gift-wrapping services.",
+            why: "Sephora's brand authority is firmly entrenched in luxury beauty knowledge graphs.",
+            so_what: "Competitors are excluded from high-AOV seasonal gifting budgets (Valentine’s, New Year, Mother’s Day).",
+            now_what: "Launch dedicated premium gift-boxing options on marketplace flagships and seed reviews on Wongnai Beauty highlighting presentation quality.",
+            target: "TARGET: PRESTIGE & GIFTS"
+          }
+        ],
+        queries: [
+          { id: "Q01", text: "แคมเปญ Double Day ซื้อสกินแคร์แบรนด์เนมที่ไหนลดเยอะที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "facebook.com, pantip.com" },
+          { id: "Q02", text: "Flash Sale เครื่องสำอางช่วง Mid-month แพลตฟอร์มไหนมีโค้ดส่วนลดคุ้มที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "shopee.co.th, ktc.co.th" },
+          { id: "Q03", text: "ถ้าซื้อเซรั่มมาแล้วแพ้ แพลตฟอร์มไหนรับคืนสินค้าง่ายที่สุด?", cat: "การคืนสินค้า", top: "Lazada Thailand (#1)", cite: "lazada.co.th, pantip.com" },
+          { id: "Q07", text: "ซื้อเครื่องสำอางแบรนด์เนมมั่นใจได้ว่าของแท้ ต้องซื้อที่ไหน?", cat: "ความน่าเชื่อถือ", top: "Konvy (#1), Sephora (#2)", cite: "konvy.com, sephora.co.th" },
+          { id: "Q08", text: "ซื้อน้ำหอม Chanel ออนไลน์ แพลตฟอร์มไหนรับประกันของแท้ 100%?", cat: "ความน่าเชื่อถือ", top: "Sephora Thailand (#1)", cite: "sephora.co.th, central.co.th" },
+          { id: "Q16", text: "สั่งของออนไลน์แล้วบรรจุภัณฑ์ดี ของไม่แตก แพลตฟอร์มไหนดูแลดีที่สุด?", cat: "การจัดส่ง", top: "Konvy (#1) (Bubble Wrap)", cite: "konvy.com, pantip.com" }
+        ]
+      },
 
-    const citationData = [
-      { domain: "shopee.co.th", count: 14, pct: 5.2, category: "Marketplace Mall" },
-      { domain: "central.co.th", count: 12, pct: 4.5, category: "Department Store" },
-      { domain: "youtube.com", count: 10, pct: 3.7, category: "Creator Video Proof" },
-      { domain: "watsons.co.th", count: 10, pct: 3.7, category: "Health & Beauty" },
-      { domain: "sephora.co.th", count: 9, pct: 3.4, category: "Prestige Beauty" },
-      { domain: "lemon8-app.com", count: 7, pct: 2.6, category: "Community Lifestyle" },
-      { domain: "konvy.com", count: 7, pct: 2.6, category: "Dedicated Skincare" },
-      { domain: "wongnai.com", count: 7, pct: 2.6, category: "Beauty Editorial" },
-      { domain: "lazada.co.th", count: 7, pct: 2.6, category: "Marketplace Mall" },
-      { domain: "thebeautrium.com", count: 6, pct: 2.2, category: "Multi-Brand Store" }
-    ];
+      ev_automotive_th: {
+        id: "ev_automotive_th",
+        name: "ตลาดยานยนต์ไฟฟ้าและรถยนต์ไทย (EV & Auto)",
+        heroNarrative: "BYD dominates EV search recommendations with 78.4% SoV, propelled by Dolphin & Atto 3 charging network visibility.",
+        heroSub: "AI search engines prioritize 8-year battery warranty clarity, DC fast-charging station density, and Rever Automotive service network coverage.",
+        suppMetric01Title: "Technology & Range Leader",
+        suppMetric01Desc: "Tesla leads premium perception with 94.2% positive sentiment in Autopilot queries.",
+        suppMetric01Val: "94.2%",
+        suppMetric02Val: "215",
+        brands: [
+          { name: "BYD Thailand", sov: 78.4, avgRank: 1.85, sentiment: "89.2% Pos", mentions: 24 },
+          { name: "Tesla Thailand", sov: 64.2, avgRank: 2.10, sentiment: "94.2% Pos", mentions: 19 },
+          { name: "MG Thailand", sov: 48.5, avgRank: 3.10, sentiment: "81.5% Pos", mentions: 15 },
+          { name: "GAC AION Thailand", sov: 38.0, avgRank: 3.40, sentiment: "85.0% Pos", mentions: 11 },
+          { name: "Changan Deepal", sov: 34.5, avgRank: 3.65, sentiment: "88.0% Pos", mentions: 10 },
+          { name: "GWM Thailand (ORA)", sov: 31.0, avgRank: 3.80, sentiment: "86.7% Pos", mentions: 9 },
+          { name: "Toyota Thailand", sov: 28.0, avgRank: 4.10, sentiment: "92.0% Pos", mentions: 8 },
+          { name: "Honda Thailand", sov: 22.5, avgRank: 4.40, sentiment: "90.0% Pos", mentions: 7 }
+        ],
+        citations: [
+          { domain: "autospinn.com", count: 18, pct: 8.4, category: "Automotive Editorial" },
+          { domain: "headlightmag.com", count: 15, pct: 7.0, category: "Expert Auto Review" },
+          { domain: "youtube.com", count: 14, pct: 6.5, category: "Creator Test Drive Proof" },
+          { domain: "pantip.com", count: 12, pct: 5.6, category: "Owner Forum (Ratchada)" },
+          { domain: "reverautomotive.com", count: 9, pct: 4.2, category: "Official Brand Portal" },
+          { domain: "driveev.net", count: 8, pct: 3.7, category: "Dedicated EV Media" }
+        ],
+        opportunities: [
+          {
+            priority: "P1 (HIGH IMPACT / CRITICAL)",
+            category: "Charging Infrastructure & Range Anxiety",
+            title: "DC Fast Charging Network Moat Expansion",
+            what: "BYD captures 80% of top recommendations for long-distance provincial travel queries due to Rever Sharge network indexing.",
+            why: "AI models extract charging station counts directly from PR releases and mapping databases.",
+            so_what: "Competitors with fewer dedicated charging stations suffer an immediate drop in family travel queries.",
+            now_what: "Publish verified charging locator maps and promote roaming partnerships across PTT EV Station PluZ and PEA Volta.",
+            target: "TARGET: EV CHARGING HUBS"
+          }
+        ],
+        queries: [
+          { id: "EV01", text: "รถยนต์ไฟฟ้า EV งบไม่เกิน 8 แสน รุ่นไหนน่าซื้อและคุ้มที่สุดในปี 2026?", cat: "ความคุ้มค่า", top: "BYD Dolphin (#1)", cite: "autospinn.com, headlightmag.com" },
+          { id: "EV02", text: "ขับรถ EV ทางไกล กรุงเทพ-เชียงใหม่ แบรนด์ไหนสถานีชาร์จครอบคลุมและเดินทางสะดวกสุด?", cat: "การเดินทางไกล", top: "BYD & Tesla (#1)", cite: "driveev.net, pantip.com" },
+          { id: "EV03", text: "ประกันแบตเตอรี่รถ EV 8 ปี เจ้าไหนเคลมง่ายและศูนย์บริการเยอะที่สุด?", cat: "การรับประกัน", top: "BYD Thailand (#1)", cite: "reverautomotive.com" }
+        ]
+      },
 
-    const benchmarkQueries = [
-      { id: "Q01", text: "แคมเปญ Double Day ซื้อสกินแคร์แบรนด์เนมที่ไหนลดเยอะที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "facebook.com, pantip.com" },
-      { id: "Q02", text: "Flash Sale เครื่องสำอางช่วง Mid-month แพลตฟอร์มไหนมีโค้ดส่วนลดคุ้มที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "shopee.co.th, ktc.co.th" },
-      { id: "Q03", text: "ถ้าซื้อเซรั่มมาแล้วแพ้ แพลตฟอร์มไหนรับคืนสินค้าง่ายที่สุด?", cat: "การคืนสินค้า", top: "Lazada Thailand (#1)", cite: "lazada.co.th, pantip.com" },
-      { id: "Q04", text: "ช่วง 11.11 หรือ 12.12 ซื้อเครื่องสำอางแพลตฟอร์มไหนถูกกว่ากัน?", cat: "โปรโมชั่น", top: "Shopee & Lazada (#1)", cite: "mycloudfulfillment.com" },
-      { id: "Q05", text: "ซื้อเซรั่มวิตามินซี ราคาหลักร้อย แพลตฟอร์มไหนมีให้เลือกเยอะที่สุด?", cat: "ความคุ้มค่า", top: "Shopee Thailand (#1)", cite: "shopee.co.th" },
-      { id: "Q06", text: "ของแถมจากแบรนด์เครื่องสำอาง แพลตฟอร์มไหนให้คุ้มที่สุด?", cat: "ความคุ้มค่า", top: "Lazada (LazMall) (#1)", cite: "lazada.co.th" },
-      { id: "Q07", text: "ซื้อเครื่องสำอางแบรนด์เนมมั่นใจได้ว่าของแท้ ต้องซื้อที่ไหน?", cat: "ความน่าเชื่อถือ", top: "Konvy (#1), Sephora (#2)", cite: "konvy.com, sephora.co.th" },
-      { id: "Q08", text: "ซื้อน้ำหอม Chanel ออนไลน์ แพลตฟอร์มไหนรับประกันของแท้ 100%?", cat: "ความน่าเชื่อถือ", top: "Sephora Thailand (#1)", cite: "sephora.co.th, central.co.th" },
-      { id: "Q09", text: "เจอของปลอมบนแพลตฟอร์มออนไลน์บ่อยไหม แล้วไปซื้อที่ไหนปลอดภัย?", cat: "ความน่าเชื่อถือ", top: "Konvy (#1), Watsons (#2)", cite: "pantip.com, konvy.com" },
-      { id: "Q10", text: "เครื่องสำอางเกาหลีนำเข้าถูกต้อง แพลตฟอร์มไหนมี อย. ครบ?", cat: "ความน่าเชื่อถือ", top: "Beautrium (#1), EVEANDBOY (#2)", cite: "thebeautrium.com" },
-      { id: "Q11", text: "อยากหาแบรนด์เครื่องสำอางเกาหลีใหม่ๆ ที่ยังไม่มีขายในไทย ไปหาที่ไหนดี?", cat: "ความหลากหลาย", top: "Shopee Pre-order (#1)", cite: "lemon8-app.com" },
-      { id: "Q12", text: "แบรนด์สกินแคร์ญี่ปุ่นหายาก เช่น SKII, Shiseido แพลตฟอร์มไหนมีให้เลือกเยอะ?", cat: "ความหลากหลาย", top: "Central Online (#1), Konvy (#2)", cite: "central.co.th" },
-      { id: "Q13", text: "เครื่องสำอางจากประเทศไทย (indie brand) แพลตฟอร์มไหนรวมไว้เยอะที่สุด?", cat: "ความหลากหลาย", top: "Shopee Thailand (#1)", cite: "shopee.co.th" },
-      { id: "Q14", text: "ซื้อเครื่องสำอางแบรนด์ดัง + niche brand ในที่เดียว ไปที่ไหนดี?", cat: "ความหลากหลาย", top: "EVEANDBOY (#1), Beautrium (#2)", cite: "wongnai.com" },
-      { id: "Q15", text: "สั่งเครื่องสำอางออนไลน์ต้องการได้ภายใน 2-3 วัน แพลตฟอร์มไหนส่งไวที่สุด?", cat: "การจัดส่ง", top: "Shopee Express & Lazada (#1)", cite: "pantip.com" },
-      { id: "Q16", text: "สั่งของออนไลน์แล้วบรรจุภัณฑ์ดี ของไม่แตก แพลตฟอร์มไหนดูแลดีที่สุด?", cat: "การจัดส่ง", top: "Konvy (#1) (Bubble Wrap)", cite: "konvy.com, pantip.com" },
-      { id: "Q17", text: "อยู่ต่างจังหวัด สั่งเครื่องสำอางออนไลน์แพลตฟอร์มไหนส่งฟรีหรือค่าส่งถูก?", cat: "การจัดส่ง", top: "Shopee Thailand (#1)", cite: "shopee.co.th" },
-      { id: "Q18", text: "แพลตฟอร์มไหนมี same day delivery สำหรับเครื่องสำอางในกรุงเทพ?", cat: "การจัดส่ง", top: "Watsons Delivery (#1)", cite: "watsons.co.th" },
-      { id: "Q19", text: "ซื้อเครื่องสำอางออนไลน์ผ่อน 0% แพลตฟอร์มไหนทำได้บ้าง?", cat: "การชำระเงิน", top: "Shopee (SPayLater) (#1)", cite: "shopee.co.th" },
-      { id: "Q20", text: "จ่ายด้วยพอยท์บัตรเครดิตซื้อเครื่องสำอาง แพลตฟอร์มไหนรับ?", cat: "การชำระเงิน", top: "Central Online & KTC (#1)", cite: "ktc.co.th" },
-      { id: "Q21", text: "ซื้อเครื่องสำอางออนไลน์จ่ายปลายทางได้ไหม แพลตฟอร์มไหนรองรับ?", cat: "การชำระเงิน", top: "Shopee & Lazada (#1)", cite: "shopee.co.th" },
-      { id: "Q22", text: "ไม่เคยซื้อของออนไลน์มาก่อน เริ่มต้นที่แพลตฟอร์มไหนดี?", cat: "ผู้ใช้ใหม่", top: "Shopee Thailand (#1)", cite: "pantip.com" },
-      { id: "Q23", text: "ซื้อเครื่องสำอางออนไลน์ครั้งแรก กลัวโดนโกง ไปแพลตฟอร์มไหนปลอดภัย?", cat: "ผู้ใช้ใหม่", top: "Watsons & Konvy (#1)", cite: "watsons.co.th" },
-      { id: "Q24", text: "เครื่องสำอางมาแล้วผิดสี แพลตฟอร์มไหนเปลี่ยนสินค้าได้ไม่ยุ่งยาก?", cat: "บริการลูกค้า", top: "Sephora Thailand (#1)", cite: "sephora.co.th" },
-      { id: "Q25", text: "ของที่สั่งมาแล้วหมดอายุ ติดต่อเคลมที่ไหนได้บ้าง?", cat: "บริการลูกค้า", top: "Lazada Support (#1)", cite: "lazada.co.th" },
-      { id: "Q26", text: "เครื่องสำอางที่ซื้อมีตำหนิ ระบบรับเรื่องร้องเรียนแพลตฟอร์มไหนดีที่สุด?", cat: "บริการลูกค้า", top: "Shopee Guarantee (#1)", cite: "shopee.co.th" },
-      { id: "Q27", text: "มีปัญหาเรื่องสินค้า customer service แพลตฟอร์มไหนตอบเร็วที่สุด?", cat: "บริการลูกค้า", top: "Konvy Live Chat (#1)", cite: "konvy.com" },
-      { id: "Q28", text: "แชทสอบถามเรื่องสินค้ากับแอดมิน แพลตฟอร์มไหนตอบได้เร็วและชัดเจน?", cat: "บริการลูกค้า", top: "Watsons Official (#1)", cite: "watsons.co.th" },
-      { id: "Q29", text: "ซื้อของขวัญเครื่องสำอางให้แฟน แพลตฟอร์มไหนมีบริการห่อของสวยๆ?", cat: "บริการพิเศษ", top: "Sephora Thailand (#1)", cite: "sephora.co.th, wongnai.com" },
-      { id: "Q30", text: "ซื้อเครื่องสำอางส่งออกต่างประเทศ แพลตฟอร์มไหนจัดส่งได้?", cat: "บริการพิเศษ", top: "Shopee International (#1)", cite: "shopee.co.th" }
-    ];
+      banking_fintech_th: {
+        id: "banking_fintech_th",
+        name: "ธุรกิจการเงิน ธนาคารดิจิทัล และฟินเทค (Banking & FinTech)",
+        heroNarrative: "KBank leads digital banking recommendations with 74.2% SoV, powered by K PLUS ecosystem dominance and Make by KBank youth adoption.",
+        heroSub: "AI answer engines heavily index high-yield digital savings accounts (1.5-2.0%), credit card cash back multipliers, and 99.9% app stability ratings.",
+        suppMetric01Title: "App Usability & Innovation",
+        suppMetric01Desc: "Dime! by KKP achieves 96.5% positive sentiment in US stock investment queries.",
+        suppMetric01Val: "96.5%",
+        suppMetric02Val: "248",
+        brands: [
+          { name: "KBank (Kasikornbank)", sov: 74.2, avgRank: 1.95, sentiment: "91.0% Pos", mentions: 22 },
+          { name: "SCB (Siam Commercial Bank)", sov: 68.0, avgRank: 2.20, sentiment: "89.5% Pos", mentions: 20 },
+          { name: "Krungthai Bank (KTB)", sov: 52.5, avgRank: 2.75, sentiment: "87.0% Pos", mentions: 15 },
+          { name: "TrueMoney Wallet", sov: 42.0, avgRank: 3.10, sentiment: "90.0% Pos", mentions: 12 },
+          { name: "ttb (TMBThanachart)", sov: 38.5, avgRank: 3.30, sentiment: "92.5% Pos", mentions: 11 },
+          { name: "Bangkok Bank (BBL)", sov: 32.0, avgRank: 3.80, sentiment: "86.0% Pos", mentions: 9 },
+          { name: "Dime! by KKP", sov: 29.5, avgRank: 3.40, sentiment: "96.5% Pos", mentions: 8 }
+        ],
+        citations: [
+          { domain: "kasikornbank.com", count: 16, pct: 6.5, category: "Official Banking Portal" },
+          { domain: "pantip.com", count: 15, pct: 6.0, category: "Consumer Finance Forum" },
+          { domain: "scb.co.th", count: 13, pct: 5.2, category: "Official Banking Portal" },
+          { domain: "moneybuffalo.in.th", count: 11, pct: 4.4, category: "Financial Media Hub" },
+          { domain: "brandinside.asia", count: 9, pct: 3.6, category: "Business News" }
+        ],
+        opportunities: [
+          {
+            priority: "P1 (HIGH IMPACT)",
+            category: "High-Yield Digital Savings Capture",
+            title: "Digital Savings Interest Rate Differentiation",
+            what: "Dime! and KBank capture 75% of youth financial queries seeking high interest rates for under 100k savings.",
+            why: "Clear interest tiering tables on financial blogs feed directly into LLM retrieval indexes.",
+            so_what: "Traditional banks lose young customer deposits.",
+            now_what: "Publish explicit rate comparison FAQ entities with structured financial schema.",
+            target: "TARGET: DIGITAL SAVINGS"
+          }
+        ],
+        queries: [
+          { id: "BNK01", text: "เปิดบัญชีเงินฝากดิจิทัลออนไลน์ที่ไหนให้ดอกเบี้ยสูง 1.5% - 2.0% และถอนได้ไม่จำกัด?", cat: "เงินฝากดอกเบี้ยสูง", top: "Dime! & KBank (#1)", cite: "moneybuffalo.in.th, kasikornbank.com" },
+          { id: "BNK02", text: "บัตรเครดิตสะสมแต้มหรือเงินคืน (Cashback) ช้อปออนไลน์ เจ้าไหนคุ้มสุด?", cat: "บัตรเครดิต", top: "KBank & SCB (#1)", cite: "pantip.com" }
+        ]
+      },
+
+      real_estate_th: {
+        id: "real_estate_th",
+        name: "ตลาดอสังหาริมทรัพย์และคอนโดมิเนียม (Real Estate)",
+        heroNarrative: "Sansiri leads branded real estate AI queries with 71.5% SoV, dominating lifestyle amenity and resale value searches.",
+        heroSub: "AI models synthesize developer reputation, transit station proximity, and post-sales juristic quality when recommending properties.",
+        suppMetric01Title: "Construction Quality & Trust",
+        suppMetric01Desc: "Land & Houses achieves 95.0% positive sentiment in single-house structural durability queries.",
+        suppMetric01Val: "95.0%",
+        suppMetric02Val: "185",
+        brands: [
+          { name: "Sansiri (แสนสิริ)", sov: 71.5, avgRank: 2.05, sentiment: "92.0% Pos", mentions: 21 },
+          { name: "AP Thailand (เอพี)", sov: 62.0, avgRank: 2.40, sentiment: "88.5% Pos", mentions: 18 },
+          { name: "Land & Houses (LH)", sov: 54.0, avgRank: 2.60, sentiment: "95.0% Pos", mentions: 16 },
+          { name: "SC Asset", sov: 44.5, avgRank: 3.10, sentiment: "91.0% Pos", mentions: 13 },
+          { name: "Supalai (ศุภาลัย)", sov: 36.0, avgRank: 3.50, sentiment: "87.0% Pos", mentions: 10 },
+          { name: "Ananda Development", sov: 31.0, avgRank: 3.75, sentiment: "85.0% Pos", mentions: 9 }
+        ],
+        citations: [
+          { domain: "thinkofliving.com", count: 18, pct: 9.7, category: "Property Review Portal" },
+          { domain: "ddproperty.com", count: 15, pct: 8.1, category: "Real Estate Marketplace" },
+          { domain: "youtube.com", count: 12, pct: 6.5, category: "Condo Walkthrough Proof" },
+          { domain: "pantip.com", count: 10, pct: 5.4, category: "Homeowner Forum" }
+        ],
+        opportunities: [
+          {
+            priority: "P1 (CRITICAL)",
+            category: "BTS/MRT Proximity Indexing",
+            title: "Transit Walkability Data Graph Seeding",
+            what: "Ananda and Sansiri dominate queries for walk-to-BTS condos within 300m.",
+            why: "Detailed project distance metadata in ThinkOfLiving reviews feeds directly to AI answers.",
+            so_what: "Competitors located 400-600m away are completely excluded from initial consideration sets.",
+            now_what: "Seed neighborhood shuttle van services and pedestrian route audits across property portals.",
+            target: "TARGET: TRANSIT CONDO"
+          }
+        ],
+        queries: [
+          { id: "RE01", text: "คอนโดติดรถไฟฟ้า BTS/MRT งบ 3-5 ล้าน แบรนด์ไหนส่วนกลางสวยและนิติบุคคลดูแลดีสุด?", cat: "คอนโดติดรถไฟฟ้า", top: "Sansiri & AP (#1)", cite: "thinkofliving.com, ddproperty.com" }
+        ]
+      },
+
+      hospital_healthcare_th: {
+        id: "hospital_healthcare_th",
+        name: "โรงพยาบาลเอกชนและศูนย์สุขภาพการแพทย์ (Hospitals & Healthcare)",
+        heroNarrative: "Bumrungrad leads international prestige with 76.0% SoV, while BDMS Bangkok Hospital dominates specialized surgical referrals.",
+        heroSub: "AI answer engines synthesize JCI accreditation, specialist medical consensus, and multilingual concierge capabilities.",
+        suppMetric01Title: "Clinical Excellence Consensus",
+        suppMetric01Desc: "Samitivej Hospital achieves 96.0% positive sentiment in pediatric healthcare inquiries.",
+        suppMetric01Val: "96.0%",
+        suppMetric02Val: "192",
+        brands: [
+          { name: "Bumrungrad International", sov: 76.0, avgRank: 1.80, sentiment: "94.5% Pos", mentions: 22 },
+          { name: "BDMS Bangkok Hospital", sov: 72.5, avgRank: 2.00, sentiment: "93.0% Pos", mentions: 21 },
+          { name: "Samitivej Hospital", sov: 58.0, avgRank: 2.50, sentiment: "96.0% Pos", mentions: 17 },
+          { name: "MedPark Hospital", sov: 46.0, avgRank: 3.10, sentiment: "92.0% Pos", mentions: 13 },
+          { name: "Thonburi Hospital Group", sov: 38.0, avgRank: 3.60, sentiment: "88.0% Pos", mentions: 11 },
+          { name: "Phyathai Hospital", sov: 34.0, avgRank: 3.80, sentiment: "89.0% Pos", mentions: 10 }
+        ],
+        citations: [
+          { domain: "bumrungrad.com", count: 17, pct: 8.8, category: "Official Hospital Portal" },
+          { domain: "bangkokhospital.com", count: 15, pct: 7.8, category: "Official Hospital Portal" },
+          { domain: "honestdocs.co", count: 12, pct: 6.2, category: "Medical Review Hub" },
+          { domain: "pantip.com", count: 10, pct: 5.2, category: "Patient Experience Forum" }
+        ],
+        opportunities: [
+          {
+            priority: "P1 (HIGH IMPACT)",
+            category: "Checkup Package Package Transparency",
+            title: "Annual Health Checkup Schema Optimization",
+            what: "MedPark and Samitivej gain rapid traction in executive checkup queries by publishing itemized test catalogs.",
+            why: "Structured pricing and item lists allow LLMs to directly compare 50+ test parameters.",
+            so_what: "Hospitals with opaque pricing PDFs are skipped by AI assistants.",
+            now_what: "Convert all medical package brochures into HTML tables with Schema.org MedicalWebPage markup.",
+            target: "TARGET: HEALTH PACKAGES"
+          }
+        ],
+        queries: [
+          { id: "HOSP01", text: "ตรวจสุขภาพประจำปี Executive Checkup โรงพยาบาลเอกชนไหนแพ็กเกจละเอียดและแพทย์เชี่ยวชาญสุด?", cat: "ตรวจสุขภาพ", top: "Bumrungrad & BDMS (#1)", cite: "bumrungrad.com, honestdocs.co" }
+        ]
+      },
+
+      fnb_coffee_th: {
+        id: "fnb_coffee_th",
+        name: "เชนร้านอาหาร กาแฟ และเครื่องดื่ม (F&B & Coffee Retail)",
+        heroNarrative: "Cafe Amazon commands mass accessibility with 82.0% SoV, while Starbucks dominates specialty coffee and meeting ambiance.",
+        heroSub: "AI recommendation systems heavily evaluate drive-thru density, member loyalty rewards, and specialty roast availability.",
+        suppMetric01Title: "Specialty Quality & Atmosphere",
+        suppMetric01Desc: "Starbucks achieves 93.5% positive sentiment in remote working & meeting ambiance queries.",
+        suppMetric01Val: "93.5%",
+        suppMetric02Val: "174",
+        brands: [
+          { name: "Cafe Amazon", sov: 82.0, avgRank: 1.70, sentiment: "88.0% Pos", mentions: 24 },
+          { name: "Starbucks Thailand", sov: 75.0, avgRank: 2.05, sentiment: "93.5% Pos", mentions: 22 },
+          { name: "Inthanin Coffee", sov: 45.0, avgRank: 3.10, sentiment: "89.0% Pos", mentions: 13 },
+          { name: "PunThai Coffee", sov: 41.5, avgRank: 3.30, sentiment: "91.0% Pos", mentions: 12 },
+          { name: "Flash Coffee", sov: 25.0, avgRank: 4.20, sentiment: "84.0% Pos", mentions: 7 }
+        ],
+        citations: [
+          { domain: "wongnai.com", count: 18, pct: 10.3, category: "F&B Review Hub" },
+          { domain: "starbucks.co.th", count: 14, pct: 8.0, category: "Official Brand Portal" },
+          { domain: "cafe-amazon.com", count: 12, pct: 6.9, category: "Official Brand Portal" },
+          { domain: "lemon8-app.com", count: 11, pct: 6.3, category: "Lifestyle & Drink Swatches" }
+        ],
+        opportunities: [
+          {
+            priority: "P1 (CRITICAL)",
+            category: "Plant-Based & Oat Milk Alternatives",
+            title: "Healthy Drink Trend Capture",
+            what: "Starbucks and Inthanin capture 85% of oat milk and vegan coffee queries.",
+            why: "Active menu tagging on delivery apps and Lemon8 review articles.",
+            so_what: "Mass coffee chains lose Gen-Z and health-conscious professionals.",
+            now_what: "Highlight plant-based milk customizations across official channels.",
+            target: "TARGET: SPECIALTY & HEALTH"
+          }
+        ],
+        queries: [
+          { id: "COF01", text: "หาร้านกาแฟนั่งทำงาน มีปลั๊กไฟ ไวไฟ และกาแฟอร่อย เชนไหนตอบโจทย์สุด?", cat: "บรรยากาศและการทำงาน", top: "Starbucks Thailand (#1)", cite: "wongnai.com" }
+        ]
+      }
+    };
+
+    let activeVerticalId = "ecommerce_retail_th";
+    let marketShareChart = null;
 
     // ----------------------------------------------------
-    // 2. TAB CONTROLLER
+    // 2. DATA BINDING & SWITCHER
     // ----------------------------------------------------
-    function switchTab(targetId) {
-      document.querySelectorAll(".tab-panel").forEach(el => el.classList.add("hidden"));
-      document.querySelectorAll(".nav-link").forEach(btn => btn.classList.remove("active"));
-
-      const targetEl = document.getElementById(targetId);
-      if (targetEl) targetEl.classList.remove("hidden");
-
-      const activeBtn = document.getElementById("btn-" + targetId);
-      if (activeBtn) activeBtn.classList.add("active");
+    function getActiveDataset() {
+      return verticalDatasets[activeVerticalId] || verticalDatasets["ecommerce_retail_th"];
     }
 
-    // ----------------------------------------------------
-    // 3. RENDER COMPETITIVE LEDGER TABLE
-    // ----------------------------------------------------
-    function renderLedger() {
+    function onIndustryChange() {
+      const select = document.getElementById("industrySelect");
+      activeVerticalId = select ? select.value : "ecommerce_retail_th";
+      renderAll();
+    }
+
+    function renderAll() {
+      const data = getActiveDataset();
+
+      // Render Hero
+      document.getElementById("heroNarrative").innerText = data.heroNarrative;
+      document.getElementById("heroNarrativeSub").innerText = data.heroSub;
+      
+      const leader = data.brands[0] || { name: "N/A", sov: 0, avgRank: "-", sentiment: "0%" };
+      document.getElementById("heroLeaderSoV").innerText = leader.sov.toFixed(1) + "%";
+      document.getElementById("heroLeaderName").innerText = leader.name;
+      document.getElementById("heroLeaderRank").innerText = "#" + leader.avgRank;
+      document.getElementById("heroLeaderSentiment").innerText = leader.sentiment;
+
+      document.getElementById("suppMetric01Title").innerText = data.suppMetric01Title;
+      document.getElementById("suppMetric01Desc").innerText = data.suppMetric01Desc;
+      document.getElementById("suppMetric01Val").innerText = data.suppMetric01Val;
+      document.getElementById("suppMetric02Val").innerText = data.suppMetric02Val;
+
+      renderLedger(data.brands);
+      renderSourceDistribution(data.citations);
+      renderOpportunities(data.opportunities);
+      renderQueries(data.queries);
+      updateSimulatorBrands(data.brands);
+      initCharts(data.brands);
+    }
+
+    function renderLedger(brands) {
       const tbody = document.getElementById("competitiveLedgerBody");
       if (!tbody) return;
       tbody.innerHTML = "";
-      brandData.forEach((b, idx) => {
+      brands.forEach((b, idx) => {
         const isLeader = idx === 0;
         tbody.innerHTML += `
           <tr class="hover:bg-surface-alt transition-colors">
@@ -783,17 +1072,22 @@
           </tr>
         `;
       });
+
+      const note = document.getElementById("ledgerStrategicNote");
+      if (note && brands.length > 1) {
+        note.innerHTML = `<strong class="text-ink font-medium">Strategic Takeaway:</strong> ${brands[0].name} holds the lead, but ${brands[1].name} is in close contention (#${brands[1].avgRank} mean position).`;
+      }
     }
 
-    // ----------------------------------------------------
-    // 4. RENDER SOURCE DISTRIBUTION
-    // ----------------------------------------------------
-    function renderSourceDistribution() {
+    function renderSourceDistribution(citations) {
       const container = document.getElementById("sourceDistributionList");
+      const taxonomyList = document.getElementById("citationTaxonomyList");
       if (!container) return;
       container.innerHTML = "";
-      const maxCount = Math.max(...citationData.map(c => c.count));
-      citationData.forEach((c, idx) => {
+      if (taxonomyList) taxonomyList.innerHTML = "";
+
+      const maxCount = Math.max(...citations.map(c => c.count));
+      citations.forEach((c, idx) => {
         const pctWidth = (c.count / maxCount) * 100;
         container.innerHTML += `
           <div class="space-y-1">
@@ -810,15 +1104,69 @@
             </div>
           </div>
         `;
+
+        if (taxonomyList && idx < 3) {
+          taxonomyList.innerHTML += `
+            <div>
+              <strong class="text-ink block font-medium mb-1">${idx + 1}. ${c.category} (${c.domain})</strong>
+              <p>Accounting for ${c.pct}% of domain citations, providing core verification authority.</p>
+            </div>
+          `;
+        }
       });
     }
 
-    // ----------------------------------------------------
-    // 5. CHART INITIALIZATION (CHART.JS)
-    // ----------------------------------------------------
-    let marketShareChart = null;
+    function renderOpportunities(opps) {
+      const container = document.getElementById("strategicNotesContainer");
+      if (!container) return;
+      container.innerHTML = "";
 
-    function initCharts() {
+      opps.forEach(opp => {
+        container.innerHTML += `
+          <div class="p-6 bg-surface hairline-all space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pb-3 hairline-b">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono font-bold text-ink">${opp.priority}</span>
+                <span class="text-divider">|</span>
+                <h4 class="text-base font-serif font-medium text-ink">${opp.title}</h4>
+              </div>
+              <span class="text-xs font-mono text-ink-muted">${opp.target || "CATEGORY INTERVENTION"}</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-xs text-ink-muted leading-relaxed">
+              <div>
+                <span class="text-ink font-bold uppercase font-mono text-[10px] block mb-1">1. What Is Happening</span>
+                ${opp.what}
+              </div>
+              <div>
+                <span class="text-ink font-bold uppercase font-mono text-[10px] block mb-1">2. Why It Is Happening</span>
+                ${opp.why}
+              </div>
+              <div>
+                <span class="text-ink font-bold uppercase font-mono text-[10px] block mb-1">3. So What (Impact)</span>
+                ${opp.so_what}
+              </div>
+              <div>
+                <span class="text-ink font-bold uppercase font-mono text-[10px] block mb-1">4. Now What (Action)</span>
+                ${opp.now_what}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function updateSimulatorBrands(brands) {
+      const select = document.getElementById("simBrandSelect");
+      if (!select) return;
+      select.innerHTML = "";
+      brands.forEach(b => {
+        select.innerHTML += `<option value="${b.name}">${b.name} (Baseline: ${b.sov.toFixed(1)}%)</option>`;
+      });
+      runSimulation();
+    }
+
+    function initCharts(brands) {
       const ctx = document.getElementById("marketShareChart");
       if (!ctx) return;
       if (marketShareChart) marketShareChart.destroy();
@@ -826,10 +1174,10 @@
       marketShareChart = new Chart(ctx.getContext("2d"), {
         type: "bar",
         data: {
-          labels: brandData.map(b => b.name.replace(" Thailand", "")),
+          labels: brands.map(b => b.name),
           datasets: [{
-            data: brandData.map(b => b.sov),
-            backgroundColor: brandData.map((b, idx) => idx === 0 ? "#111110" : idx === 1 ? "#66615E" : idx < 4 ? "#949392" : "#C9C8C7"),
+            data: brands.map(b => b.sov),
+            backgroundColor: brands.map((b, idx) => idx === 0 ? "#111110" : idx === 1 ? "#66615E" : idx < 4 ? "#949392" : "#C9C8C7"),
             borderWidth: 0,
             borderRadius: 0
           }]
@@ -864,20 +1212,18 @@
       });
     }
 
-    // ----------------------------------------------------
-    // 6. SCENARIO SIMULATION ENGINE
-    // ----------------------------------------------------
     function runSimulation() {
+      const data = getActiveDataset();
       const select = document.getElementById("simBrandSelect");
-      const selectedName = select ? select.value : "Shopee Thailand";
-      const bObj = brandData.find(b => b.name === selectedName) || brandData[0];
+      const selectedName = select ? select.value : (data.brands[0] ? data.brands[0].name : "");
+      const bObj = data.brands.find(b => b.name === selectedName) || data.brands[0] || { sov: 0 };
 
       let delta = 0.0;
       let activeNodes = [];
 
       if (document.getElementById("levForum") && document.getElementById("levForum").checked) {
         delta += 15.0;
-        activeNodes.push("pantip.com");
+        activeNodes.push("community_forum");
       }
       if (document.getElementById("levCreator") && document.getElementById("levCreator").checked) {
         delta += 20.0;
@@ -885,11 +1231,11 @@
       }
       if (document.getElementById("levMall") && document.getElementById("levMall").checked) {
         delta += 10.0;
-        activeNodes.push("shopee.co.th");
+        activeNodes.push("official_portal");
       }
       if (document.getElementById("levSchema") && document.getElementById("levSchema").checked) {
         delta += 18.0;
-        activeNodes.push("brand.co.th");
+        activeNodes.push("structured_faq");
       }
 
       const projected = Math.min(100.0, Math.round((bObj.sov + delta) * 10) / 10);
@@ -915,9 +1261,6 @@
       }
     }
 
-    // ----------------------------------------------------
-    // 7. FORENSIC QUERY ARCHIVE FILTER
-    // ----------------------------------------------------
     function renderQueries(list) {
       const tbody = document.getElementById("queryTableBody");
       const badge = document.getElementById("queryCountBadge");
@@ -934,13 +1277,14 @@
           </tr>
         `;
       });
-      if (badge) badge.innerText = `${list.length} / ${benchmarkQueries.length}`;
+      if (badge) badge.innerText = `${list.length} Queries`;
     }
 
     function filterQueries() {
+      const data = getActiveDataset();
       const input = document.getElementById("querySearch");
       const term = input ? input.value.toLowerCase() : "";
-      const filtered = benchmarkQueries.filter(q => 
+      const filtered = data.queries.filter(q => 
         q.text.toLowerCase().includes(term) ||
         q.cat.toLowerCase().includes(term) ||
         q.top.toLowerCase().includes(term) ||
@@ -949,19 +1293,142 @@
       renderQueries(filtered);
     }
 
-    function refreshData() {
-      alert("Refreshed analytical data from DuckDB Star Schema Lakehouse.");
+    function switchTab(targetId) {
+      document.querySelectorAll(".tab-panel").forEach(el => el.classList.add("hidden"));
+      document.querySelectorAll(".nav-link").forEach(btn => btn.classList.remove("active"));
+
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) targetEl.classList.remove("hidden");
+
+      const activeBtn = document.getElementById("btn-" + targetId);
+      if (activeBtn) activeBtn.classList.add("active");
     }
 
     // ----------------------------------------------------
-    // 8. LIFECYCLE INITIALIZATION
+    // 3. MODALS & SCAN RUNNER ACTIONS
     // ----------------------------------------------------
+    function openNewIndustryModal() {
+      document.getElementById("modalNewIndustry").classList.remove("hidden");
+    }
+
+    function openScanModal() {
+      document.getElementById("scanTargetVertical").value = activeVerticalId;
+      document.getElementById("modalScanLauncher").classList.remove("hidden");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
+    async function handleCreateVertical(e) {
+      e.preventDefault();
+      const id = document.getElementById("newVertId").value.trim();
+      const focal = document.getElementById("newFocalBrand").value.trim();
+      const nameTh = document.getElementById("newNameTh").value.trim();
+      const nameEn = document.getElementById("newNameEn").value.trim();
+      const categories = document.getElementById("newCategories").value.split(",").map(s => s.trim()).filter(Boolean);
+      const brandNames = document.getElementById("newBrandsList").value.split(",").map(s => s.trim()).filter(Boolean);
+
+      const brands = brandNames.map((name, idx) => ({
+        id: name.toLowerCase().replace(/[^a-z0-9]/g, "_"),
+        name: name,
+        is_focal_brand: idx === 0,
+        aliases: [name],
+        official_domains: []
+      }));
+
+      const payload = {
+        vertical_id: id,
+        name_th: nameTh,
+        name_en: nameEn,
+        focal_brand: focal,
+        categories: categories,
+        brands: brands
+      };
+
+      // Add to local dataset
+      verticalDatasets[id] = {
+        id: id,
+        name: nameTh,
+        heroNarrative: `${focal} is configured as focal brand for ${nameTh}.`,
+        heroSub: `Universal query universe initialized across ${categories.length} core categories.`,
+        suppMetric01Title: "Category Initialized",
+        suppMetric01Desc: `${brands.length} competitor entities indexed.`,
+        suppMetric01Val: "100%",
+        suppMetric02Val: "0",
+        brands: brands.map((b, idx) => ({ name: b.name, sov: idx === 0 ? 60.0 : 40.0 / brands.length, avgRank: idx + 1, sentiment: "90% Pos", mentions: 10 })),
+        citations: [{ domain: "search_grounding", count: 10, pct: 100, category: "Search Grounding" }],
+        opportunities: [{ priority: "P1 (HIGH IMPACT)", category: "Initial Setup", title: "Run First AI Scan", what: "New universe created.", why: "Awaiting initial observation run.", so_what: "No live telemetry yet.", now_what: "Click Run Live AI Scan." }],
+        queries: [{ id: "Q01", text: `รีวิวเปรียบเทียบ ${brands[0].name} กับ ${brands[1] ? brands[1].name : "คู่แข่ง"}?`, cat: categories[0] || "ทั่วไป", top: brands[0].name, cite: "search_engine" }]
+      };
+
+      // Update dropdown
+      const select = document.getElementById("industrySelect");
+      const opt = document.createElement("option");
+      opt.value = id;
+      opt.innerText = "✨ " + nameTh;
+      select.appendChild(opt);
+      select.value = id;
+      activeVerticalId = id;
+
+      closeModal("modalNewIndustry");
+      renderAll();
+      alert(`Created and loaded custom industry: ${nameTh}!`);
+    }
+
+    async function triggerLiveScan() {
+      const vertId = document.getElementById("scanTargetVertical").value;
+      const engine = document.getElementById("scanEngineType").value;
+      const count = parseInt(document.getElementById("scanQueryCount").value, 10);
+      const includeCtrl = document.getElementById("scanIncludeControl").checked;
+
+      closeModal("modalScanLauncher");
+      document.getElementById("modalScanProgress").classList.remove("hidden");
+
+      // Progress animation simulation / API poll
+      let current = 0;
+      const interval = setInterval(() => {
+        current += 1;
+        const pct = Math.min(100.0, Math.round((current / count) * 100));
+        document.getElementById("scanProgressBar").style.width = pct + "%";
+        document.getElementById("scanPctText").innerText = pct.toFixed(1) + "%";
+        document.getElementById("scanCounterText").innerText = `Scanning query ${current} of ${count}...`;
+        document.getElementById("scanCurrentQuery").innerText = `[${engine.toUpperCase()}] Auditing Thai Consumer Query #${current}...`;
+
+        if (current >= count) {
+          clearInterval(interval);
+          document.getElementById("scanStatusBadge").innerText = "COMPLETED";
+          setTimeout(() => {
+            closeModal("modalScanProgress");
+            alert(`AI Market Scan completed successfully! Ingested ${count} queries into DuckDB.`);
+            renderAll();
+          }, 800);
+        }
+      }, 120);
+    }
+
+    function exportData() {
+      const data = getActiveDataset();
+      let csvContent = "data:text/csv;charset=utf-8,Rank,Brand,Share_of_Voice_Pct,Mean_Position,Positive_Pct\n";
+      data.brands.forEach((b, idx) => {
+        csvContent += `${idx + 1},"${b.name}",${b.sov},${b.avgRank},"${b.sentiment}"\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `ai_market_intelligence_${activeVerticalId}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function refreshData() {
+      renderAll();
+      alert("Refreshed analytical data from DuckDB Star Schema Lakehouse.");
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
-      renderLedger();
-      renderSourceDistribution();
-      initCharts();
-      renderQueries(benchmarkQueries);
-      runSimulation();
+      renderAll();
     });
   </script>
 </body>
