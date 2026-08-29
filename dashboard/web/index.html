@@ -12,19 +12,14 @@
       theme: {
         extend: {
           colors: {
-            canvas: "#F3F1EA",
-            surface: "#FBFAF6",
-            "surface-alt": "#E9E5DC",
-            ink: "#181817",
-            "ink-muted": "#6D6A63",
-            "ink-faint": "#9E9A90",
-            divider: "#C9C3B6",
-            "divider-light": "#DDD8CE",
-            accent: "#C84B1A",
-            "accent-soft": "#F5EBE6",
-            "accent-dark": "#9E340E",
-            "signal-green": "#2B6349",
-            "signal-green-soft": "#EAF2ED"
+            canvas: "#F2F0EF",
+            surface: "#FAF9F8",
+            "surface-alt": "#E6E4E2",
+            ink: "#111110",
+            "ink-muted": "#66615E",
+            "ink-faint": "#949392",
+            divider: "#C9C8C7",
+            "divider-light": "#DBD9D7"
           },
           fontFamily: {
             serif: ["Newsreader", "Playfair Display", "Georgia", "serif"],
@@ -40,15 +35,23 @@
   <!-- Google Fonts: Newsreader, Plus Jakarta Sans, Prompt, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
+    :root {
+      --canvas: #F2F0EF;
+      --divider: #C9C8C7;
+      --faint: #949392;
+      --muted: #66615E;
+      --ink: #111110;
+    }
+
     body {
-      background-color: #F3F1EA;
-      color: #181817;
+      background-color: var(--canvas);
+      color: var(--ink);
       font-family: "Plus Jakarta Sans", "Prompt", sans-serif;
       font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
       -webkit-font-smoothing: antialiased;
@@ -64,23 +67,23 @@
     }
 
     .hairline-b {
-      border-bottom: 1px solid #C9C3B6;
+      border-bottom: 1px solid var(--divider);
     }
 
     .hairline-t {
-      border-top: 1px solid #C9C3B6;
+      border-top: 1px solid var(--divider);
     }
 
     .hairline-l {
-      border-left: 1px solid #C9C3B6;
+      border-left: 1px solid var(--divider);
     }
 
     .hairline-r {
-      border-right: 1px solid #C9C3B6;
+      border-right: 1px solid var(--divider);
     }
 
     .hairline-all {
-      border: 1px solid #C9C3B6;
+      border: 1px solid var(--divider);
     }
 
     /* Custom Refined Scrollbar */
@@ -89,22 +92,26 @@
       height: 5px;
     }
     ::-webkit-scrollbar-track {
-      background: #F3F1EA;
+      background: var(--canvas);
     }
     ::-webkit-scrollbar-thumb {
-      background: #C9C3B6;
+      background: var(--divider);
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #9E9A90;
+      background: var(--faint);
     }
 
     /* Active Navigation Line */
     .nav-link {
       position: relative;
       transition: color 0.15s ease;
+      color: var(--muted);
+    }
+    .nav-link:hover {
+      color: var(--ink);
     }
     .nav-link.active {
-      color: #181817;
+      color: var(--ink);
       font-weight: 600;
     }
     .nav-link.active::after {
@@ -114,7 +121,7 @@
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: #C84B1A;
+      background-color: var(--ink);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -125,7 +132,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-accent-soft selection:text-accent-dark">
+<body class="min-h-screen flex flex-col selection:bg-[#E6E4E2] selection:text-ink">
 
   <!-- ======================================================
        EDITORIAL METADATA MASTHEAD
@@ -151,7 +158,7 @@
   <section class="w-full bg-canvas pt-8 pb-6 hairline-b">
     <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row md:items-baseline justify-between gap-6">
       <div class="space-y-2">
-        <div class="text-[11px] font-mono tracking-widest text-accent uppercase font-medium">
+        <div class="text-[11px] font-mono tracking-widest text-ink-muted uppercase font-semibold">
           EXECUTIVE INTELLIGENCE BRIEFING
         </div>
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-ink tracking-tight leading-tight">
@@ -164,7 +171,7 @@
 
       <div class="flex items-center gap-3 self-start md:self-auto">
         <button onclick="refreshData()" class="px-4 py-2 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors duration-150 flex items-center gap-2">
-          <svg class="w-3.5 h-3.5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-3.5 h-3.5 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
           </svg>
           <span>Refresh Analysis</span>
@@ -182,7 +189,7 @@
         
         <!-- Left 7 Cols: Dominant Business Signal & Narrative -->
         <div class="lg:col-span-7 space-y-4">
-          <div class="text-[11px] font-mono uppercase tracking-wider text-ink-muted">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-ink-faint">
             PRIMARY MARKET SIGNAL // AUGUST 2026
           </div>
           
@@ -194,7 +201,7 @@
             <div>
               <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5">Leader Visibility</span>
               <div class="flex items-baseline gap-2">
-                <span class="text-5xl font-sans font-semibold text-accent tabular-nums tracking-tight">76.7%</span>
+                <span class="text-5xl font-sans font-bold text-ink tabular-nums tracking-tight">76.7%</span>
                 <span class="text-xs text-ink-muted font-medium">SoV (23/30 Prompts)</span>
               </div>
             </div>
@@ -204,7 +211,7 @@
             </div>
             <div class="hairline-l pl-6">
               <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5">Positive Sentiment</span>
-              <div class="text-3xl font-sans font-medium text-signal-green tabular-nums tracking-tight">87.5%</div>
+              <div class="text-3xl font-sans font-medium text-ink tabular-nums tracking-tight">87.5%</div>
             </div>
           </div>
 
@@ -217,7 +224,7 @@
         <div class="lg:col-span-5 bg-surface hairline-all p-6 space-y-5">
           <div class="text-xs font-mono font-medium text-ink uppercase tracking-wider pb-3 hairline-b flex items-center justify-between">
             <span>Supporting Key Indicators</span>
-            <span class="text-accent text-[10px]">VERIFIED</span>
+            <span class="text-ink font-bold text-[10px]">VERIFIED</span>
           </div>
 
           <!-- Supporting Metric 01 -->
@@ -227,8 +234,8 @@
               <span class="text-[11px] text-ink-muted">Konvy achieves 100% positive sentiment across all prompts without a single negative mention.</span>
             </div>
             <div class="text-right">
-              <span class="text-lg font-semibold text-ink font-sans tabular-nums">100%</span>
-              <span class="text-[10px] text-signal-green block font-medium">Net Trust</span>
+              <span class="text-lg font-bold text-ink font-sans tabular-nums">100%</span>
+              <span class="text-[10px] text-ink-muted block font-medium">Net Trust</span>
             </div>
           </div>
 
@@ -239,8 +246,8 @@
               <span class="text-[11px] text-ink-muted">AI synthesis draws upon 268 validated citation links indexed across 10 authoritative Thai domains.</span>
             </div>
             <div class="text-right">
-              <span class="text-lg font-semibold text-ink font-sans tabular-nums">268</span>
-              <span class="text-[10px] text-ink-muted block">Citations</span>
+              <span class="text-lg font-bold text-ink font-sans tabular-nums">268</span>
+              <span class="text-[10px] text-ink-faint block">Citations</span>
             </div>
           </div>
 
@@ -251,8 +258,8 @@
               <span class="text-[11px] text-ink-muted">Real-time search grounding eliminates promotional knowledge lag during Double Day and Payday cycles.</span>
             </div>
             <div class="text-right">
-              <span class="text-lg font-semibold text-signal-green font-sans tabular-nums">0–2d</span>
-              <span class="text-[10px] text-signal-green block font-medium">Active Sync</span>
+              <span class="text-lg font-bold text-ink font-sans tabular-nums">0–2d</span>
+              <span class="text-[10px] text-ink-muted block font-medium">Active Sync</span>
             </div>
           </div>
 
@@ -266,7 +273,7 @@
        QUIET ENTERPRISE NAVIGATION RAIL
   ====================================================== -->
   <nav class="w-full bg-canvas hairline-b sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center gap-8 overflow-x-auto text-xs font-medium text-ink-muted">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center gap-8 overflow-x-auto text-xs font-medium">
       
       <button onclick="switchTab('tab-market-share')" id="btn-tab-market-share" class="nav-link active py-4 whitespace-nowrap">
         Market Share & Distribution
@@ -315,8 +322,8 @@
           </div>
 
           <div class="text-[11px] text-ink-muted leading-relaxed pt-2 flex items-center justify-between">
-            <span>Highlighted bar represents market leader (<strong class="text-accent">Shopee 76.7%</strong>).</span>
-            <span class="font-mono text-[10px]">BASELINE N=30 INVARIANTS</span>
+            <span>Solid black bar represents market leader (<strong class="text-ink">Shopee 76.7%</strong>).</span>
+            <span class="font-mono text-[10px] text-ink-faint">BASELINE N=30 INVARIANTS</span>
           </div>
         </div>
 
@@ -401,7 +408,7 @@
           </div>
 
           <div class="p-3 bg-canvas hairline-all text-[11px] text-ink">
-            <span class="text-accent font-mono font-medium block text-[10px] uppercase mb-0.5">GEO Recommendation</span>
+            <span class="font-mono font-bold block text-[10px] uppercase mb-0.5 text-ink-muted">GEO Recommendation</span>
             Brands with zero presence on YouTube Shorts and Wongnai suffer an immediate 40% penalty in AI recommendation confidence.
           </div>
         </div>
@@ -426,7 +433,7 @@
         <div class="p-6 bg-surface hairline-all space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
             <div class="flex items-center gap-3">
-              <span class="text-xs font-mono font-bold text-accent">PRIORITY 01 // CRITICAL</span>
+              <span class="text-xs font-mono font-bold text-ink">PRIORITY 01 // CRITICAL</span>
               <span class="text-divider">|</span>
               <h4 class="text-base font-serif font-medium text-ink">Authenticity & Counterfeit Risk Mitigation</h4>
             </div>
@@ -453,7 +460,7 @@
         <div class="p-6 bg-surface hairline-all space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
             <div class="flex items-center gap-3">
-              <span class="text-xs font-mono font-bold text-ink">PRIORITY 02 // DEFENSIVE</span>
+              <span class="text-xs font-mono font-bold text-ink-muted">PRIORITY 02 // DEFENSIVE</span>
               <span class="text-divider">|</span>
               <h4 class="text-base font-serif font-medium text-ink">Defending Against Sephora’s High-AOV Moat</h4>
             </div>
@@ -480,7 +487,7 @@
         <div class="p-6 bg-surface hairline-all space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
             <div class="flex items-center gap-3">
-              <span class="text-xs font-mono font-bold text-ink-muted">PRIORITY 03 // RECOVERY</span>
+              <span class="text-xs font-mono font-bold text-ink-faint">PRIORITY 03 // RECOVERY</span>
               <span class="text-divider">|</span>
               <h4 class="text-base font-serif font-medium text-ink">Allnii Brand Invisibility Remediation</h4>
             </div>
@@ -529,7 +536,7 @@
           <div class="space-y-4">
             <div>
               <label for="simBrandSelect" class="text-xs font-medium text-ink block mb-1.5">Focal Platform:</label>
-              <select id="simBrandSelect" onchange="runSimulation()" class="w-full bg-canvas hairline-all px-3 py-2 text-xs text-ink font-medium focus:outline-none focus:border-accent">
+              <select id="simBrandSelect" onchange="runSimulation()" class="w-full bg-canvas hairline-all px-3 py-2 text-xs text-ink font-medium focus:outline-none focus:border-ink">
                 <option value="Shopee Thailand">Shopee Thailand (Baseline: 76.7%)</option>
                 <option value="Lazada Thailand">Lazada Thailand (Baseline: 66.7%)</option>
                 <option value="Watsons Thailand">Watsons Thailand (Baseline: 50.0%)</option>
@@ -546,7 +553,7 @@
               <span class="text-xs font-medium text-ink block">Intervention Levers:</span>
               
               <label class="flex items-start gap-3 p-2.5 hairline-all bg-canvas cursor-pointer select-none">
-                <input type="checkbox" id="levForum" onchange="runSimulation()" class="mt-0.5 accent-accent w-4 h-4" checked>
+                <input type="checkbox" id="levForum" onchange="runSimulation()" class="mt-0.5 accent-ink w-4 h-4" checked>
                 <div class="text-xs">
                   <span class="text-ink font-medium block">Pantip Forum Discussion Seeding</span>
                   <span class="text-ink-muted text-[11px]">+15.0% SoV Gain // Forum Node Authority</span>
@@ -554,7 +561,7 @@
               </label>
 
               <label class="flex items-start gap-3 p-2.5 hairline-all bg-canvas cursor-pointer select-none">
-                <input type="checkbox" id="levCreator" onchange="runSimulation()" class="mt-0.5 accent-accent w-4 h-4" checked>
+                <input type="checkbox" id="levCreator" onchange="runSimulation()" class="mt-0.5 accent-ink w-4 h-4" checked>
                 <div class="text-xs">
                   <span class="text-ink font-medium block">YouTube / Lemon8 Creator Unboxings</span>
                   <span class="text-ink-muted text-[11px]">+20.0% SoV Gain // Video & Social Proof</span>
@@ -562,7 +569,7 @@
               </label>
 
               <label class="flex items-start gap-3 p-2.5 hairline-all bg-canvas cursor-pointer select-none">
-                <input type="checkbox" id="levMall" onchange="runSimulation()" class="mt-0.5 accent-accent w-4 h-4">
+                <input type="checkbox" id="levMall" onchange="runSimulation()" class="mt-0.5 accent-ink w-4 h-4">
                 <div class="text-xs">
                   <span class="text-ink font-medium block">Official Mall 100% Guarantee Badge</span>
                   <span class="text-ink-muted text-[11px]">+10.0% SoV Gain // +35 Net Recommendation Score</span>
@@ -570,7 +577,7 @@
               </label>
 
               <label class="flex items-start gap-3 p-2.5 hairline-all bg-canvas cursor-pointer select-none">
-                <input type="checkbox" id="levSchema" onchange="runSimulation()" class="mt-0.5 accent-accent w-4 h-4">
+                <input type="checkbox" id="levSchema" onchange="runSimulation()" class="mt-0.5 accent-ink w-4 h-4">
                 <div class="text-xs">
                   <span class="text-ink font-medium block">Structured Schema & Product FAQ Entities</span>
                   <span class="text-ink-muted text-[11px]">+18.0% SoV Gain // Direct LLM Ingestion</span>
@@ -590,14 +597,14 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="p-5 bg-surface hairline-all space-y-1">
               <span class="text-xs text-ink-muted uppercase tracking-wider block font-mono text-[10px]">Baseline Visibility</span>
-              <div class="text-4xl font-sans font-semibold text-ink tabular-nums" id="simBaseSoV">76.7%</div>
+              <div class="text-4xl font-sans font-bold text-ink tabular-nums" id="simBaseSoV">76.7%</div>
               <span class="text-[11px] text-ink-muted block">Current Measured Position</span>
             </div>
 
-            <div class="p-5 bg-accent-soft hairline-all border-accent space-y-1">
-              <span class="text-xs text-accent-dark uppercase tracking-wider block font-mono text-[10px]">Projected Visibility</span>
-              <div class="text-4xl font-sans font-semibold text-accent tabular-nums" id="simProjSoV">100.0%</div>
-              <span class="text-[11px] text-accent-dark font-medium block" id="simDeltaText">+23.3% Modeled Potential Gain</span>
+            <div class="p-5 bg-surface-alt hairline-all space-y-1">
+              <span class="text-xs text-ink uppercase tracking-wider block font-mono text-[10px]">Projected Visibility</span>
+              <div class="text-4xl font-sans font-extrabold text-ink tabular-nums" id="simProjSoV">100.0%</div>
+              <span class="text-[11px] text-ink font-semibold block" id="simDeltaText">+23.3% Modeled Potential Gain</span>
             </div>
           </div>
 
@@ -625,7 +632,7 @@
     <!-- ======================================================
          MODULE 05: FORENSIC QUERY ARCHIVE
     ====================================================== -->
-    <section id="tab-forensic-archive" class="tab-panel hidden space-y-6">
+    <section id="tab-forensic-archive" class="tab-panel hidden space-y-8">
       
       <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-4 pb-4 hairline-b">
         <div class="space-y-1">
@@ -634,7 +641,7 @@
         </div>
         
         <div class="flex items-center gap-3">
-          <input type="text" id="querySearch" onkeyup="filterQueries()" placeholder="Filter query, category, or platform..." class="w-full sm:w-80 bg-surface hairline-all px-3 py-1.5 text-xs text-ink placeholder-ink-faint focus:outline-none focus:border-accent">
+          <input type="text" id="querySearch" onkeyup="filterQueries()" placeholder="Filter query, category, or platform..." class="w-full sm:w-80 bg-surface hairline-all px-3 py-1.5 text-xs text-ink placeholder-ink-faint focus:outline-none focus:border-ink">
           <span class="text-xs font-mono text-ink-muted whitespace-nowrap" id="queryCountBadge">
             30 / 30
           </span>
@@ -769,10 +776,10 @@
         tbody.innerHTML += `
           <tr class="hover:bg-surface-alt transition-colors">
             <td class="py-2.5 pr-3 font-mono text-[11px] text-ink-muted">${String(idx + 1).padStart(2, "0")}</td>
-            <td class="py-2.5 pr-4 font-medium text-ink ${isLeader ? "text-accent font-semibold" : ""}">${b.name}</td>
-            <td class="py-2.5 pr-4 font-mono font-medium text-right ${isLeader ? "text-accent" : "text-ink"} tabular-nums">${b.sov.toFixed(1)}%</td>
+            <td class="py-2.5 pr-4 font-medium text-ink ${isLeader ? "font-bold" : ""}">${b.name}</td>
+            <td class="py-2.5 pr-4 font-mono font-bold text-right text-ink tabular-nums">${b.sov.toFixed(1)}%</td>
             <td class="py-2.5 pr-4 font-mono text-ink-muted text-right tabular-nums">${b.avgRank}</td>
-            <td class="py-2.5 font-mono text-signal-green text-right tabular-nums font-medium">${b.sentiment}</td>
+            <td class="py-2.5 font-mono text-ink font-medium text-right tabular-nums">${b.sentiment}</td>
           </tr>
         `;
       });
@@ -799,7 +806,7 @@
               <span class="font-mono text-xs font-medium text-ink tabular-nums">${c.count} cites <span class="text-ink-muted">(${c.pct}%)</span></span>
             </div>
             <div class="w-full bg-surface-alt h-2 rounded-none overflow-hidden">
-              <div class="h-full ${idx === 0 ? "bg-accent" : "bg-ink-muted"}" style="width: ${pctWidth}%"></div>
+              <div class="h-full ${idx === 0 ? "bg-ink" : "bg-ink-muted"}" style="width: ${pctWidth}%"></div>
             </div>
           </div>
         `;
@@ -822,7 +829,7 @@
           labels: brandData.map(b => b.name.replace(" Thailand", "")),
           datasets: [{
             data: brandData.map(b => b.sov),
-            backgroundColor: brandData.map((b, idx) => idx === 0 ? "#C84B1A" : idx === 1 ? "#3D3B37" : idx < 4 ? "#6D6A63" : "#C9C3B6"),
+            backgroundColor: brandData.map((b, idx) => idx === 0 ? "#111110" : idx === 1 ? "#66615E" : idx < 4 ? "#949392" : "#C9C8C7"),
             borderWidth: 0,
             borderRadius: 0
           }]
@@ -833,11 +840,11 @@
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: "#181817",
+              backgroundColor: "#111110",
               titleFont: { family: "Plus Jakarta Sans", size: 12, weight: "bold" },
               bodyFont: { family: "Plus Jakarta Sans", size: 11 },
-              titleColor: "#FBFAF6",
-              bodyColor: "#C84B1A",
+              titleColor: "#FAF9F8",
+              bodyColor: "#C9C8C7",
               padding: 10,
               cornerRadius: 0
             }
@@ -845,11 +852,11 @@
           scales: {
             x: {
               grid: { display: false },
-              ticks: { color: "#181817", font: { family: "Plus Jakarta Sans", size: 10, weight: "500" } }
+              ticks: { color: "#111110", font: { family: "Plus Jakarta Sans", size: 10, weight: "600" } }
             },
             y: {
-              grid: { color: "#E9E5DC" },
-              ticks: { color: "#6D6A63", font: { family: "Plus Jakarta Sans", size: 10 } },
+              grid: { color: "#DBD9D7" },
+              ticks: { color: "#66615E", font: { family: "Plus Jakarta Sans", size: 10 } },
               max: 100
             }
           }
