@@ -11,4 +11,5 @@ __pycache__/
 *.sqlite3
 data/
 output/
-.claude/
+.claude/
+.DS_Store

@@ -1,16 +1,22 @@
 # src/engines/serper_engine.py
-import json
 import os
 import time
-import urllib.request
 from datetime import datetime
 
+from src.engines._http import request_json
 from src.engines.base import BaseObservationEngine
+from src.exceptions import EngineError
+from src.ids import new_observation_id
 from src.models.observations import BrandMentionDetail, CitationSource, RawObservation
 
 
 class SerperGoogleEngine(BaseObservationEngine):
-    """Google Organic SERP Ranking Engine using Serper.dev API."""
+    """Google organic SERP ranking via Serper.dev.
+
+    ``organic_serp`` surface: ``rank`` is a search-result position, NOT a
+    generative recommendation rank. Analytics must not average it against
+    generative-answer ranks.
+    """
 
     ENDPOINT = "https://google.serper.dev/search"
 
@@ -19,71 +25,64 @@ class SerperGoogleEngine(BaseObservationEngine):
 
     def observe(self, query_id: str, query_text: str, target_brands: list[str]) -> RawObservation:
         if not self.api_key:
-            raise RuntimeError("Serper API Key not configured. Set SERPER_API_KEY.")
+            raise EngineError("Serper engine requires SERPER_API_KEY", {"engine": "serper"})
 
         start_time = time.time()
-        req = urllib.request.Request(
+        data, retries = request_json(
             self.ENDPOINT,
+            payload={"q": query_text, "gl": "th", "hl": "th", "num": 10},
             headers={"X-API-KEY": self.api_key, "Content-Type": "application/json"},
-            data=json.dumps({"q": query_text, "gl": "th", "hl": "th", "num": 10}).encode("utf-8"),
+            timeout=15,
+            engine="serper",
         )
-
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-
         latency = int((time.time() - start_time) * 1000)
         organic_results = data.get("organic", [])
 
-        citations = []
-        brand_positions = {}
+        citations: list[CitationSource] = []
+        brand_positions: dict[str, int] = {}
         for idx, item in enumerate(organic_results, start=1):
             link = item.get("link", "")
             title = item.get("title", "")
             snippet = item.get("snippet", "")
             domain = link.split("//")[-1].split("/")[0] if link else "google"
-
             citations.append(
                 CitationSource(
                     url=link,
                     domain=domain,
                     title=title,
-                    source_type="marketplace" if "shopee" in domain or "lazada" in domain else "news",
+                    source_type="marketplace" if ("shopee" in domain or "lazada" in domain) else "news",
                 )
             )
-
             full_text = f"{title} {snippet}".lower()
             for brand in target_brands:
                 if brand.lower() in full_text and brand not in brand_positions:
                     brand_positions[brand] = idx
 
-        mentions = []
-        for brand in target_brands:
-            rank = brand_positions.get(brand)
-            mentions.append(
-                BrandMentionDetail(
-                    brand_id=brand.lower().replace(" ", "_"),
-                    brand_name=brand,
-                    mentioned=rank is not None,
-                    rank=rank,
-                    sentiment="positive" if rank and rank <= 3 else "neutral",
-                    recommendation_intent="strongly_recommended"
-                    if rank and rank == 1
-                    else "recommended"
-                    if rank and rank <= 3
-                    else "neutral_mention",
-                )
+        mentions = [
+            BrandMentionDetail(
+                brand_id=brand.lower().replace(" ", "_"),
+                brand_name=brand,
+                mentioned=brand in brand_positions,
+                rank=brand_positions.get(brand),
+                sentiment="neutral",
+                recommendation_intent="neutral_mention",
             )
+            for brand in target_brands
+        ]
 
         return RawObservation(
-            observation_id=f"obs_serp_{int(time.time())}",
+            observation_id=new_observation_id("serper"),
             timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             query_id=query_id,
             query_text=query_text,
-            engine_provider="google_gemini",
-            model_name="google-serp-organic",
+            provider="serper",
+            model_name=self.model_name,
+            answer_surface="organic_serp",
             grounding_enabled=True,
-            response_raw_text=f"Google Search SERP rankings for Thai query: {query_text} ({len(organic_results)} organic results)",
+            retry_count=retries,
+            response_raw_text=f"Google SERP for: {query_text} ({len(organic_results)} organic results)",
             response_latency_ms=latency,
+            parse_status="not_applicable",
             brand_mentions=mentions,
             citations=citations,
         )

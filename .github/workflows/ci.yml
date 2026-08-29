@@ -2,7 +2,7 @@ name: CI Test & Quality Suite
 
 on:
   push:
-    branches: [ main, upgrade/** ]
+    branches: [ main, "upgrade/**", "phase/**" ]
   pull_request:
     branches: [ main ]
 
@@ -14,11 +14,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install dependencies
+
+      - name: Install (editable, with dev extras)
         run: |
-          pip install --upgrade pip
-          pip install . pytest ruff
-      - name: Lint with Ruff
-        run: ruff check .
-      - name: Test with Pytest
-        run: pytest tests/
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,dashboard]"
+
+      - name: Build wheel (packaging smoke)
+        run: |
+          pip install build
+          python -m build --wheel
+
+      - name: Import smoke test
+        run: |
+          python -c "import src.api, src.runner, src.cli, src.engines, src.analytics, src.storage, src.security, src.prompts, src.brands, src.ids; print('imports ok')"
+
+      - name: Lint (ruff)
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Tests
+        run: pytest tests/ -q

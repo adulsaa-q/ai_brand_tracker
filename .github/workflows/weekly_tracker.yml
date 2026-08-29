@@ -4,34 +4,44 @@ on:
   schedule:
     - cron: '0 2 * * 1'
   workflow_dispatch:
+    inputs:
+      engine:
+        description: "Observation engine"
+        default: "mock"
+        type: choice
+        options: [mock, gemini, openrouter]
 
 jobs:
   track:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.12"
 
-      - name: Install Dependencies
+      - name: Install
         run: |
-          pip install .
+          python -m pip install --upgrade pip
+          pip install -e .
 
-      - name: Run Intelligence Pipeline
+      - name: Run intelligence pipeline
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          python src/runner.py
+          python -m src.cli run \
+            --vertical ecommerce_retail_th \
+            --count 30 \
+            --engine "${{ github.event.inputs.engine || 'mock' }}"
 
-      - name: Commit Updated Data
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add data/latest_run_summary.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore(data): weekly auto-track [skip ci]"
-          git push
+      # data/ is gitignored (local artifact dir). Publish the run as a build
+      # artifact instead of committing it back to the repo.
+      - name: Upload run summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-run-summary
+          path: |
+            data/latest_run_summary*.json
+            data/run_*.json
+          retention-days: 90

@@ -27,6 +27,24 @@ if not os.path.exists(summary_file):
 with open(summary_file, encoding="utf-8") as f:
     data = json.load(f)
 
+data_mode = data.get("data_mode", "unknown")
+if data_mode == "synthetic":
+    st.warning(
+        "⚠️ DEMO / SYNTHETIC DATA — ผลด้านล่างมาจาก Mock engine ที่สร้างขึ้นแบบกำหนดค่าได้ "
+        "ไม่ใช่คำตอบจริงจาก AI provider ห้ามนำไปใช้ตัดสินใจธุรกิจ"
+    )
+elif data_mode == "live":
+    st.success(f"LIVE DATA · run_id `{data.get('run_id', 'n/a')}` · engine `{data.get('engine_type')}`")
+
+_stats = data.get("run_stats", {})
+if _stats:
+    st.caption(
+        f"observations: {_stats.get('successful_observations', 0)}/{_stats.get('requested_observations', 0)} ok · "
+        f"provider errors: {_stats.get('provider_errors', 0)} · "
+        f"persistence failures: {_stats.get('persistence_failures', 0)} · "
+        f"parse failures: {_stats.get('parse_failures', 0)}"
+    )
+
 metrics = data.get("metrics", {})
 brands = metrics.get("brands", [])
 observations = data.get("observations", [])
@@ -73,6 +91,12 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
 
 with tab1:
     st.subheader("📈 AI Share of Voice (SoV) & Net Recommendation Score (NRS)")
+    _primary = metrics.get("primary_surface")
+    if _primary:
+        st.caption(
+            f"Headline numbers = surface `{_primary}` · surfaces in this run: "
+            f"{', '.join(metrics.get('surfaces_present', [])) or 'n/a'}"
+        )
     if brands:
         df_brands = pd.DataFrame(brands)
         top_brand = brands[0]
@@ -169,9 +193,11 @@ with tab5:
         for opp in opportunities:
             st.error(
                 f"🚨 **{opp.get('title')}**  `{opp.get('priority', 'P1')}`\n\n"
-                f"• **ผลกระทบ:** {opp.get('impact')}\n\n"
-                f"• **หลักฐาน:** {opp.get('evidence', '')}\n\n"
-                f"• **คำแนะนำเชิงกลยุทธ์:** {opp.get('recommended_action')}"
+                f"• **What:** {opp.get('what_is_happening', '')}\n\n"
+                f"• **Why:** {opp.get('why_it_is_happening', '')}\n\n"
+                f"• **So what:** {opp.get('so_what', '')}\n\n"
+                f"• **Now what:** {opp.get('now_what', '')}\n\n"
+                f"• **Confidence:** {opp.get('confidence', 'n/a')}"
             )
     else:
         st.success("✅ แบรนด์ครองความเป็นผู้นำในทุกคำถามสำคัญ")
@@ -179,6 +205,9 @@ with tab5:
 with tab6:
     st.subheader("⚡ AI Information Freshness & Knowledge Lag")
     col_a, col_b = st.columns(2)
-    col_a.metric("Grounding Real-Time Rate", lag_data.get("grounding_realtime_rate", "N/A"))
-    col_b.metric("Information Lag Estimate", lag_data.get("estimated_information_lag", "N/A"))
-    st.info(f"💡 **คำแนะนำด้านสถาปัตยกรรม:** {lag_data.get('recommendation', '')}")
+    col_a.metric("Grounded Rate", f"{lag_data.get('grounded_rate_pct', 0)}%")
+    col_b.metric(
+        "Grounded / Total", f"{lag_data.get('grounded_observations', 0)} / {lag_data.get('total_observations', 0)}"
+    )
+    st.caption(lag_data.get("note", ""))
+    st.info(f"💡 {lag_data.get('recommendation', '')}")

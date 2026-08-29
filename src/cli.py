@@ -41,6 +41,9 @@ def main():
     )
     run_parser.add_argument("--seed", type=int, default=42, help="Random seed")
     run_parser.add_argument(
+        "--model", type=str, default=None, help="Model id (e.g. an OpenRouter free model from `cli.py models`)"
+    )
+    run_parser.add_argument(
         "--control", action="store_true", default=True, help="Include invariant control benchmark set"
     )
 
@@ -53,9 +56,6 @@ def main():
 
     # dashboard
     subparsers.add_parser("dashboard", help="Launch Executive Streamlit Dashboard")
-
-    # web
-    subparsers.add_parser("web", help="Launch Executive Web Dashboard")
 
     args = parser.parse_args()
 
@@ -82,6 +82,7 @@ def main():
             seed=args.seed,
             engine_type=args.engine,
             include_control=args.control,
+            engine_model=args.model,
         )
 
     elif args.command == "migrate":
@@ -97,14 +98,8 @@ def main():
     elif args.command == "dashboard":
         import subprocess
 
-        print("🚀 Launching Streamlit Executive Dashboard...")
+        print("Launching Streamlit dashboard...")
         subprocess.run(["streamlit", "run", "dashboard/app.py"])
-
-    elif args.command == "web":
-        import uvicorn
-
-        print("🌐 Modern Executive Web Command Center (Style Q) running at http://127.0.0.1:8000")
-        uvicorn.run("src.api:app", host="127.0.0.1", port=8000, reload=False)
 
     else:
         parser.print_help()

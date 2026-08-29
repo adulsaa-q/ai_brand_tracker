@@ -2,19 +2,31 @@ from typing import Any
 
 
 class AIInformationLagTracker:
-    """Measures the time lag between real-world brand news/events and AI perception updates."""
+    """Reports how grounded a scan's answers were.
+
+    Phase 0 remediation: this used to emit a fabricated "0-2 Days (Real-time)"
+    vs "3-6 Months (Static)" verdict purely from whether the citations list was
+    non-empty. A real information-lag measurement requires comparing cited
+    content dates against known real-world events and is deferred. We now only
+    report the grounding rate, which is an actual measurement.
+    """
 
     @staticmethod
     def measure_knowledge_freshness(observations: list[dict[str, Any]]) -> dict[str, Any]:
-        has_citations = sum(1 for obs in observations if len(obs.get("citations", [])) > 0)
-        total = len(observations) or 1
-        grounding_ratio = round((has_citations / total) * 100, 1)
+        total = len(observations)
+        if total == 0:
+            return {"grounded_rate_pct": 0.0, "grounded_observations": 0, "total_observations": 0, "note": "no data"}
+
+        grounded = sum(1 for obs in observations if len(obs.get("citations", [])) > 0)
+        rate = round((grounded / total) * 100, 1)
 
         return {
-            "grounding_realtime_rate": f"{grounding_ratio}%",
-            "estimated_information_lag": "0-2 Days (Real-time Grounded via Google Search)"
-            if grounding_ratio > 70
-            else "3-6 Months (Static Pre-training Weights)",
-            "risk_assessment": "LOW_LAG" if grounding_ratio > 70 else "HIGH_LAG",
-            "recommendation": "เปิดใช้งาน Search Grounding เสมอเพื่อให้ AI ตอบโปรโมชั่นปัจจุบันได้ถูกต้อง",
+            "grounded_rate_pct": rate,
+            "grounded_observations": grounded,
+            "total_observations": total,
+            "note": (
+                "Fraction of observations that carried at least one citation. "
+                "Not a time-lag estimate - a dated-content vs event-date comparison is not yet implemented."
+            ),
+            "recommendation": "เปิด Search Grounding ทุกครั้งเพื่อให้ AI อ้างอิงโปรโมชั่น/ข้อมูลปัจจุบัน",
         }
