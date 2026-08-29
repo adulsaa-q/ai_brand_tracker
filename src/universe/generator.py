@@ -100,9 +100,7 @@ class QueryUniverseGenerator:
         rng = random.Random(seed)
         v_config = self.get_vertical_config(vertical_id)
         brands = [b["name"] for b in v_config.get("brands", [])]
-        categories = v_config.get(
-            "categories", ["สินค้าและบริการยอดนิยม", "ตัวเลือกมาตรฐาน", "แพ็กเกจยอดนิยม", "รุ่นแนะนำ"]
-        )
+        categories = v_config.get("categories", ["สินค้าและบริการยอดนิยม", "ตัวเลือกมาตรฐาน", "แพ็กเกจยอดนิยม", "รุ่นแนะนำ"])
 
         queries = []
         intents = list(self.domain_intent_templates.keys())

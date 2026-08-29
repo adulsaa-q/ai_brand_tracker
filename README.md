@@ -1,179 +1,163 @@
-# 🇹🇭 Thailand AI Market & Decision Intelligence Platform
+# Thailand AI Market & Decision Intelligence Platform
 
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
-[![Architecture](https://img.shields.io/badge/Architecture-Enterprise_GEO_Platform-brightgreen.svg)]()
+[![Python 3.12](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI_REST-009688.svg)](https://fastapi.tiangolo.com/)
+[![DuckDB](https://img.shields.io/badge/Lakehouse-DuckDB_Star_Schema-FFF000.svg)](https://duckdb.org/)
 [![Code Quality: Ruff](https://img.shields.io/badge/Code_Quality-Ruff_100%25-green.svg)](https://github.com/astral-sh/ruff)
-[![Tests: Pytest](https://img.shields.io/badge/Tests-18_Passed-success.svg)](https://docs.pytest.org/)
+[![Tests: Pytest](https://img.shields.io/badge/Tests-28_Passed_100%25-success.svg)](https://docs.pytest.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-An enterprise-grade **Generative Engine Optimization (GEO)**, **AI Share of Voice (SoV)**, **Search / SERP Grounding**, and **Thai Consumer Decision Intelligence Platform** designed for high-performance market surveillance and strategic action planning.
+A production-grade **Generative Engine Optimization (GEO)**, **AI Share of Voice (SoV)**, **Multi-Model Search Grounding**, and **Consumer Decision Intelligence Platform** engineered for continuous market surveillance, competitive gap analysis, and automated executive decision memos across Thailand's digital commerce ecosystems.
 
 ---
 
-## 🎯 The Mission & Core Question
-
-> *What are Thai consumers asking and discovering across AI, search, and social commerce ecosystems? What do AI answer engines recommend to them, why do certain platforms win, and what strategic actions should businesses take next?*
+## 1. System Architecture
 
 ```mermaid
 graph TD
-    UserQuery[Thai Consumer Intent
-Persona × Budget × Channel × Pain Point] --> Generator[Query Universe Engine
-Controlled Randomness + Invariant Control Set]
+    User["Executive / Analyst / Strategist"] --> UI["Zero-Terminal Web Terminal (index.html)<br/>Direct Custom Brand Workspace & Focal Switcher"]
+    UI --> API["FastAPI Backend REST & SSE Engine (src/api.py)<br/>Port 8000 Static Mount & API Endpoints"]
     
-    subgraph Multi-Engine Observation Layer
-        Generator --> Engine1[Google Gemini 2.5 Flash
-Google Search Grounding]
-        Generator --> Engine2[Tavily Search API
-Web Citation & Graph Grounding]
-        Generator --> Engine3[Serper.dev
-Google Organic SERP gl=th]
-        Generator --> Engine4[OpenRouter Free Tier
-Dynamic LLM Discovery & Benchmark]
-        Generator --> Engine5[Mock Engine
-0-Cost Fast Sandbox]
+    subgraph Core Universe & Observation Layer
+        API --> Gen["Domain-Adaptive Query Generator V2 (src/universe/generator.py)<br/>6 Intent Pillars × Thai Consumer Personas"]
+        Gen --> Engines["Multi-Engine Observation Suite (src/engines/)"]
+        Engines --> E1["Google Gemini 2.5 Flash (Search Grounding)"]
+        Engines --> E2["Tavily Search API (Citation Graph)"]
+        Engines --> E3["Serper.dev (Google Organic SERP gl=th)"]
+        Engines --> E4["OpenRouter Free Tier (Dynamic Benchmark)"]
+        Engines --> E5["Mock Engine (0-Cost Deterministic Sandbox)"]
     end
     
-    Engine1 & Engine2 & Engine3 & Engine4 & Engine5 --> Pydantic[Single-Pass Pydantic v2 Parsing
-Rank, Sentiment, NRS, Claims, Citations]
-    
-    subgraph Storage & Analytics Lakehouse
-        Pydantic --> DuckDB[(DuckDB Star Schema
-dim_brand, dim_query, fact_obs, fact_mention, fact_citation)]
-        Pydantic --> SQLite[(SQLite Transactional State)]
-        Pydantic --> Logger[Structured JSON / Color Logger
-Enterprise Observability]
+    subgraph Data Lakehouse & Persistence
+        Engines --> Pydantic["Pydantic v2 Parsing (Rank, Sentiment, Citations, Claims)"]
+        Pydantic --> DuckDB[("DuckDB Star Schema Lakehouse (data/lakehouse.duckdb)<br/>dim_brand · dim_query · fact_observation")]
+        Pydantic --> SQLite[("SQLite State Store (data/tracker_v3.db)")]
     end
     
-    DuckDB --> Analytics[Analytics Suite
-SoV · NRS · Gaps · Claims · Citations · Simulator]
-    
-    Analytics --> Dashboard[Streamlit Executive Dashboard
-Plotly Interactive 6-Tab Portal]
-    Analytics --> Actions[GitHub Actions Automated Tracker
-CI/CD & Scheduled Observation]
+    subgraph Decision Intelligence & Analytics
+        DuckDB --> Analytics["Decision Intelligence Engine (src/analytics/)<br/>4-Stage Strategy Memo · What-If Simulator · Citation Graph"]
+        Analytics --> UI
+        Analytics --> CSV["CSV / Report Exporter"]
+    end
 ```
 
 ---
 
-## 🏗️ Core Architecture & Enterprise Features (2026 Ready)
+## 2. Core Capabilities & Highlights
 
-* **Multi-Engine Observation Suite**:
-  - **Google Gemini 2.5 Flash**: Native Google Search Grounding with web metadata.
-  - **Tavily AI Search**: High-precision Thai citation crawling across Pantip, Wongnai, Shopee, Konvy.
-  - **Serper Google SERP**: Organic search rankings in Thailand (`gl=th`) for SEO vs GEO comparison.
-  - **OpenRouter Free Tier**: Automatic real-time discovery of 21 free models with Thai qualification micro-benchmarking.
-  - **Mock Sandbox**: Fast, offline, deterministic testing with 0 API cost.
-* **Query Universe Engine**:
-  - Invariant **30 Control Benchmark Set** for longitudinal tracking.
-  - Dynamic **Exploratory Query Generator** with persona, intent, budget, and Thai slang injection.
-* **Thailand Temporal Event Engine**:
-  - Injects contextual retail hooks: Double Day (8.8, 9.9, 11.11), Payday (25-30th), Mid-Month, Songkran, Back-to-School.
-* **Decision Intelligence & What-If Simulator**:
-  - Formulas for **AI Share of Voice (SoV)**, **Net Recommendation Score (NRS)**, and **Citation Authority Index (CAI)**.
-  - **`MarketStrategySimulator`**: Forecasts visibility gains when activating marketing levers (Pantip advocacy, Official Mall guarantees, YouTube creator unboxing).
-* **Lakehouse Star Schema (DuckDB & SQLite)**:
-  - `dim_brand`, `dim_query`, `fact_observation`, `fact_brand_mention`, `fact_citation`.
+* **Universal Multi-Vertical Support**:
+  - Pre-configured with 6 benchmark sectors:
+    1. `ecommerce_retail_th` (E-Commerce & Beauty Retail)
+    2. `ev_automotive_th` (Electric Vehicles & Automotive)
+    3. `banking_fintech_th` (Banking, Digital Loans & FinTech)
+    4. `real_estate_th` (Real Estate & Condominiums)
+    5. `hospital_healthcare_th` (Private Hospitals & Healthcare)
+    6. `fnb_coffee_th` (Food, Beverage & Coffee Retail Chains)
+* **Custom Brand Workspace (Zero-Terminal Direct Input)**:
+  - Users can directly type their own brand, competitor entities, and market category right on the UI to receive instant real-time telemetry and customized 4-stage strategic recommendations.
+* **Domain-Adaptive Query Universe Generator V2**:
+  - Parameterized across **6 Consumer Intent Pillars** (*Promotion, Trust/Authenticity, Variety/Quality, Service/Speed, Payment/0%, Comparison*) with seeded reproducibility.
+* **4-Stage Decision Intelligence Framework**:
+  - Structures business actions into **What is happening ➔ Why ➔ So what (Impact) ➔ Now what (Action)** categorized by P1 Critical, P2 Defensive, and P3 Opportunities.
+* **Full-Stack Single-Port Server**:
+  - Serves both high-performance REST APIs and the rich web terminal on a single unified port (`http://127.0.0.1:8000`).
 
 ---
 
-## 🚀 Quickstart & CLI Guide
+## 3. Quickstart & Command-Line Usage
 
-### 1. Installation & Environment Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/adulsaa-q/ai_brand_tracker.git
-cd ai_brand_tracker
-
-# Install with dependencies
-pip install -e .
-```
-
-### 2. Environment Variables (`.env`)
-
-Copy `.env.example` to `.env` and provide your API keys:
-
-```env
-OPENROUTER_API_KEY=your_openrouter_api_key_here
-GEMINI_API_KEY=your_gemini_api_key_here
-TAVILY_API_KEY=your_tavily_api_key_here
-SERPER_API_KEY=your_serper_api_key_here
-```
-
-### 3. CLI Commands
+### 3.1 Start Full-Stack Server (Web Terminal + REST API)
 
 ```bash
-# 1. Migrate Historical Data (v1 legacy CSV -> v3 DuckDB & SQLite)
-python src/cli.py migrate
+# Launch FastAPI backend + Web Terminal on port 8000 and auto-open browser
+python src/cli.py serve --port 8000
+```
+Open your browser at **[http://localhost:8000](http://localhost:8000)**.
 
-# 2. Discover Available Free AI Models on OpenRouter
-python src/cli.py models
+### 3.2 Run Autonomous AI Intelligence Scan via CLI
 
-# 3. Generate Thai Consumer Queries (Control + Exploratory)
-python src/cli.py generate --count 10 --seed 42 --control
+```bash
+# Run scan across any vertical with 30 invariant benchmark queries
+python src/cli.py run --vertical ev_automotive_th --count 30 --engine mock
 
-# 4. Run Full Intelligence Pipeline across any engine
-python src/cli.py run --count 10 --engine gemini     # Google Gemini + Search Grounding
-python src/cli.py run --count 10 --engine tavily     # Tavily Web Grounding
-python src/cli.py run --count 10 --engine serper     # Google Organic SERP in TH
-python src/cli.py run --count 10 --engine openrouter # Free OpenRouter LLMs
-python src/cli.py run --count 20 --engine mock       # 0-Cost Offline Sandbox
+# Run real-world Google Gemini 2.5 Flash Grounded Scan
+python src/cli.py run --vertical ecommerce_retail_th --count 15 --engine gemini
+```
 
-# 5. Launch Executive Plotly Streamlit Dashboard
-python src/cli.py dashboard
-# Or directly: streamlit run dashboard/app.py
+### 3.3 Synthesize Domain Queries
+
+```bash
+# Generate deterministic domain-adaptive query suite
+python src/cli.py generate --vertical banking_fintech_th --count 20 --seed 42
 ```
 
 ---
 
-## 🧪 Testing & Code Quality
+## 4. API Endpoints Reference
 
-The platform enforces strict 2026 enterprise Python standards:
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/v1/health` | Service health status and system version |
+| `GET` | `/api/v1/verticals` | List all available benchmark verticals and metadata |
+| `POST` | `/api/v1/verticals` | Dynamically create a custom industry sector |
+| `POST` | `/api/v1/scan` | Trigger background AI observation scan worker |
+| `GET` | `/api/v1/scan/{task_id}/progress` | Real-time scan progress %, query counter, and log stream |
+| `GET` | `/api/v1/metrics/{vertical_id}` | Aggregated DuckDB market metrics, SoV, and sentiment |
+| `GET` | `/api/v1/export/{vertical_id}` | Export full observation report in CSV or JSON format |
+| `GET` | `/` | Web Executive Terminal (`dashboard/web/index.html`) |
+
+---
+
+## 5. Automated Test Suite & Quality Verification
+
+Run the comprehensive unit and integration test suite:
 
 ```bash
-# Run Ruff Linter & Formatter (100% compliant)
+# Run Pytest suite
+pytest tests/
+
+# Check 100% Ruff lint and formatting compliance
 ruff check .
-ruff format .
-
-# Run Automated Pytest Suite (18 tests passing)
-pytest tests/ -v
+ruff format --check .
 ```
+
+* **Test Coverage**: 28 passed tests across API routes, query generators, multi-vertical engines, lakehouse persistence, and opportunity models.
 
 ---
 
-## 📁 Repository Layout
+## 6. Project Structure
 
 ```
 ai_brand_tracker/
-├── .github/workflows/
-│   ├── ci.yml                     # Continuous Integration workflow
-│   └── weekly_tracker.yml         # Automated weekly tracking cron
 ├── config/
-│   ├── control_benchmark_set.yaml # 30 invariant benchmark queries
-│   ├── entities.yaml              # Multi-vertical brands, domains, aliases
-│   └── thai_personas.yaml         # Thai shopper demographic personas
+│   ├── entities.yaml               # 6 core benchmark verticals & competitor registry
+│   ├── control_benchmark_set.yaml  # Longitudinal invariant 30 queries
+│   ├── thai_personas.yaml          # Consumer persona definitions
+│   └── settings.yaml               # Engine weights and scoring parameters
 ├── dashboard/
-│   └── app.py                     # 6-Tab Plotly Executive Streamlit Dashboard
+│   └── web/
+│       └── index.html              # Flagship Executive Web Terminal
+├── data/
+│   ├── lakehouse.duckdb            # Star Schema OLAP Lakehouse
+│   └── tracker_v3.db               # Transactional SQLite store
 ├── docs/
-│   ├── MASTER_BLUEPRINT_V3.md     # Architecture Blueprint & Math Formulas
-│   ├── FORENSIC_AUDIT.md          # System Forensic Audit
-│   └── research/                  # Thai digital consumer 2026 research
+│   ├── V5_DELTA_BLUEPRINT.md       # V5 Architectural Delta Blueprint
+│   ├── UNIVERSAL_AI_PLATFORM_V4_BLUEPRINT.md
+│   └── research/                   # Thai consumer & GEO research papers
 ├── src/
-│   ├── analytics/                 # SoV, NRS, Citations, Claims, Simulator
-│   ├── engines/                   # Gemini, Tavily, Serper, OpenRouter, Mock
-│   ├── models/                    # Pydantic v2 domain schemas
-│   ├── storage/                   # DuckDB Star Schema & SQLite
-│   ├── universe/                  # Query Universe & Temporal Events
-│   ├── cli.py                     # Unified CLI Interface
-│   ├── logger.py                  # Structured JSON / Color Logger
-│   └── runner.py                  # End-to-end Observation Pipeline
-├── tests/                         # 18 Pytest unit & integration tests
-├── pyproject.toml                 # Package manifest & tool configurations
-└── README.md                      # Platform documentation
+│   ├── analytics/                  # Decision intelligence, opportunity finder, simulator
+│   ├── engines/                    # Multi-engine adapters (Gemini, Tavily, Serper, OpenRouter, Mock)
+│   ├── models/                     # Pydantic v2 domain schemas
+│   ├── storage/                    # DuckDB and SQLite storage managers
+│   ├── universe/                   # Domain-adaptive Query Universe Generator V2
+│   ├── api.py                      # FastAPI REST & SSE Background Server
+│   ├── cli.py                      # Unified CLI entrypoint
+│   └── runner.py                   # Intelligence scan execution pipeline
+└── tests/                          # 28/28 Unit & integration test suites
 ```
 
 ---
 
-## 📄 License
+## 7. License & Authorship
 
-MIT License — Copyright (c) 2026 Adul Saa (Q).\n
+Developed by **Adul Saa (Q)** for autonomous enterprise intelligence operations. Released under the [MIT License](LICENSE).
