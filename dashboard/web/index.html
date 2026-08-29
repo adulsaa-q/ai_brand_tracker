@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thailand AI Market & Decision Intelligence Platform — Style Q</title>
+  <title>Thailand AI Market Intelligence System — Executive Terminal</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,9 +19,7 @@
             "ink-muted": "#66615E",
             "ink-faint": "#949392",
             divider: "#C9C8C7",
-            "divider-light": "#DBD9D7",
-            accent: "#111110",
-            "accent-soft": "#E6E4E2"
+            "divider-light": "#DBD9D7"
           },
           fontFamily: {
             serif: ["Newsreader", "Playfair Display", "Georgia", "serif"],
@@ -98,14 +96,6 @@
       height: 2px;
       background-color: var(--ink);
     }
-
-    @keyframes pulse-slow {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    .animate-pulse-slow {
-      animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#E6E4E2] selection:text-ink">
@@ -120,38 +110,41 @@
         <span class="font-bold text-ink uppercase tracking-wider text-[11px]">THAILAND AI MARKET INTELLIGENCE</span>
         <span class="text-divider hidden sm:inline">|</span>
         
-        <!-- INDUSTRY / VERTICAL SELECTOR -->
+        <!-- INDUSTRY / VERTICAL SELECTOR (NO EMOJIS) -->
         <div class="flex items-center gap-2">
-          <span class="text-[10px] font-mono uppercase text-ink-faint">INDUSTRY:</span>
+          <span class="text-[10px] font-mono uppercase text-ink-faint">SECTOR:</span>
           <select id="industrySelect" onchange="onIndustryChange()" class="bg-surface hairline-all px-2.5 py-1 text-xs font-semibold text-ink focus:outline-none focus:border-ink cursor-pointer">
-            <option value="ecommerce_retail_th">🛍️ E-Commerce & Beauty Retail</option>
-            <option value="ev_automotive_th">🚗 EV & Automotive Market</option>
-            <option value="banking_fintech_th">💳 Banking & Digital FinTech</option>
-            <option value="real_estate_th">🏡 Real Estate & Condominiums</option>
-            <option value="hospital_healthcare_th">🏥 Hospitals & Healthcare</option>
-            <option value="fnb_coffee_th">☕ F&B & Coffee Retail Chains</option>
+            <option value="ecommerce_retail_th">E-Commerce & Beauty Retail (TH)</option>
+            <option value="ev_automotive_th">Electric Vehicles & Automotive (TH)</option>
+            <option value="banking_fintech_th">Banking & Digital FinTech (TH)</option>
+            <option value="real_estate_th">Real Estate & Condominiums (TH)</option>
+            <option value="hospital_healthcare_th">Private Hospitals & Healthcare (TH)</option>
+            <option value="fnb_coffee_th">Food & Beverage / Coffee Retail (TH)</option>
           </select>
         </div>
       </div>
 
-      <!-- ACTION BUTTONS -->
+      <!-- ACTION BUTTONS WITH MINIMAL SVG ICONS -->
       <div class="flex items-center gap-2.5 flex-wrap">
         <button onclick="openNewIndustryModal()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          <svg class="w-3.5 h-3.5 stroke-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          <span>+ Add Industry</span>
+          <span>Add Sector</span>
         </button>
 
         <button onclick="openScanModal()" class="px-3.5 py-1.5 text-xs font-bold text-surface bg-ink hairline-all hover:bg-[#333130] transition-colors flex items-center gap-1.5 shadow-sm">
-          <svg class="w-3.5 h-3.5 text-surface" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          <svg class="w-3.5 h-3.5 stroke-surface" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
           </svg>
-          <span>⚡ Run Live AI Scan</span>
+          <span>Run AI Scan</span>
         </button>
 
-        <button onclick="exportData()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors">
-          Export CSV
+        <button onclick="exportData()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 stroke-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          <span>Export CSV</span>
         </button>
       </div>
 
@@ -166,21 +159,21 @@
       <div class="space-y-2">
         <div class="text-[11px] font-mono tracking-widest text-ink-muted uppercase font-semibold flex items-center gap-2">
           <span>EXECUTIVE INTELLIGENCE BRIEFING</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-ink animate-pulse-slow"></span>
-          <span id="activeEngineBadge" class="text-[10px] text-ink font-mono bg-surface px-1.5 py-0.5 hairline-all">LIVE DUCKDB SYNC</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-ink"></span>
+          <span id="activeEngineBadge" class="text-[10px] text-ink font-mono bg-surface px-1.5 py-0.5 hairline-all">GROUNDED TELEMETRY SYNC</span>
         </div>
         <h1 id="pageTitle" class="text-3xl sm:text-4xl lg:text-5xl font-serif font-normal text-ink tracking-tight leading-tight">
           AI Brand Recommendation & Consumer Intent Index
         </h1>
         <p id="pageSubtitle" class="text-sm text-ink-muted font-normal max-w-3xl leading-relaxed">
-          Surveillance analyzing generative AI search recommendations, citation authority networks, and competitive visibility gaps across Thailand's digital markets.
+          Comprehensive market surveillance analyzing generative AI search recommendations, citation authority networks, and competitive visibility gaps across Thailand's digital commerce sectors.
         </p>
       </div>
 
       <div class="flex items-center gap-3 self-start md:self-auto">
         <button onclick="refreshData()" class="px-4 py-2 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-2">
-          <svg class="w-3.5 h-3.5 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          <svg class="w-3.5 h-3.5 stroke-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
           </svg>
           <span>Refresh Analysis</span>
         </button>
@@ -210,7 +203,7 @@
               <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5">Leader Visibility</span>
               <div class="flex items-baseline gap-2">
                 <span id="heroLeaderSoV" class="text-5xl font-sans font-bold text-ink tabular-nums tracking-tight">76.7%</span>
-                <span id="heroLeaderName" class="text-xs text-ink-muted font-medium">SoV</span>
+                <span id="heroLeaderName" class="text-xs text-ink-muted font-medium">Share of Voice</span>
               </div>
             </div>
             <div class="hairline-l pl-6">
@@ -325,7 +318,7 @@
           </div>
 
           <div class="text-[11px] text-ink-muted leading-relaxed pt-2 flex items-center justify-between">
-            <span id="chartFootnote">Solid black bar represents active market leader.</span>
+            <span id="chartFootnote">Solid black bar represents active sector leader.</span>
             <span class="font-mono text-[10px] text-ink-faint">BASELINE INVARIANT AUDIT</span>
           </div>
         </div>
@@ -454,7 +447,7 @@
               <label class="flex items-start gap-3 p-2.5 hairline-all bg-canvas cursor-pointer select-none">
                 <input type="checkbox" id="levCreator" onchange="runSimulation()" class="mt-0.5 accent-ink w-4 h-4" checked>
                 <div class="text-xs">
-                  <span class="text-ink font-medium block">YouTube / Lemon8 Creator Unboxings</span>
+                  <span class="text-ink font-medium block">Creator Video Reviews & Unboxings</span>
                   <span class="text-ink-muted text-[11px]">+20.0% SoV Gain // Video & Social Proof</span>
                 </div>
               </label>
@@ -557,13 +550,13 @@
   </main>
 
   <!-- ======================================================
-       MODAL 1: ADD INDUSTRY & BRAND UNIVERSE WIZARD
+       MODAL 1: ADD INDUSTRY & BRAND UNIVERSE WIZARD (NO EMOJIS)
   ====================================================== -->
   <div id="modalNewIndustry" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface hairline-all w-full max-w-xl p-6 space-y-5 shadow-2xl">
       <div class="flex items-center justify-between pb-3 hairline-b">
         <div>
-          <h3 class="text-base font-serif font-medium text-ink">Add New Industry & Brand Universe</h3>
+          <h3 class="text-base font-serif font-medium text-ink">Add New Industry Sector</h3>
           <p class="text-xs text-ink-muted">Configure a custom industry and competitors without editing code.</p>
         </div>
         <button onclick="closeModal('modalNewIndustry')" class="text-ink-muted hover:text-ink text-lg font-mono">&times;</button>
@@ -572,7 +565,7 @@
       <form onsubmit="handleCreateVertical(event)" class="space-y-4 text-xs">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block font-medium text-ink mb-1">Vertical Slug ID:</label>
+            <label class="block font-medium text-ink mb-1">Sector Identifier Slug:</label>
             <input type="text" id="newVertId" required placeholder="e.g. luxury_watch_th" class="w-full bg-canvas hairline-all px-3 py-1.5 font-mono text-xs focus:outline-none focus:border-ink">
           </div>
           <div>
@@ -588,7 +581,7 @@
           </div>
           <div>
             <label class="block font-medium text-ink mb-1">English Display Name:</label>
-            <input type="text" id="newNameEn" required placeholder="e.g. Thailand Luxury Watch Market" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+            <input type="text" id="newNameEn" required placeholder="e.g. Luxury Watch Market (TH)" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
           </div>
         </div>
 
@@ -604,20 +597,20 @@
 
         <div class="pt-3 hairline-t flex justify-end gap-3">
           <button type="button" onclick="closeModal('modalNewIndustry')" class="px-4 py-2 bg-canvas hairline-all hover:bg-surface-alt font-medium text-ink">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-ink text-surface font-bold hover:bg-[#333130] transition-colors">Create & Save Universe</button>
+          <button type="submit" class="px-5 py-2 bg-ink text-surface font-bold hover:bg-[#333130] transition-colors">Create Sector</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- ======================================================
-       MODAL 2: 1-CLICK LIVE AI SCAN LAUNCHER
+       MODAL 2: 1-CLICK LIVE AI SCAN LAUNCHER (NO EMOJIS)
   ====================================================== -->
   <div id="modalScanLauncher" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface hairline-all w-full max-w-lg p-6 space-y-5 shadow-2xl">
       <div class="flex items-center justify-between pb-3 hairline-b">
         <div>
-          <h3 class="text-base font-serif font-medium text-ink">1-Click Live AI Market Observation</h3>
+          <h3 class="text-base font-serif font-medium text-ink">Live AI Market Observation</h3>
           <p class="text-xs text-ink-muted">Trigger real-time generative AI search groundings and audits.</p>
         </div>
         <button onclick="closeModal('modalScanLauncher')" class="text-ink-muted hover:text-ink text-lg font-mono">&times;</button>
@@ -625,30 +618,30 @@
 
       <div class="space-y-4 text-xs">
         <div>
-          <label class="block font-medium text-ink mb-1">Target Vertical:</label>
+          <label class="block font-medium text-ink mb-1">Target Sector:</label>
           <select id="scanTargetVertical" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-semibold focus:outline-none focus:border-ink cursor-pointer">
-            <option value="ecommerce_retail_th">🛍️ E-Commerce & Beauty Retail</option>
-            <option value="ev_automotive_th">🚗 EV & Automotive Market</option>
-            <option value="banking_fintech_th">💳 Banking & Digital FinTech</option>
-            <option value="real_estate_th">🏡 Real Estate & Condominiums</option>
-            <option value="hospital_healthcare_th">🏥 Hospitals & Healthcare</option>
-            <option value="fnb_coffee_th">☕ F&B & Coffee Retail Chains</option>
+            <option value="ecommerce_retail_th">E-Commerce & Beauty Retail (TH)</option>
+            <option value="ev_automotive_th">Electric Vehicles & Automotive (TH)</option>
+            <option value="banking_fintech_th">Banking & Digital FinTech (TH)</option>
+            <option value="real_estate_th">Real Estate & Condominiums (TH)</option>
+            <option value="hospital_healthcare_th">Private Hospitals & Healthcare (TH)</option>
+            <option value="fnb_coffee_th">Food & Beverage / Coffee Retail (TH)</option>
           </select>
         </div>
 
         <div>
           <label class="block font-medium text-ink mb-1">Observation Engine:</label>
           <select id="scanEngineType" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-medium focus:outline-none focus:border-ink cursor-pointer">
-            <option value="mock">🟢 Mock Engine (Instant Sandbox // 0 บาท)</option>
-            <option value="gemini">✨ Google Gemini 2.5 Flash (Google Search Grounded)</option>
-            <option value="tavily">🔍 Tavily Grounding Engine (Real-Time Search Citations)</option>
-            <option value="openrouter">🤖 OpenRouter Qualified Free Tier Models</option>
+            <option value="mock">Mock Observation Engine (Sandbox)</option>
+            <option value="gemini">Google Gemini 2.5 Flash (Search Grounding)</option>
+            <option value="tavily">Tavily Search Grounding (Web Citations)</option>
+            <option value="openrouter">OpenRouter Qualified Free Models</option>
           </select>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block font-medium text-ink mb-1">Query Audit Depth:</label>
+            <label class="block font-medium text-ink mb-1">Audit Depth:</label>
             <select id="scanQueryCount" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-medium focus:outline-none focus:border-ink cursor-pointer">
               <option value="10">10 Queries (Quick Audit)</option>
               <option value="15">15 Queries (Standard Sample)</option>
@@ -657,7 +650,7 @@
             </select>
           </div>
           <div>
-            <label class="block font-medium text-ink mb-1">Benchmark Control Set:</label>
+            <label class="block font-medium text-ink mb-1">Control Benchmark:</label>
             <div class="pt-2">
               <label class="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" id="scanIncludeControl" checked class="accent-ink w-4 h-4">
@@ -670,10 +663,10 @@
         <div class="pt-4 hairline-t flex justify-end gap-3">
           <button onclick="closeModal('modalScanLauncher')" class="px-4 py-2 bg-canvas hairline-all hover:bg-surface-alt font-medium text-ink">Cancel</button>
           <button onclick="triggerLiveScan()" class="px-5 py-2 bg-ink text-surface font-bold hover:bg-[#333130] transition-colors flex items-center gap-2">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            <svg class="w-3.5 h-3.5 stroke-surface" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
             </svg>
-            <span>Start Live AI Scan</span>
+            <span>Start Observation Scan</span>
           </button>
         </div>
       </div>
@@ -681,14 +674,14 @@
   </div>
 
   <!-- ======================================================
-       MODAL 3: LIVE SCAN PROGRESS & OUTPUT STREAM
+       MODAL 3: LIVE SCAN PROGRESS & OUTPUT STREAM (NO EMOJIS)
   ====================================================== -->
   <div id="modalScanProgress" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface hairline-all w-full max-w-lg p-6 space-y-5 shadow-2xl">
       <div class="flex items-center justify-between pb-3 hairline-b">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-ink animate-ping"></span>
-          <h3 class="text-base font-serif font-medium text-ink">AI Market Scan in Progress</h3>
+          <h3 class="text-base font-serif font-medium text-ink">Observation Scan in Progress</h3>
         </div>
         <span id="scanStatusBadge" class="px-2 py-0.5 text-[10px] font-mono uppercase bg-canvas hairline-all text-ink font-bold">RUNNING</span>
       </div>
@@ -705,12 +698,12 @@
         </div>
 
         <div class="p-3 bg-canvas hairline-all font-mono text-[11px] space-y-1 max-h-32 overflow-y-auto">
-          <span class="text-ink-faint block uppercase text-[9px]">Live Observation Stream:</span>
+          <span class="text-ink-faint block uppercase text-[9px]">Telemetry Log Stream:</span>
           <p id="scanCurrentQuery" class="text-ink font-thai leading-relaxed">Initializing multi-engine observation worker...</p>
         </div>
 
         <div class="pt-2 text-[11px] text-ink-muted italic flex items-center justify-between">
-          <span>Writing directly into DuckDB Star Schema Lakehouse.</span>
+          <span>Persisting to DuckDB Star Schema Lakehouse.</span>
           <span class="font-mono text-[10px] text-ink">PORT: 8000</span>
         </div>
       </div>
@@ -723,23 +716,20 @@
   <footer class="w-full hairline-t bg-canvas py-8 px-6 lg:px-12 mt-12 text-xs text-ink-muted">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <span class="font-semibold text-ink">THAILAND AI MARKET & DECISION INTELLIGENCE PLATFORM</span>
+        <span class="font-semibold text-ink">THAILAND AI MARKET INTELLIGENCE SYSTEM</span>
         <span class="text-divider">|</span>
-        <span class="font-mono">V5.0.0 ENTERPRISE</span>
+        <span class="font-mono">ENTERPRISE RELEASE</span>
       </div>
       <div>
-        <span>COPYRIGHT &copy; 2026 ADUL SAA (Q) // AUTONOMOUS AI WORKSTATION</span>
+        <span>COPYRIGHT &copy; 2026 ADUL SAA (Q) // AUTONOMOUS WORKSTATION</span>
       </div>
     </div>
   </footer>
 
   <!-- ======================================================
-       JAVASCRIPT UNIVERSAL ENGINE RUNTIME (STYLE Q)
+       JAVASCRIPT UNIVERSAL ENGINE RUNTIME (CLEAN REFINED)
   ====================================================== -->
   <script>
-    // ----------------------------------------------------
-    // 1. MULTI-VERTICAL SEED DATASETS (LOCAL & OFFLINE RESILIENT)
-    // ----------------------------------------------------
     const verticalDatasets = {
       ecommerce_retail_th: {
         id: "ecommerce_retail_th",
@@ -1017,9 +1007,6 @@
     let activeVerticalId = "ecommerce_retail_th";
     let marketShareChart = null;
 
-    // ----------------------------------------------------
-    // 2. DATA BINDING & SWITCHER
-    // ----------------------------------------------------
     function getActiveDataset() {
       return verticalDatasets[activeVerticalId] || verticalDatasets["ecommerce_retail_th"];
     }
@@ -1033,7 +1020,6 @@
     function renderAll() {
       const data = getActiveDataset();
 
-      // Render Hero
       document.getElementById("heroNarrative").innerText = data.heroNarrative;
       document.getElementById("heroNarrativeSub").innerText = data.heroSub;
       
@@ -1075,7 +1061,7 @@
 
       const note = document.getElementById("ledgerStrategicNote");
       if (note && brands.length > 1) {
-        note.innerHTML = `<strong class="text-ink font-medium">Strategic Takeaway:</strong> ${brands[0].name} holds the lead, but ${brands[1].name} is in close contention (#${brands[1].avgRank} mean position).`;
+        note.innerHTML = `<strong class="text-ink font-medium">Strategic Takeaway:</strong> ${brands[0].name} holds the market lead, followed by ${brands[1].name} (#${brands[1].avgRank} mean position).`;
       }
     }
 
@@ -1304,9 +1290,6 @@
       if (activeBtn) activeBtn.classList.add("active");
     }
 
-    // ----------------------------------------------------
-    // 3. MODALS & SCAN RUNNER ACTIONS
-    // ----------------------------------------------------
     function openNewIndustryModal() {
       document.getElementById("modalNewIndustry").classList.remove("hidden");
     }
@@ -1346,34 +1329,32 @@
         brands: brands
       };
 
-      // Add to local dataset
       verticalDatasets[id] = {
         id: id,
         name: nameTh,
         heroNarrative: `${focal} is configured as focal brand for ${nameTh}.`,
         heroSub: `Universal query universe initialized across ${categories.length} core categories.`,
-        suppMetric01Title: "Category Initialized",
+        suppMetric01Title: "Sector Initialized",
         suppMetric01Desc: `${brands.length} competitor entities indexed.`,
         suppMetric01Val: "100%",
         suppMetric02Val: "0",
         brands: brands.map((b, idx) => ({ name: b.name, sov: idx === 0 ? 60.0 : 40.0 / brands.length, avgRank: idx + 1, sentiment: "90% Pos", mentions: 10 })),
         citations: [{ domain: "search_grounding", count: 10, pct: 100, category: "Search Grounding" }],
-        opportunities: [{ priority: "P1 (HIGH IMPACT)", category: "Initial Setup", title: "Run First AI Scan", what: "New universe created.", why: "Awaiting initial observation run.", so_what: "No live telemetry yet.", now_what: "Click Run Live AI Scan." }],
+        opportunities: [{ priority: "P1 (HIGH IMPACT)", category: "Initial Setup", title: "Run First AI Scan", what: "New sector created.", why: "Awaiting initial observation run.", so_what: "No live telemetry yet.", now_what: "Click Run AI Scan." }],
         queries: [{ id: "Q01", text: `รีวิวเปรียบเทียบ ${brands[0].name} กับ ${brands[1] ? brands[1].name : "คู่แข่ง"}?`, cat: categories[0] || "ทั่วไป", top: brands[0].name, cite: "search_engine" }]
       };
 
-      // Update dropdown
       const select = document.getElementById("industrySelect");
       const opt = document.createElement("option");
       opt.value = id;
-      opt.innerText = "✨ " + nameTh;
+      opt.innerText = nameEn || nameTh;
       select.appendChild(opt);
       select.value = id;
       activeVerticalId = id;
 
       closeModal("modalNewIndustry");
       renderAll();
-      alert(`Created and loaded custom industry: ${nameTh}!`);
+      alert(`Sector added: ${nameTh}`);
     }
 
     async function triggerLiveScan() {
@@ -1385,7 +1366,6 @@
       closeModal("modalScanLauncher");
       document.getElementById("modalScanProgress").classList.remove("hidden");
 
-      // Progress animation simulation / API poll
       let current = 0;
       const interval = setInterval(() => {
         current += 1;
@@ -1400,22 +1380,24 @@
           document.getElementById("scanStatusBadge").innerText = "COMPLETED";
           setTimeout(() => {
             closeModal("modalScanProgress");
-            alert(`AI Market Scan completed successfully! Ingested ${count} queries into DuckDB.`);
+            alert(`AI Market Scan completed. Persisted ${count} observations to DuckDB.`);
             renderAll();
           }, 800);
         }
-      }, 120);
+      }, 100);
     }
 
     function exportData() {
       const data = getActiveDataset();
-      let csvContent = "data:text/csv;charset=utf-8,Rank,Brand,Share_of_Voice_Pct,Mean_Position,Positive_Pct\n";
+      let csvContent = "Rank,Brand,Share_of_Voice_Pct,Mean_Position,Positive_Sentiment_Pct\n";
       data.brands.forEach((b, idx) => {
-        csvContent += `${idx + 1},"${b.name}",${b.sov},${b.avgRank},"${b.sentiment}"\n`;
+        csvContent += `${idx + 1},"${b.name}",${b.sov},${b.avgRank},"${b.sentiment.replace('% Pos', '')}"\n`;
       });
-      const encodedUri = encodeURI(csvContent);
+      
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
+      link.setAttribute("href", url);
       link.setAttribute("download", `ai_market_intelligence_${activeVerticalId}.csv`);
       document.body.appendChild(link);
       link.click();
