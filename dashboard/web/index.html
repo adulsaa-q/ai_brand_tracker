@@ -110,7 +110,7 @@
         <span class="font-bold text-ink uppercase tracking-wider text-[11px]">THAILAND AI MARKET INTELLIGENCE</span>
         <span class="text-divider hidden sm:inline">|</span>
         
-        <!-- INDUSTRY / VERTICAL SELECTOR (NO EMOJIS) -->
+        <!-- SECTOR SELECTOR -->
         <div class="flex items-center gap-2">
           <span class="text-[10px] font-mono uppercase text-ink-faint">SECTOR:</span>
           <select id="industrySelect" onchange="onIndustryChange()" class="bg-surface hairline-all px-2.5 py-1 text-xs font-semibold text-ink focus:outline-none focus:border-ink cursor-pointer">
@@ -122,13 +122,30 @@
             <option value="fnb_coffee_th">Food & Beverage / Coffee Retail (TH)</option>
           </select>
         </div>
+
+        <span class="text-divider hidden sm:inline">|</span>
+
+        <!-- FOCAL BRAND SELECTOR (USER-DEFINED FOCUS) -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-mono uppercase text-ink-faint">FOCAL BRAND:</span>
+          <select id="focalBrandSelect" onchange="onFocalBrandChange()" class="bg-surface hairline-all px-2.5 py-1 text-xs font-bold text-ink focus:outline-none focus:border-ink cursor-pointer">
+            <!-- Dynamically Populated with Brands from Active Sector -->
+          </select>
+        </div>
       </div>
 
-      <!-- ACTION BUTTONS WITH MINIMAL SVG ICONS -->
+      <!-- ACTION BUTTONS -->
       <div class="flex items-center gap-2.5 flex-wrap">
-        <button onclick="openNewIndustryModal()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-1.5">
+        <button onclick="openAddBrandModal()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5 stroke-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          <span>Add Brand</span>
+        </button>
+
+        <button onclick="openNewIndustryModal()" class="px-3 py-1.5 text-xs font-medium text-ink bg-surface hairline-all hover:bg-surface-alt transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 stroke-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
           </svg>
           <span>Add Sector</span>
         </button>
@@ -182,28 +199,30 @@
   </section>
 
   <!-- ======================================================
-       ASYMMETRIC EXECUTIVE SUMMARY COMPOSITION (HERO)
+       ASYMMETRIC EXECUTIVE SUMMARY COMPOSITION (FOCAL BRAND FOCUS)
   ====================================================== -->
   <section class="w-full bg-canvas py-8 hairline-b">
     <div class="max-w-7xl mx-auto px-6 lg:px-12">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         
-        <!-- Left 7 Cols: Dominant Business Signal & Narrative -->
+        <!-- Left 7 Cols: Focal Brand Performance Signal & Narrative -->
         <div class="lg:col-span-7 space-y-4">
-          <div class="text-[11px] font-mono uppercase tracking-wider text-ink-faint">
-            PRIMARY MARKET SIGNAL // AUGUST 2026
+          <div class="text-[11px] font-mono uppercase tracking-wider text-ink-faint flex items-center gap-2">
+            <span>FOCAL BRAND INTELLIGENCE AUDIT</span>
+            <span class="text-divider">|</span>
+            <span id="focalTagLabel" class="text-ink font-bold">TARGET ENTITY</span>
           </div>
           
           <h2 id="heroNarrative" class="text-2xl sm:text-3xl font-serif italic text-ink font-normal leading-snug">
-            Market leader captures dominant AI recommendation volume across core consumer search journeys.
+            Focal brand performance audit across generative AI answer engines and recommendation journeys.
           </h2>
 
           <div class="pt-2 flex flex-wrap items-baseline gap-6">
             <div>
-              <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5">Leader Visibility</span>
+              <span class="text-xs text-ink-muted uppercase tracking-wider block mb-0.5" id="heroLabel1">Focal Share of Voice</span>
               <div class="flex items-baseline gap-2">
                 <span id="heroLeaderSoV" class="text-5xl font-sans font-bold text-ink tabular-nums tracking-tight">76.7%</span>
-                <span id="heroLeaderName" class="text-xs text-ink-muted font-medium">Share of Voice</span>
+                <span id="heroLeaderName" class="text-xs text-ink-muted font-medium font-mono">SoV</span>
               </div>
             </div>
             <div class="hairline-l pl-6">
@@ -217,25 +236,25 @@
           </div>
 
           <p id="heroNarrativeSub" class="text-xs text-ink-muted leading-relaxed pt-2">
-            Analysis confirms AI answer engines heavily prioritize commercial authority and fulfillment density when answering price and promotion queries.
+            Analysis confirms recommendation volume shifts dynamically according to digital catalog freshness and citation evidence graphs.
           </p>
         </div>
 
         <!-- Right 5 Cols: Asymmetric Supporting Intelligence Ledger -->
         <div class="lg:col-span-5 bg-surface hairline-all p-6 space-y-5">
           <div class="text-xs font-mono font-medium text-ink uppercase tracking-wider pb-3 hairline-b flex items-center justify-between">
-            <span>Supporting Key Indicators</span>
-            <span class="text-ink font-bold text-[10px]">VERIFIED EVIDENCE</span>
+            <span>Competitive Relative Signals</span>
+            <span class="text-ink font-bold text-[10px]">EVIDENCE LEDGER</span>
           </div>
 
           <div class="flex items-start justify-between gap-4 pb-4 hairline-b">
             <div>
-              <span class="text-xs font-medium text-ink block" id="suppMetric01Title">Authenticity & Trust Leader</span>
-              <span class="text-[11px] text-ink-muted" id="suppMetric01Desc">Zero negative citations in consumer evaluations.</span>
+              <span class="text-xs font-medium text-ink block" id="suppMetric01Title">Market Position Status</span>
+              <span class="text-[11px] text-ink-muted" id="suppMetric01Desc">Performance relative to sector leader.</span>
             </div>
             <div class="text-right">
-              <span class="text-lg font-bold text-ink font-sans tabular-nums" id="suppMetric01Val">100%</span>
-              <span class="text-[10px] text-ink-muted block font-medium">Net Trust</span>
+              <span class="text-lg font-bold text-ink font-sans tabular-nums" id="suppMetric01Val">#1</span>
+              <span class="text-[10px] text-ink-muted block font-medium" id="suppMetric01Sub">Category Rank</span>
             </div>
           </div>
 
@@ -318,7 +337,7 @@
           </div>
 
           <div class="text-[11px] text-ink-muted leading-relaxed pt-2 flex items-center justify-between">
-            <span id="chartFootnote">Solid black bar represents active sector leader.</span>
+            <span id="chartFootnote">Black bar represents the active focal brand.</span>
             <span class="font-mono text-[10px] text-ink-faint">BASELINE INVARIANT AUDIT</span>
           </div>
         </div>
@@ -400,11 +419,11 @@
     <section id="tab-strategic-actions" class="tab-panel hidden space-y-8">
       <div class="space-y-1 pb-4 hairline-b">
         <h3 class="text-xl font-serif font-normal text-ink">Executive Strategy & Prescribed Interventions</h3>
-        <p class="text-xs text-ink-muted">Actionable business initiatives answering: What is happening ➔ Why ➔ So what ➔ Now what to do.</p>
+        <p class="text-xs text-ink-muted">Actionable business initiatives customized for the active focal brand.</p>
       </div>
 
       <div class="space-y-6" id="strategicNotesContainer">
-        <!-- Dynamically Rendered Opportunities -->
+        <!-- Dynamically Rendered Opportunities based on Focal Brand -->
       </div>
     </section>
 
@@ -550,7 +569,46 @@
   </main>
 
   <!-- ======================================================
-       MODAL 1: ADD INDUSTRY & BRAND UNIVERSE WIZARD (NO EMOJIS)
+       MODAL: ADD BRAND TO ACTIVE SECTOR
+  ====================================================== -->
+  <div id="modalAddBrand" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface hairline-all w-full max-w-md p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 hairline-b">
+        <div>
+          <h3 class="text-base font-serif font-medium text-ink">Add Brand to Active Sector</h3>
+          <p class="text-xs text-ink-muted">Insert a new competitor entity into current monitoring universe.</p>
+        </div>
+        <button onclick="closeModal('modalAddBrand')" class="text-ink-muted hover:text-ink text-lg font-mono">&times;</button>
+      </div>
+
+      <form onsubmit="handleAddBrandToSector(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-medium text-ink mb-1">Brand Name:</label>
+          <input type="text" id="addBrandNameInput" required placeholder="e.g. Cerave, BYD Denza, SCB Julius Baer" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+        </div>
+
+        <div>
+          <label class="block font-medium text-ink mb-1">Thai Slang / Aliases (Optional, comma separated):</label>
+          <input type="text" id="addBrandAliasesInput" placeholder="e.g. เซราวี, Cerave Thailand" class="w-full bg-canvas hairline-all px-3 py-1.5 text-xs focus:outline-none focus:border-ink">
+        </div>
+
+        <div class="pt-2">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="addBrandSetFocal" checked class="accent-ink w-4 h-4">
+            <span class="text-xs text-ink font-medium">Set as active Focal Brand immediately</span>
+          </label>
+        </div>
+
+        <div class="pt-3 hairline-t flex justify-end gap-3">
+          <button type="button" onclick="closeModal('modalAddBrand')" class="px-4 py-2 bg-canvas hairline-all hover:bg-surface-alt font-medium text-ink">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-ink text-surface font-bold hover:bg-[#333130] transition-colors">Add & Monitor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================
+       MODAL: ADD NEW SECTOR WIZARD
   ====================================================== -->
   <div id="modalNewIndustry" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface hairline-all w-full max-w-xl p-6 space-y-5 shadow-2xl">
@@ -604,7 +662,7 @@
   </div>
 
   <!-- ======================================================
-       MODAL 2: 1-CLICK LIVE AI SCAN LAUNCHER (NO EMOJIS)
+       MODAL: 1-CLICK LIVE AI SCAN LAUNCHER
   ====================================================== -->
   <div id="modalScanLauncher" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface hairline-all w-full max-w-lg p-6 space-y-5 shadow-2xl">
@@ -674,7 +732,7 @@
   </div>
 
   <!-- ======================================================
-       MODAL 3: LIVE SCAN PROGRESS & OUTPUT STREAM (NO EMOJIS)
+       MODAL: LIVE SCAN PROGRESS
   ====================================================== -->
   <div id="modalScanProgress" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-surface hairline-all w-full max-w-lg p-6 space-y-5 shadow-2xl">
@@ -727,19 +785,14 @@
   </footer>
 
   <!-- ======================================================
-       JAVASCRIPT UNIVERSAL ENGINE RUNTIME (CLEAN REFINED)
+       JAVASCRIPT UNIVERSAL ENGINE RUNTIME (WITH FOCAL CONTROL)
   ====================================================== -->
   <script>
     const verticalDatasets = {
       ecommerce_retail_th: {
         id: "ecommerce_retail_th",
         name: "แพลตฟอร์มอีคอมเมิร์ซและร้านค้าปลีกความงามไทย",
-        heroNarrative: "Shopee maintains dominant visibility at 76.7% Share of Voice, while Konvy leads consumer trust with zero negative citations.",
-        heroSub: "Analysis confirms AI answer engines heavily prioritize high-frequency retail promotions and marketplace fulfillment density when answering price and promotion queries.",
-        suppMetric01Title: "Authenticity & Trust Leader",
-        suppMetric01Desc: "Konvy achieves 100% positive sentiment across all prompts without a single negative mention.",
-        suppMetric01Val: "100%",
-        suppMetric02Val: "268",
+        focalBrand: "Shopee Thailand",
         brands: [
           { name: "Shopee Thailand", sov: 76.7, avgRank: 2.13, sentiment: "87.5% Pos", mentions: 23 },
           { name: "Lazada Thailand", sov: 66.7, avgRank: 2.50, sentiment: "86.7% Pos", mentions: 20 },
@@ -763,28 +816,6 @@
           { domain: "lazada.co.th", count: 7, pct: 2.6, category: "Marketplace Mall" },
           { domain: "thebeautrium.com", count: 6, pct: 2.2, category: "Multi-Brand Store" }
         ],
-        opportunities: [
-          {
-            priority: "P1 (HIGH IMPACT / LOW EFFORT)",
-            category: "Authenticity & Counterfeit Risk Mitigation",
-            title: "Authenticity & Counterfeit Risk Mitigation",
-            what: "In queries seeking 100% authentic guarantees, AI engines consistently bypass generic marketplace searches in favor of Konvy (#1) and Sephora (#2).",
-            why: "AI models crawl consumer trust forums (Pantip/Wongnai) where open marketplace sellers have mixed authenticity reputations.",
-            so_what: "Marketplaces lose the high-ticket skincare demographic seeking warranty reassurance.",
-            now_what: "Implement structured schema markup for LazMall / Shopee Mall Official brand stores and index warranty policies directly into beauty editorial nodes.",
-            target: "TARGET: MARKETPLACE MALLS"
-          },
-          {
-            priority: "P2 (DEFENSIVE)",
-            category: "Prestige & Seasonal Gifting Moat",
-            title: "Defending Against Sephora’s High-AOV Moat",
-            what: "Sephora achieves an absolute 100% win rate (Rank #1) in queries related to prestige gifts, luxury perfume, and complimentary gift-wrapping services.",
-            why: "Sephora's brand authority is firmly entrenched in luxury beauty knowledge graphs.",
-            so_what: "Competitors are excluded from high-AOV seasonal gifting budgets (Valentine’s, New Year, Mother’s Day).",
-            now_what: "Launch dedicated premium gift-boxing options on marketplace flagships and seed reviews on Wongnai Beauty highlighting presentation quality.",
-            target: "TARGET: PRESTIGE & GIFTS"
-          }
-        ],
         queries: [
           { id: "Q01", text: "แคมเปญ Double Day ซื้อสกินแคร์แบรนด์เนมที่ไหนลดเยอะที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "facebook.com, pantip.com" },
           { id: "Q02", text: "Flash Sale เครื่องสำอางช่วง Mid-month แพลตฟอร์มไหนมีโค้ดส่วนลดคุ้มที่สุด?", cat: "โปรโมชั่น", top: "Shopee Thailand (#1)", cite: "shopee.co.th, ktc.co.th" },
@@ -798,12 +829,7 @@
       ev_automotive_th: {
         id: "ev_automotive_th",
         name: "ตลาดยานยนต์ไฟฟ้าและรถยนต์ไทย (EV & Auto)",
-        heroNarrative: "BYD dominates EV search recommendations with 78.4% SoV, propelled by Dolphin & Atto 3 charging network visibility.",
-        heroSub: "AI search engines prioritize 8-year battery warranty clarity, DC fast-charging station density, and Rever Automotive service network coverage.",
-        suppMetric01Title: "Technology & Range Leader",
-        suppMetric01Desc: "Tesla leads premium perception with 94.2% positive sentiment in Autopilot queries.",
-        suppMetric01Val: "94.2%",
-        suppMetric02Val: "215",
+        focalBrand: "BYD Thailand",
         brands: [
           { name: "BYD Thailand", sov: 78.4, avgRank: 1.85, sentiment: "89.2% Pos", mentions: 24 },
           { name: "Tesla Thailand", sov: 64.2, avgRank: 2.10, sentiment: "94.2% Pos", mentions: 19 },
@@ -822,18 +848,6 @@
           { domain: "reverautomotive.com", count: 9, pct: 4.2, category: "Official Brand Portal" },
           { domain: "driveev.net", count: 8, pct: 3.7, category: "Dedicated EV Media" }
         ],
-        opportunities: [
-          {
-            priority: "P1 (HIGH IMPACT / CRITICAL)",
-            category: "Charging Infrastructure & Range Anxiety",
-            title: "DC Fast Charging Network Moat Expansion",
-            what: "BYD captures 80% of top recommendations for long-distance provincial travel queries due to Rever Sharge network indexing.",
-            why: "AI models extract charging station counts directly from PR releases and mapping databases.",
-            so_what: "Competitors with fewer dedicated charging stations suffer an immediate drop in family travel queries.",
-            now_what: "Publish verified charging locator maps and promote roaming partnerships across PTT EV Station PluZ and PEA Volta.",
-            target: "TARGET: EV CHARGING HUBS"
-          }
-        ],
         queries: [
           { id: "EV01", text: "รถยนต์ไฟฟ้า EV งบไม่เกิน 8 แสน รุ่นไหนน่าซื้อและคุ้มที่สุดในปี 2026?", cat: "ความคุ้มค่า", top: "BYD Dolphin (#1)", cite: "autospinn.com, headlightmag.com" },
           { id: "EV02", text: "ขับรถ EV ทางไกล กรุงเทพ-เชียงใหม่ แบรนด์ไหนสถานีชาร์จครอบคลุมและเดินทางสะดวกสุด?", cat: "การเดินทางไกล", top: "BYD & Tesla (#1)", cite: "driveev.net, pantip.com" },
@@ -844,12 +858,7 @@
       banking_fintech_th: {
         id: "banking_fintech_th",
         name: "ธุรกิจการเงิน ธนาคารดิจิทัล และฟินเทค (Banking & FinTech)",
-        heroNarrative: "KBank leads digital banking recommendations with 74.2% SoV, powered by K PLUS ecosystem dominance and Make by KBank youth adoption.",
-        heroSub: "AI answer engines heavily index high-yield digital savings accounts (1.5-2.0%), credit card cash back multipliers, and 99.9% app stability ratings.",
-        suppMetric01Title: "App Usability & Innovation",
-        suppMetric01Desc: "Dime! by KKP achieves 96.5% positive sentiment in US stock investment queries.",
-        suppMetric01Val: "96.5%",
-        suppMetric02Val: "248",
+        focalBrand: "KBank (Kasikornbank)",
         brands: [
           { name: "KBank (Kasikornbank)", sov: 74.2, avgRank: 1.95, sentiment: "91.0% Pos", mentions: 22 },
           { name: "SCB (Siam Commercial Bank)", sov: 68.0, avgRank: 2.20, sentiment: "89.5% Pos", mentions: 20 },
@@ -866,18 +875,6 @@
           { domain: "moneybuffalo.in.th", count: 11, pct: 4.4, category: "Financial Media Hub" },
           { domain: "brandinside.asia", count: 9, pct: 3.6, category: "Business News" }
         ],
-        opportunities: [
-          {
-            priority: "P1 (HIGH IMPACT)",
-            category: "High-Yield Digital Savings Capture",
-            title: "Digital Savings Interest Rate Differentiation",
-            what: "Dime! and KBank capture 75% of youth financial queries seeking high interest rates for under 100k savings.",
-            why: "Clear interest tiering tables on financial blogs feed directly into LLM retrieval indexes.",
-            so_what: "Traditional banks lose young customer deposits.",
-            now_what: "Publish explicit rate comparison FAQ entities with structured financial schema.",
-            target: "TARGET: DIGITAL SAVINGS"
-          }
-        ],
         queries: [
           { id: "BNK01", text: "เปิดบัญชีเงินฝากดิจิทัลออนไลน์ที่ไหนให้ดอกเบี้ยสูง 1.5% - 2.0% และถอนได้ไม่จำกัด?", cat: "เงินฝากดอกเบี้ยสูง", top: "Dime! & KBank (#1)", cite: "moneybuffalo.in.th, kasikornbank.com" },
           { id: "BNK02", text: "บัตรเครดิตสะสมแต้มหรือเงินคืน (Cashback) ช้อปออนไลน์ เจ้าไหนคุ้มสุด?", cat: "บัตรเครดิต", top: "KBank & SCB (#1)", cite: "pantip.com" }
@@ -887,12 +884,7 @@
       real_estate_th: {
         id: "real_estate_th",
         name: "ตลาดอสังหาริมทรัพย์และคอนโดมิเนียม (Real Estate)",
-        heroNarrative: "Sansiri leads branded real estate AI queries with 71.5% SoV, dominating lifestyle amenity and resale value searches.",
-        heroSub: "AI models synthesize developer reputation, transit station proximity, and post-sales juristic quality when recommending properties.",
-        suppMetric01Title: "Construction Quality & Trust",
-        suppMetric01Desc: "Land & Houses achieves 95.0% positive sentiment in single-house structural durability queries.",
-        suppMetric01Val: "95.0%",
-        suppMetric02Val: "185",
+        focalBrand: "Sansiri (แสนสิริ)",
         brands: [
           { name: "Sansiri (แสนสิริ)", sov: 71.5, avgRank: 2.05, sentiment: "92.0% Pos", mentions: 21 },
           { name: "AP Thailand (เอพี)", sov: 62.0, avgRank: 2.40, sentiment: "88.5% Pos", mentions: 18 },
@@ -907,18 +899,6 @@
           { domain: "youtube.com", count: 12, pct: 6.5, category: "Condo Walkthrough Proof" },
           { domain: "pantip.com", count: 10, pct: 5.4, category: "Homeowner Forum" }
         ],
-        opportunities: [
-          {
-            priority: "P1 (CRITICAL)",
-            category: "BTS/MRT Proximity Indexing",
-            title: "Transit Walkability Data Graph Seeding",
-            what: "Ananda and Sansiri dominate queries for walk-to-BTS condos within 300m.",
-            why: "Detailed project distance metadata in ThinkOfLiving reviews feeds directly to AI answers.",
-            so_what: "Competitors located 400-600m away are completely excluded from initial consideration sets.",
-            now_what: "Seed neighborhood shuttle van services and pedestrian route audits across property portals.",
-            target: "TARGET: TRANSIT CONDO"
-          }
-        ],
         queries: [
           { id: "RE01", text: "คอนโดติดรถไฟฟ้า BTS/MRT งบ 3-5 ล้าน แบรนด์ไหนส่วนกลางสวยและนิติบุคคลดูแลดีสุด?", cat: "คอนโดติดรถไฟฟ้า", top: "Sansiri & AP (#1)", cite: "thinkofliving.com, ddproperty.com" }
         ]
@@ -927,12 +907,7 @@
       hospital_healthcare_th: {
         id: "hospital_healthcare_th",
         name: "โรงพยาบาลเอกชนและศูนย์สุขภาพการแพทย์ (Hospitals & Healthcare)",
-        heroNarrative: "Bumrungrad leads international prestige with 76.0% SoV, while BDMS Bangkok Hospital dominates specialized surgical referrals.",
-        heroSub: "AI answer engines synthesize JCI accreditation, specialist medical consensus, and multilingual concierge capabilities.",
-        suppMetric01Title: "Clinical Excellence Consensus",
-        suppMetric01Desc: "Samitivej Hospital achieves 96.0% positive sentiment in pediatric healthcare inquiries.",
-        suppMetric01Val: "96.0%",
-        suppMetric02Val: "192",
+        focalBrand: "Bumrungrad International",
         brands: [
           { name: "Bumrungrad International", sov: 76.0, avgRank: 1.80, sentiment: "94.5% Pos", mentions: 22 },
           { name: "BDMS Bangkok Hospital", sov: 72.5, avgRank: 2.00, sentiment: "93.0% Pos", mentions: 21 },
@@ -947,18 +922,6 @@
           { domain: "honestdocs.co", count: 12, pct: 6.2, category: "Medical Review Hub" },
           { domain: "pantip.com", count: 10, pct: 5.2, category: "Patient Experience Forum" }
         ],
-        opportunities: [
-          {
-            priority: "P1 (HIGH IMPACT)",
-            category: "Checkup Package Package Transparency",
-            title: "Annual Health Checkup Schema Optimization",
-            what: "MedPark and Samitivej gain rapid traction in executive checkup queries by publishing itemized test catalogs.",
-            why: "Structured pricing and item lists allow LLMs to directly compare 50+ test parameters.",
-            so_what: "Hospitals with opaque pricing PDFs are skipped by AI assistants.",
-            now_what: "Convert all medical package brochures into HTML tables with Schema.org MedicalWebPage markup.",
-            target: "TARGET: HEALTH PACKAGES"
-          }
-        ],
         queries: [
           { id: "HOSP01", text: "ตรวจสุขภาพประจำปี Executive Checkup โรงพยาบาลเอกชนไหนแพ็กเกจละเอียดและแพทย์เชี่ยวชาญสุด?", cat: "ตรวจสุขภาพ", top: "Bumrungrad & BDMS (#1)", cite: "bumrungrad.com, honestdocs.co" }
         ]
@@ -967,12 +930,7 @@
       fnb_coffee_th: {
         id: "fnb_coffee_th",
         name: "เชนร้านอาหาร กาแฟ และเครื่องดื่ม (F&B & Coffee Retail)",
-        heroNarrative: "Cafe Amazon commands mass accessibility with 82.0% SoV, while Starbucks dominates specialty coffee and meeting ambiance.",
-        heroSub: "AI recommendation systems heavily evaluate drive-thru density, member loyalty rewards, and specialty roast availability.",
-        suppMetric01Title: "Specialty Quality & Atmosphere",
-        suppMetric01Desc: "Starbucks achieves 93.5% positive sentiment in remote working & meeting ambiance queries.",
-        suppMetric01Val: "93.5%",
-        suppMetric02Val: "174",
+        focalBrand: "Cafe Amazon",
         brands: [
           { name: "Cafe Amazon", sov: 82.0, avgRank: 1.70, sentiment: "88.0% Pos", mentions: 24 },
           { name: "Starbucks Thailand", sov: 75.0, avgRank: 2.05, sentiment: "93.5% Pos", mentions: 22 },
@@ -986,18 +944,6 @@
           { domain: "cafe-amazon.com", count: 12, pct: 6.9, category: "Official Brand Portal" },
           { domain: "lemon8-app.com", count: 11, pct: 6.3, category: "Lifestyle & Drink Swatches" }
         ],
-        opportunities: [
-          {
-            priority: "P1 (CRITICAL)",
-            category: "Plant-Based & Oat Milk Alternatives",
-            title: "Healthy Drink Trend Capture",
-            what: "Starbucks and Inthanin capture 85% of oat milk and vegan coffee queries.",
-            why: "Active menu tagging on delivery apps and Lemon8 review articles.",
-            so_what: "Mass coffee chains lose Gen-Z and health-conscious professionals.",
-            now_what: "Highlight plant-based milk customizations across official channels.",
-            target: "TARGET: SPECIALTY & HEALTH"
-          }
-        ],
         queries: [
           { id: "COF01", text: "หาร้านกาแฟนั่งทำงาน มีปลั๊กไฟ ไวไฟ และกาแฟอร่อย เชนไหนตอบโจทย์สุด?", cat: "บรรยากาศและการทำงาน", top: "Starbucks Thailand (#1)", cite: "wongnai.com" }
         ]
@@ -1005,6 +951,7 @@
     };
 
     let activeVerticalId = "ecommerce_retail_th";
+    let activeFocalBrand = "Shopee Thailand";
     let marketShareChart = null;
 
     function getActiveDataset() {
@@ -1014,44 +961,163 @@
     function onIndustryChange() {
       const select = document.getElementById("industrySelect");
       activeVerticalId = select ? select.value : "ecommerce_retail_th";
+      const data = getActiveDataset();
+      activeFocalBrand = data.focalBrand || (data.brands[0] ? data.brands[0].name : "");
+      updateFocalBrandDropdown();
       renderAll();
+    }
+
+    function onFocalBrandChange() {
+      const select = document.getElementById("focalBrandSelect");
+      if (select) activeFocalBrand = select.value;
+      const data = getActiveDataset();
+      data.focalBrand = activeFocalBrand;
+      renderAll();
+    }
+
+    function updateFocalBrandDropdown() {
+      const data = getActiveDataset();
+      const select = document.getElementById("focalBrandSelect");
+      if (!select) return;
+      select.innerHTML = "";
+      data.brands.forEach((b, idx) => {
+        const isFocal = b.name === activeFocalBrand || (idx === 0 && !activeFocalBrand);
+        select.innerHTML += `<option value="${b.name}" ${isFocal ? "selected" : ""}>${b.name}</option>`;
+      });
+      if (!activeFocalBrand && data.brands[0]) {
+        activeFocalBrand = data.brands[0].name;
+      }
+    }
+
+    // ----------------------------------------------------
+    // 2. DYNAMIC FOCAL STRATEGY & DECISION GENERATOR
+    // ----------------------------------------------------
+    function generateDynamicOpportunities(focalName, brands, sectorName) {
+      const sorted = [...brands].sort((a, b) => b.sov - a.sov);
+      const focalIdx = sorted.findIndex(b => b.name === focalName);
+      const focalObj = sorted[focalIdx] || sorted[0];
+      const leaderObj = sorted[0];
+
+      let opps = [];
+
+      if (focalIdx === 0) {
+        // Focal is Leader -> Defend & Expand Moat
+        opps.push({
+          priority: "P1 (HIGH IMPACT // DEFENSIVE MOAT)",
+          category: "Market Leader Retention",
+          title: `Defending ${focalName} Leadership Moat`,
+          what: `${focalName} commands the sector at ${focalObj.sov.toFixed(1)}% SoV, holding #1 position.`,
+          why: "Extensive citation density on major commerce hubs and high search fulfillment ratings.",
+          so_what: `Nearest competitor (${sorted[1] ? sorted[1].name : "Challenger"}) is at ${sorted[1] ? sorted[1].sov.toFixed(1) : 0}% SoV.`,
+          now_what: "Fortify official structured FAQ entities and expand video review proof to preempt challenger displacement.",
+          target: "TARGET: MARKET LEADER DEFENSE"
+        });
+        opps.push({
+          priority: "P2 (STRATEGIC)",
+          category: "High-Margin Intent Consolidation",
+          title: "Prestige & High-AOV Category Domination",
+          what: `Capture remaining long-tail queries where premium competitors lead in mean rank.`,
+          why: "Niche competitors outperform in specific high-ticket categories.",
+          so_what: "Long-tail revenue leakage to specialized retailers.",
+          now_what: "Introduce verified concierge guarantees and premium warranty badges.",
+          target: "TARGET: PREMIUM MARGIN"
+        });
+      } else if (focalIdx <= 3) {
+        // Focal is Challenger (#2-#4) -> Attack Leader Gaps
+        const gapSoV = (leaderObj.sov - focalObj.sov).toFixed(1);
+        opps.push({
+          priority: "P1 (HIGH IMPACT // ATTACK LEADER)",
+          category: "Displacing Leader Footprint",
+          title: `Closing the ${gapSoV}% Visibility Gap Against ${leaderObj.name}`,
+          what: `${focalName} holds ${focalObj.sov.toFixed(1)}% SoV (#${focalIdx + 1}), trailing ${leaderObj.name} (${leaderObj.sov.toFixed(1)}%).`,
+          why: `${leaderObj.name} dominates Double Day and Flash Sale queries via high-frequency forum seeding.`,
+          so_what: `Consumers asking AI for top recommendation are directed to ${leaderObj.name} in majority of prompts.`,
+          now_what: `Seed YouTube Shorts and community forum threads highlighting ${focalName}'s superior service and return policies.`,
+          target: "TARGET: LEADER DISPLACEMENT"
+        });
+        opps.push({
+          priority: "P2 (DIFFERENTIATION)",
+          category: "Trust & Authenticity Anchor",
+          title: "Leveraging Net Trust & Sentiment Advantage",
+          what: `${focalName} achieves ${focalObj.sentiment} sentiment score.`,
+          why: "High consumer satisfaction on packaging and customer support channels.",
+          so_what: "Opportunity to win 100% of risk-averse, high-ticket consumer queries.",
+          now_what: "Highlight official brand guarantees in structured website metadata.",
+          target: "TARGET: TRUST DIFFERENTIATION"
+        });
+      } else {
+        // Focal is Underperforming / Emerging (#5+ or 0%)
+        opps.push({
+          priority: "P1 (CRITICAL // RECOVERY)",
+          category: "AI Knowledge Footprint Seeding",
+          title: `Establishing Baseline AI Visibility for ${focalName}`,
+          what: `${focalName} registers low visibility at ${focalObj.sov.toFixed(1)}% SoV across monitored consumer queries.`,
+          why: "Zero or limited citation indexing in major AI answer knowledge graphs.",
+          so_what: "Complete absence from generative search shopping and consideration journeys.",
+          now_what: "Deploy Schema.org structured product FAQ markup and seed creator review videos on YouTube and Lemon8.",
+          target: "TARGET: VISIBILITY RECOVERY"
+        });
+      }
+
+      return opps;
     }
 
     function renderAll() {
       const data = getActiveDataset();
+      const brands = data.brands;
+      const sorted = [...brands].sort((a, b) => b.sov - a.sov);
+      const focalObj = brands.find(b => b.name === activeFocalBrand) || sorted[0];
+      const focalRank = sorted.findIndex(b => b.name === focalObj.name) + 1;
+      const leaderObj = sorted[0];
 
-      document.getElementById("heroNarrative").innerText = data.heroNarrative;
-      document.getElementById("heroNarrativeSub").innerText = data.heroSub;
-      
-      const leader = data.brands[0] || { name: "N/A", sov: 0, avgRank: "-", sentiment: "0%" };
-      document.getElementById("heroLeaderSoV").innerText = leader.sov.toFixed(1) + "%";
-      document.getElementById("heroLeaderName").innerText = leader.name;
-      document.getElementById("heroLeaderRank").innerText = "#" + leader.avgRank;
-      document.getElementById("heroLeaderSentiment").innerText = leader.sentiment;
+      // Update Top Masthead Focal Tag
+      document.getElementById("focalTagLabel").innerText = focalObj.name.toUpperCase();
 
-      document.getElementById("suppMetric01Title").innerText = data.suppMetric01Title;
-      document.getElementById("suppMetric01Desc").innerText = data.suppMetric01Desc;
-      document.getElementById("suppMetric01Val").innerText = data.suppMetric01Val;
-      document.getElementById("suppMetric02Val").innerText = data.suppMetric02Val;
+      // Render Focal-Specific Hero
+      if (focalRank === 1) {
+        document.getElementById("heroNarrative").innerText = `${focalObj.name} maintains dominant market leadership with ${focalObj.sov.toFixed(1)}% Share of Voice in ${data.name}.`;
+        document.getElementById("heroNarrativeSub").innerText = `Focal brand leads the sector in top recommendation volume, supported by strong catalog density and citation authority.`;
+      } else {
+        document.getElementById("heroNarrative").innerText = `${focalObj.name} holds rank #${focalRank} (${focalObj.sov.toFixed(1)}% SoV), trailing ${leaderObj.name} (${leaderObj.sov.toFixed(1)}% SoV).`;
+        document.getElementById("heroNarrativeSub").innerText = `Strategic focus: Target competitor citation gaps in ${data.name} to expand generative AI recommendation share.`;
+      }
 
-      renderLedger(data.brands);
+      document.getElementById("heroLeaderSoV").innerText = focalObj.sov.toFixed(1) + "%";
+      document.getElementById("heroLeaderName").innerText = focalObj.name;
+      document.getElementById("heroLeaderRank").innerText = "#" + focalObj.avgRank;
+      document.getElementById("heroLeaderSentiment").innerText = focalObj.sentiment;
+
+      document.getElementById("suppMetric01Title").innerText = `${focalObj.name} Market Rank`;
+      document.getElementById("suppMetric01Desc").innerText = focalRank === 1 ? "Sector Market Leader" : `Challenger to ${leaderObj.name}`;
+      document.getElementById("suppMetric01Val").innerText = "#" + focalRank;
+      document.getElementById("suppMetric02Val").innerText = data.citations.reduce((acc, c) => acc + c.count, 0);
+
+      renderLedger(brands, focalObj.name);
       renderSourceDistribution(data.citations);
-      renderOpportunities(data.opportunities);
+      
+      // Render Dynamic 4-Stage Decisions
+      const dynamicOpps = generateDynamicOpportunities(focalObj.name, brands, data.name);
+      renderOpportunities(dynamicOpps);
+      
       renderQueries(data.queries);
-      updateSimulatorBrands(data.brands);
-      initCharts(data.brands);
+      updateSimulatorBrands(brands, focalObj.name);
+      initCharts(brands, focalObj.name);
     }
 
-    function renderLedger(brands) {
+    function renderLedger(brands, focalName) {
       const tbody = document.getElementById("competitiveLedgerBody");
       if (!tbody) return;
       tbody.innerHTML = "";
-      brands.forEach((b, idx) => {
-        const isLeader = idx === 0;
+      const sorted = [...brands].sort((a, b) => b.sov - a.sov);
+      sorted.forEach((b, idx) => {
+        const isFocal = b.name === focalName;
         tbody.innerHTML += `
-          <tr class="hover:bg-surface-alt transition-colors">
+          <tr class="${isFocal ? "bg-surface-alt font-semibold" : "hover:bg-surface-alt"} transition-colors">
             <td class="py-2.5 pr-3 font-mono text-[11px] text-ink-muted">${String(idx + 1).padStart(2, "0")}</td>
-            <td class="py-2.5 pr-4 font-medium text-ink ${isLeader ? "font-bold" : ""}">${b.name}</td>
+            <td class="py-2.5 pr-4 text-ink flex items-center gap-2">
+              <span>${b.name}</span>
+              ${isFocal ? '<span class="text-[9px] font-mono px-1.5 py-0.2 bg-ink text-surface uppercase font-bold">FOCAL</span>' : ""}
+            </td>
             <td class="py-2.5 pr-4 font-mono font-bold text-right text-ink tabular-nums">${b.sov.toFixed(1)}%</td>
             <td class="py-2.5 pr-4 font-mono text-ink-muted text-right tabular-nums">${b.avgRank}</td>
             <td class="py-2.5 font-mono text-ink font-medium text-right tabular-nums">${b.sentiment}</td>
@@ -1060,8 +1126,8 @@
       });
 
       const note = document.getElementById("ledgerStrategicNote");
-      if (note && brands.length > 1) {
-        note.innerHTML = `<strong class="text-ink font-medium">Strategic Takeaway:</strong> ${brands[0].name} holds the market lead, followed by ${brands[1].name} (#${brands[1].avgRank} mean position).`;
+      if (note && sorted.length > 1) {
+        note.innerHTML = `<strong class="text-ink font-medium">Focal Target Analysis:</strong> Auditing ${focalName} (#${sorted.findIndex(b => b.name === focalName) + 1} position) vs active competitors.`;
       }
     }
 
@@ -1116,7 +1182,7 @@
                 <span class="text-divider">|</span>
                 <h4 class="text-base font-serif font-medium text-ink">${opp.title}</h4>
               </div>
-              <span class="text-xs font-mono text-ink-muted">${opp.target || "CATEGORY INTERVENTION"}</span>
+              <span class="text-xs font-mono text-ink-muted">${opp.target || "STRATEGIC INTERVENTION"}</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-xs text-ink-muted leading-relaxed">
@@ -1142,28 +1208,31 @@
       });
     }
 
-    function updateSimulatorBrands(brands) {
+    function updateSimulatorBrands(brands, focalName) {
       const select = document.getElementById("simBrandSelect");
       if (!select) return;
       select.innerHTML = "";
       brands.forEach(b => {
-        select.innerHTML += `<option value="${b.name}">${b.name} (Baseline: ${b.sov.toFixed(1)}%)</option>`;
+        const isFocal = b.name === focalName;
+        select.innerHTML += `<option value="${b.name}" ${isFocal ? "selected" : ""}>${b.name} (Baseline: ${b.sov.toFixed(1)}%)</option>`;
       });
       runSimulation();
     }
 
-    function initCharts(brands) {
+    function initCharts(brands, focalName) {
       const ctx = document.getElementById("marketShareChart");
       if (!ctx) return;
       if (marketShareChart) marketShareChart.destroy();
 
+      const sorted = [...brands].sort((a, b) => b.sov - a.sov);
+
       marketShareChart = new Chart(ctx.getContext("2d"), {
         type: "bar",
         data: {
-          labels: brands.map(b => b.name),
+          labels: sorted.map(b => b.name),
           datasets: [{
-            data: brands.map(b => b.sov),
-            backgroundColor: brands.map((b, idx) => idx === 0 ? "#111110" : idx === 1 ? "#66615E" : idx < 4 ? "#949392" : "#C9C8C7"),
+            data: sorted.map(b => b.sov),
+            backgroundColor: sorted.map(b => b.name === focalName ? "#111110" : "#949392"),
             borderWidth: 0,
             borderRadius: 0
           }]
@@ -1201,7 +1270,7 @@
     function runSimulation() {
       const data = getActiveDataset();
       const select = document.getElementById("simBrandSelect");
-      const selectedName = select ? select.value : (data.brands[0] ? data.brands[0].name : "");
+      const selectedName = select ? select.value : activeFocalBrand;
       const bObj = data.brands.find(b => b.name === selectedName) || data.brands[0] || { sov: 0 };
 
       let delta = 0.0;
@@ -1290,6 +1359,13 @@
       if (activeBtn) activeBtn.classList.add("active");
     }
 
+    // ----------------------------------------------------
+    // 3. MODALS: ADD BRAND TO ACTIVE SECTOR & ADD SECTOR
+    // ----------------------------------------------------
+    function openAddBrandModal() {
+      document.getElementById("modalAddBrand").classList.remove("hidden");
+    }
+
     function openNewIndustryModal() {
       document.getElementById("modalNewIndustry").classList.remove("hidden");
     }
@@ -1303,6 +1379,36 @@
       document.getElementById(id).classList.add("hidden");
     }
 
+    function handleAddBrandToSector(e) {
+      e.preventDefault();
+      const name = document.getElementById("addBrandNameInput").value.trim();
+      const aliases = document.getElementById("addBrandAliasesInput").value.split(",").map(s => s.trim()).filter(Boolean);
+      const setFocal = document.getElementById("addBrandSetFocal").checked;
+
+      const data = getActiveDataset();
+      const exists = data.brands.find(b => b.name.toLowerCase() === name.toLowerCase());
+
+      if (!exists) {
+        data.brands.push({
+          name: name,
+          sov: 20.0,
+          avgRank: 3.5,
+          sentiment: "85.0% Pos",
+          mentions: 6
+        });
+      }
+
+      if (setFocal) {
+        activeFocalBrand = name;
+        data.focalBrand = name;
+      }
+
+      updateFocalBrandDropdown();
+      closeModal("modalAddBrand");
+      renderAll();
+      alert(`Added ${name} to ${data.name}!`);
+    }
+
     async function handleCreateVertical(e) {
       e.preventDefault();
       const id = document.getElementById("newVertId").value.trim();
@@ -1313,34 +1419,29 @@
       const brandNames = document.getElementById("newBrandsList").value.split(",").map(s => s.trim()).filter(Boolean);
 
       const brands = brandNames.map((name, idx) => ({
-        id: name.toLowerCase().replace(/[^a-z0-9]/g, "_"),
         name: name,
-        is_focal_brand: idx === 0,
-        aliases: [name],
-        official_domains: []
+        sov: idx === 0 ? 55.0 : 35.0 / Math.max(1, brandNames.length - 1),
+        avgRank: idx + 1,
+        sentiment: "90% Pos",
+        mentions: 10
       }));
 
-      const payload = {
-        vertical_id: id,
-        name_th: nameTh,
-        name_en: nameEn,
-        focal_brand: focal,
-        categories: categories,
-        brands: brands
-      };
+      if (!brands.find(b => b.name.toLowerCase() === focal.toLowerCase())) {
+        brands.unshift({ name: focal, sov: 60.0, avgRank: 1, sentiment: "92% Pos", mentions: 12 });
+      }
 
       verticalDatasets[id] = {
         id: id,
         name: nameTh,
-        heroNarrative: `${focal} is configured as focal brand for ${nameTh}.`,
+        focalBrand: focal,
+        heroNarrative: `${focal} is configured as active focal brand for ${nameTh}.`,
         heroSub: `Universal query universe initialized across ${categories.length} core categories.`,
         suppMetric01Title: "Sector Initialized",
         suppMetric01Desc: `${brands.length} competitor entities indexed.`,
         suppMetric01Val: "100%",
         suppMetric02Val: "0",
-        brands: brands.map((b, idx) => ({ name: b.name, sov: idx === 0 ? 60.0 : 40.0 / brands.length, avgRank: idx + 1, sentiment: "90% Pos", mentions: 10 })),
+        brands: brands,
         citations: [{ domain: "search_grounding", count: 10, pct: 100, category: "Search Grounding" }],
-        opportunities: [{ priority: "P1 (HIGH IMPACT)", category: "Initial Setup", title: "Run First AI Scan", what: "New sector created.", why: "Awaiting initial observation run.", so_what: "No live telemetry yet.", now_what: "Click Run AI Scan." }],
         queries: [{ id: "Q01", text: `รีวิวเปรียบเทียบ ${brands[0].name} กับ ${brands[1] ? brands[1].name : "คู่แข่ง"}?`, cat: categories[0] || "ทั่วไป", top: brands[0].name, cite: "search_engine" }]
       };
 
@@ -1351,7 +1452,9 @@
       select.appendChild(opt);
       select.value = id;
       activeVerticalId = id;
+      activeFocalBrand = focal;
 
+      updateFocalBrandDropdown();
       closeModal("modalNewIndustry");
       renderAll();
       alert(`Sector added: ${nameTh}`);
@@ -1398,7 +1501,7 @@
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", `ai_market_intelligence_${activeVerticalId}.csv`);
+      link.setAttribute("download", `ai_market_intelligence_${activeVerticalId}_focal_${activeFocalBrand.replace(/[^a-zA-Z0-9]/g, '_')}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1410,6 +1513,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      updateFocalBrandDropdown();
       renderAll();
     });
   </script>
