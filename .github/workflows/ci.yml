@@ -27,7 +27,7 @@ jobs:
 
       - name: Import smoke test
         run: |
-          python -c "import src.api, src.runner, src.cli, src.engines, src.analytics, src.storage; print('imports ok')"
+          python -c "import src.api, src.runner, src.cli, src.engines, src.analytics, src.storage, src.security, src.prompts, src.brands, src.ids; print('imports ok')"
 
       - name: Lint (ruff)
         run: |

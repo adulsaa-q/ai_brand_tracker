@@ -1,5 +1,5 @@
 {
-  "run_id": "run_196df35588f6445981eec0e86dda2be0",
+  "run_id": "run_535a28223e86474f9154194bb0567e61",
   "vertical_id": "ecommerce_retail_th",
   "vertical_name": "แพลตฟอร์มอีคอมเมิร์ซและร้านค้าปลีกความงามไทย",
   "focal_brand": {
@@ -267,41 +267,22 @@
       "type": "CATEGORY_VISIBILITY_GAP",
       "priority": "P1 (HIGH IMPACT / LOW EFFORT)",
       "severity": "HIGH",
-      "category": "โปรโมชั่น",
-      "title": "แบรนด์เสียโอกาสการแนะนำในหมวด โปรโมชั่น (2 คำถาม)",
-      "what_is_happening": "จากการตรวจวัด 2 คำถามในหมวดนี้ แบรนด์ Shopee Thailand ไม่ถูกกล่าวถึงในคำตอบของ AI",
-      "why_it_is_happening": "คู่แข่งหลัก (Sephora Thailand, Boots Thailand) ผูกขาดแหล่งอ้างอิงและเนื้อหาใน Category นี้",
-      "so_what": "ลูกค้าที่ค้นหาข้อมูลเปรียบเทียบในหมวดนี้จะถูกชักจูงไปยังคู่แข่งโดยตรง",
-      "now_what": "กระจาย Digital Footprint และสร้างคอนเทนต์ตอบโจทย์คำถาม โปรโมชั่น ลงในแพลตฟอร์มคอมมูนิตี้และเว็บบอร์ด",
-      "missed_query_count": 2,
-      "effort": "MEDIUM (3-4 สัปดาห์)",
-      "confidence": "MEDIUM (อ้างอิงจากจำนวนคำถามที่ตรวจพบในรอบนี้)",
-      "sample_queries": [
-        "ช่วง 11.11 หรือ 12.12 ซื้อเครื่องสำอางแพลตฟอร์มไหนถูกกว่ากัน?",
-        "ของแถมจากแบรนด์เครื่องสำอาง แพลตฟอร์มไหนให้คุ้มที่สุด?"
-      ]
-    },
-    {
-      "id": "opp_02",
-      "type": "CATEGORY_VISIBILITY_GAP",
-      "priority": "P1 (HIGH IMPACT / LOW EFFORT)",
-      "severity": "HIGH",
       "category": "ของแท้",
       "title": "แบรนด์เสียโอกาสการแนะนำในหมวด ของแท้ (3 คำถาม)",
       "what_is_happening": "จากการตรวจวัด 3 คำถามในหมวดนี้ แบรนด์ Shopee Thailand ไม่ถูกกล่าวถึงในคำตอบของ AI",
-      "why_it_is_happening": "คู่แข่งหลัก (Watsons Thailand, Konvy) ผูกขาดแหล่งอ้างอิงและเนื้อหาใน Category นี้",
+      "why_it_is_happening": "คู่แข่งหลัก (Boots Thailand, Konvy) ผูกขาดแหล่งอ้างอิงและเนื้อหาใน Category นี้",
       "so_what": "ลูกค้าที่ค้นหาข้อมูลเปรียบเทียบในหมวดนี้จะถูกชักจูงไปยังคู่แข่งโดยตรง",
       "now_what": "กระจาย Digital Footprint และสร้างคอนเทนต์ตอบโจทย์คำถาม ของแท้ ลงในแพลตฟอร์มคอมมูนิตี้และเว็บบอร์ด",
       "missed_query_count": 3,
       "effort": "MEDIUM (3-4 สัปดาห์)",
       "confidence": "MEDIUM (อ้างอิงจากจำนวนคำถามที่ตรวจพบในรอบนี้)",
       "sample_queries": [
-        "เจอของปลอมบนแพลตฟอร์มออนไลน์บ่อยไหม แล้วไปซื้อที่ไหนปลอดภัย?",
+        "ซื้อน้ำหอม Chanel ออนไลน์ แพลตฟอร์มไหนรับประกันของแท้ 100%?",
         "ซื้อเครื่องสำอางแบรนด์เนมมั่นใจได้ว่าของแท้ ต้องซื้อที่ไหน?"
       ]
     },
     {
-      "id": "opp_03",
+      "id": "opp_02",
       "type": "CATEGORY_VISIBILITY_GAP",
       "priority": "P2 (MEDIUM IMPACT)",
       "severity": "MEDIUM",
@@ -316,6 +297,25 @@
       "confidence": "MEDIUM (อ้างอิงจากจำนวนคำถามที่ตรวจพบในรอบนี้)",
       "sample_queries": [
         "ซื้อเซรั่มวิตามินซี ราคาหลักร้อย แพลตฟอร์มไหนมีให้เลือกเยอะที่สุด?"
+      ]
+    },
+    {
+      "id": "opp_03",
+      "type": "CATEGORY_VISIBILITY_GAP",
+      "priority": "P1 (HIGH IMPACT / LOW EFFORT)",
+      "severity": "HIGH",
+      "category": "โปรโมชั่น",
+      "title": "แบรนด์เสียโอกาสการแนะนำในหมวด โปรโมชั่น (2 คำถาม)",
+      "what_is_happening": "จากการตรวจวัด 2 คำถามในหมวดนี้ แบรนด์ Shopee Thailand ไม่ถูกกล่าวถึงในคำตอบของ AI",
+      "why_it_is_happening": "คู่แข่งหลัก (Sephora Thailand, Boots Thailand) ผูกขาดแหล่งอ้างอิงและเนื้อหาใน Category นี้",
+      "so_what": "ลูกค้าที่ค้นหาข้อมูลเปรียบเทียบในหมวดนี้จะถูกชักจูงไปยังคู่แข่งโดยตรง",
+      "now_what": "กระจาย Digital Footprint และสร้างคอนเทนต์ตอบโจทย์คำถาม โปรโมชั่น ลงในแพลตฟอร์มคอมมูนิตี้และเว็บบอร์ด",
+      "missed_query_count": 2,
+      "effort": "MEDIUM (3-4 สัปดาห์)",
+      "confidence": "MEDIUM (อ้างอิงจากจำนวนคำถามที่ตรวจพบในรอบนี้)",
+      "sample_queries": [
+        "ช่วง 11.11 หรือ 12.12 ซื้อเครื่องสำอางแพลตฟอร์มไหนถูกกว่ากัน?",
+        "ของแถมจากแบรนด์เครื่องสำอาง แพลตฟอร์มไหนให้คุ้มที่สุด?"
       ]
     }
   ],
@@ -348,54 +348,6 @@
   },
   "claims_audit": [
     {
-      "brand": "Allnii",
-      "claim_type": "MARKETING_POLICY",
-      "extracted_claim": "สินค้าแท้ 100%",
-      "audit_verdict": "VERIFIED_OFFICIAL",
-      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
-      "query_id": "q_ctrl_03"
-    },
-    {
-      "brand": "Watsons Thailand",
-      "claim_type": "MARKETING_POLICY",
-      "extracted_claim": "สินค้าแท้ 100%",
-      "audit_verdict": "VERIFIED_OFFICIAL",
-      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
-      "query_id": "q_ctrl_03"
-    },
-    {
-      "brand": "EVEANDBOY",
-      "claim_type": "MARKETING_POLICY",
-      "extracted_claim": "สินค้าแท้ 100%",
-      "audit_verdict": "VERIFIED_OFFICIAL",
-      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
-      "query_id": "q_ctrl_04"
-    },
-    {
-      "brand": "Konvy",
-      "claim_type": "MARKETING_POLICY",
-      "extracted_claim": "สินค้าแท้ 100%",
-      "audit_verdict": "VERIFIED_OFFICIAL",
-      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
-      "query_id": "q_ctrl_04"
-    },
-    {
-      "brand": "Beautrium",
-      "claim_type": "MARKETING_POLICY",
-      "extracted_claim": "สินค้าแท้ 100%",
-      "audit_verdict": "VERIFIED_OFFICIAL",
-      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
-      "query_id": "q_ctrl_02"
-    },
-    {
-      "brand": "Shopee Thailand",
-      "claim_type": "MARKETING_POLICY",
-      "extracted_claim": "สินค้าแท้ 100%",
-      "audit_verdict": "VERIFIED_OFFICIAL",
-      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
-      "query_id": "q_ctrl_01"
-    },
-    {
       "brand": "Boots Thailand",
       "claim_type": "MARKETING_POLICY",
       "extracted_claim": "สินค้าแท้ 100%",
@@ -410,6 +362,54 @@
       "audit_verdict": "VERIFIED_OFFICIAL",
       "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
       "query_id": "q_ctrl_07"
+    },
+    {
+      "brand": "Konvy",
+      "claim_type": "MARKETING_POLICY",
+      "extracted_claim": "สินค้าแท้ 100%",
+      "audit_verdict": "VERIFIED_OFFICIAL",
+      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
+      "query_id": "q_ctrl_06"
+    },
+    {
+      "brand": "EVEANDBOY",
+      "claim_type": "MARKETING_POLICY",
+      "extracted_claim": "สินค้าแท้ 100%",
+      "audit_verdict": "VERIFIED_OFFICIAL",
+      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
+      "query_id": "q_ctrl_04"
+    },
+    {
+      "brand": "Allnii",
+      "claim_type": "MARKETING_POLICY",
+      "extracted_claim": "สินค้าแท้ 100%",
+      "audit_verdict": "VERIFIED_OFFICIAL",
+      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
+      "query_id": "q_ctrl_08"
+    },
+    {
+      "brand": "Beautrium",
+      "claim_type": "MARKETING_POLICY",
+      "extracted_claim": "สินค้าแท้ 100%",
+      "audit_verdict": "VERIFIED_OFFICIAL",
+      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
+      "query_id": "q_ctrl_01"
+    },
+    {
+      "brand": "Shopee Thailand",
+      "claim_type": "MARKETING_POLICY",
+      "extracted_claim": "สินค้าแท้ 100%",
+      "audit_verdict": "VERIFIED_OFFICIAL",
+      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
+      "query_id": "q_ctrl_01"
+    },
+    {
+      "brand": "Watsons Thailand",
+      "claim_type": "MARKETING_POLICY",
+      "extracted_claim": "สินค้าแท้ 100%",
+      "audit_verdict": "VERIFIED_OFFICIAL",
+      "note": "การันตีเฉพาะร้านค้า Official Mall / LazMall / Counter เท่านั้น",
+      "query_id": "q_ctrl_03"
     }
   ],
   "information_lag": {
@@ -421,16 +421,16 @@
   },
   "observations": [
     {
-      "observation_id": "obs_mock_0f2a81e843a349898387381ff1cd89f7",
-      "run_id": "run_196df35588f6445981eec0e86dda2be0",
-      "query_id": "q_ctrl_03",
-      "query_text": "ช่วง 11.11 หรือ 12.12 ซื้อเครื่องสำอางแพลตฟอร์มไหนถูกกว่ากัน?",
+      "observation_id": "obs_mock_3c96453090284fcbabc2f003e896bc6d",
+      "run_id": "run_535a28223e86474f9154194bb0567e61",
+      "query_id": "q_ctrl_07",
+      "query_text": "ซื้อน้ำหอม Chanel ออนไลน์ แพลตฟอร์มไหนรับประกันของแท้ 100%?",
       "provider": "mock",
       "answer_surface": "synthetic",
       "parse_status": "not_applicable",
-      "category": "โปรโมชั่น",
+      "category": "ของแท้",
       "is_control_set": true,
-      "response_raw_text": "[SYNTHETIC] สรุปคำแนะนำสำหรับ: ช่วง 11.11 หรือ 12.12 ซื้อเครื่องสำอางแพลตฟอร์มไหนถูกกว่ากัน?",
+      "response_raw_text": "[SYNTHETIC] สรุปคำแนะนำสำหรับ: ซื้อน้ำหอม Chanel ออนไลน์ แพลตฟอร์มไหนรับประกันของแท้ 100%?",
       "vertical_id": "ecommerce_retail_th",
       "brand_mentions": [
         {
@@ -438,6 +438,36 @@
           "brand_name": "Allnii",
           "mentioned": true,
           "rank": 2,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "negative",
+          "key_strengths_mentioned": [
+            "สินค้าหมดบ่อย"
+          ],
+          "key_weaknesses_mentioned": [
+            "ค่าส่งแพง"
+          ],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "beautrium",
+          "brand_name": "Beautrium",
+          "mentioned": true,
+          "rank": 3,
+          "recommendation_intent": "neutral_mention",
+          "sentiment": "negative",
+          "key_strengths_mentioned": [
+            "สินค้าหมดบ่อย"
+          ],
+          "key_weaknesses_mentioned": [
+            "ค่าส่งแพง"
+          ],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "boots_thailand",
+          "brand_name": "Boots Thailand",
+          "mentioned": true,
+          "rank": 1,
           "recommendation_intent": "strongly_recommended",
           "sentiment": "positive",
           "key_strengths_mentioned": [
@@ -449,41 +479,11 @@
           "price_or_deal_claims": []
         },
         {
-          "brand_id": "beautrium",
-          "brand_name": "Beautrium",
+          "brand_id": "lazada_thailand",
+          "brand_name": "Lazada Thailand",
           "mentioned": true,
           "rank": 4,
-          "recommendation_intent": "strongly_recommended",
-          "sentiment": "negative",
-          "key_strengths_mentioned": [
-            "สินค้าหมดบ่อย"
-          ],
-          "key_weaknesses_mentioned": [
-            "ค่าส่งแพง"
-          ],
-          "price_or_deal_claims": []
-        },
-        {
-          "brand_id": "sephora_thailand",
-          "brand_name": "Sephora Thailand",
-          "mentioned": true,
-          "rank": 1,
           "recommendation_intent": "recommended",
-          "sentiment": "negative",
-          "key_strengths_mentioned": [
-            "สินค้าหมดบ่อย"
-          ],
-          "key_weaknesses_mentioned": [
-            "ค่าส่งแพง"
-          ],
-          "price_or_deal_claims": []
-        },
-        {
-          "brand_id": "watsons_thailand",
-          "brand_name": "Watsons Thailand",
-          "mentioned": true,
-          "rank": 3,
-          "recommendation_intent": "neutral_mention",
           "sentiment": "positive",
           "key_strengths_mentioned": [
             "โปรโมชั่นดี",
@@ -516,39 +516,24 @@
       ]
     },
     {
-      "observation_id": "obs_mock_1d17e87acdb14b95b3d032523134f62e",
-      "run_id": "run_196df35588f6445981eec0e86dda2be0",
-      "query_id": "q_ctrl_08",
-      "query_text": "เจอของปลอมบนแพลตฟอร์มออนไลน์บ่อยไหม แล้วไปซื้อที่ไหนปลอดภัย?",
+      "observation_id": "obs_mock_78434302f6ae45da928b24233daa35fc",
+      "run_id": "run_535a28223e86474f9154194bb0567e61",
+      "query_id": "q_ctrl_06",
+      "query_text": "ซื้อเครื่องสำอางแบรนด์เนมมั่นใจได้ว่าของแท้ ต้องซื้อที่ไหน?",
       "provider": "mock",
       "answer_surface": "synthetic",
       "parse_status": "not_applicable",
       "category": "ของแท้",
       "is_control_set": true,
-      "response_raw_text": "[SYNTHETIC] สรุปคำแนะนำสำหรับ: เจอของปลอมบนแพลตฟอร์มออนไลน์บ่อยไหม แล้วไปซื้อที่ไหนปลอดภัย?",
+      "response_raw_text": "[SYNTHETIC] สรุปคำแนะนำสำหรับ: ซื้อเครื่องสำอางแบรนด์เนมมั่นใจได้ว่าของแท้ ต้องซื้อที่ไหน?",
       "vertical_id": "ecommerce_retail_th",
       "brand_mentions": [
         {
           "brand_id": "allnii",
           "brand_name": "Allnii",
           "mentioned": true,
-          "rank": 3,
-          "recommendation_intent": "recommended",
-          "sentiment": "positive",
-          "key_strengths_mentioned": [
-            "โปรโมชั่นดี",
-            "สินค้าแท้ 100%",
-            "ส่งรวดเร็ว"
-          ],
-          "key_weaknesses_mentioned": [],
-          "price_or_deal_claims": []
-        },
-        {
-          "brand_id": "beautrium",
-          "brand_name": "Beautrium",
-          "mentioned": true,
           "rank": 2,
-          "recommendation_intent": "recommended",
+          "recommendation_intent": "neutral_mention",
           "sentiment": "neutral",
           "key_strengths_mentioned": [
             "สินค้าหมดบ่อย"
@@ -557,18 +542,31 @@
           "price_or_deal_claims": []
         },
         {
-          "brand_id": "watsons_thailand",
-          "brand_name": "Watsons Thailand",
+          "brand_id": "konvy",
+          "brand_name": "Konvy",
           "mentioned": true,
           "rank": 1,
           "recommendation_intent": "recommended",
-          "sentiment": "negative",
+          "sentiment": "positive",
+          "key_strengths_mentioned": [
+            "โปรโมชั่นดี",
+            "สินค้าแท้ 100%",
+            "ส่งรวดเร็ว"
+          ],
+          "key_weaknesses_mentioned": [],
+          "price_or_deal_claims": []
+        },
+        {
+          "brand_id": "watsons_thailand",
+          "brand_name": "Watsons Thailand",
+          "mentioned": true,
+          "rank": 3,
+          "recommendation_intent": "recommended",
+          "sentiment": "neutral",
           "key_strengths_mentioned": [
             "สินค้าหมดบ่อย"
           ],
-          "key_weaknesses_mentioned": [
-            "ค่าส่งแพง"
-          ],
+          "key_weaknesses_mentioned": [],
           "price_or_deal_claims": []
         }
       ],
@@ -594,8 +592,8 @@
       ]
     },
     {
-      "observation_id": "obs_mock_220debe0bc81412bb4591753ebc5531a",
-      "run_id": "run_196df35588f6445981eec0e86dda2be0",
+      "observation_id": "obs_mock_81157ff80e23489aab1cce3dd0bb6b11",
+      "run_id": "run_535a28223e86474f9154194bb0567e61",
       "query_id": "q_ctrl_04",
       "query_text": "ซื้อเซรั่มวิตามินซี ราคาหลักร้อย แพลตฟอร์มไหนมีให้เลือกเยอะที่สุด?",
       "provider": "mock",

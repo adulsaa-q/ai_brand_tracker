@@ -129,10 +129,11 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#0F1F38] selection:text-[#FAF9F8]">
 
-  <!-- Phase 0 remediation: this page still renders bundled sample datasets and
-       is NOT yet wired to the FastAPI backend. Backend integration is Phase 4. -->
-  <div id="demoDataBanner" class="w-full bg-[#6B2326] text-[#FAF9F8] text-center text-[11px] font-mono uppercase tracking-wider py-2 px-4">
-    Demo data — figures below are bundled samples, not live AI observations. Backend wiring in progress.
+  <!-- Data-mode banner. State is driven by the API client below. -->
+  <div id="dataModeBanner" class="w-full text-center text-[11px] font-mono uppercase tracking-wider py-2 px-4 bg-[#6B2326] text-[#FAF9F8]">
+    <span id="dataModeText">Demo data — bundled samples, not live AI observations</span>
+    <button onclick="configureApi()" class="ml-3 underline decoration-dotted hover:opacity-80">API settings</button>
+    <button onclick="loadDemoMode()" class="ml-3 underline decoration-dotted hover:opacity-80">Use demo data</button>
   </div>
 
   <!-- ======================================================
@@ -957,66 +958,51 @@
       }
     }
 
-    function handleDirectWorkspaceSubmit(e) {
+    async function handleDirectWorkspaceSubmit(e) {
       e.preventDefault();
       const myBrand = document.getElementById("directMyBrand").value.trim();
       const compText = document.getElementById("directCompetitors").value.trim();
       const category = document.getElementById("directCategory").value.trim() || "สินค้าและบริการยอดนิยม";
-      
       const compList = compText.split(",").map(s => s.trim()).filter(Boolean);
+      if (!myBrand) { alert("Enter your brand name."); return; }
 
-      const brands = [
-        { name: myBrand, sov: 65.0, avgRank: 2.1, sentiment: "90.0% Pos", mentions: 18 },
-        ...compList.map((name, idx) => ({
-          name: name,
-          sov: idx === 0 ? 75.0 : Math.max(15.0, 50.0 - (idx * 12)),
-          avgRank: idx === 0 ? 1.8 : 2.5 + (idx * 0.6),
-          sentiment: "88.0% Pos",
-          mentions: idx === 0 ? 22 : 12 - idx
-        }))
-      ];
-
-      const customId = "custom_workspace";
-      verticalDatasets[customId] = {
-        id: customId,
-        name: `Custom Workspace (${category})`,
-        focalBrand: myBrand,
-        brands: brands,
-        citations: [
-          { domain: "youtube.com", count: 15, pct: 7.5, category: "Creator Video Proof" },
-          { domain: "pantip.com", count: 12, pct: 6.0, category: "Consumer Forum" },
-          { domain: "lemon8-app.com", count: 10, pct: 5.0, category: "Lifestyle Reviews" },
-          { domain: "official_store.com", count: 9, pct: 4.5, category: "Brand Portal" }
-        ],
-        queries: [
-          { id: "CW01", text: `รีวิวเปรียบเทียบ ${myBrand} กับ ${compList[0] || "คู่แข่ง"} สำหรับ ${category} ข้อดีข้อเสียต่างกันอย่างไร?`, cat: category, top: compList[0] || myBrand, cite: "youtube.com, pantip.com" },
-          { id: "CW02", text: `ซื้อ ${category} ที่มั่นใจเรื่องของแท้และบริการ ระหว่าง ${myBrand} กับ ${compList[1] || compList[0] || "แบรนด์อื่น"} เลือกที่ไหนดี?`, cat: "ความน่าเชื่อถือ", top: myBrand, cite: "pantip.com" },
-          { id: "CW03", text: `โปรโมชั่นลดราคา ${category} แบรนด์ไหนคุ้มค่าที่สุดในงบประหยัด?`, cat: "โปรโมชั่น", top: myBrand, cite: "lemon8-app.com" }
-        ]
+      // Real flow: create/replace a vertical, then run a scan against it.
+      const slug = "cw_" + myBrand.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 40) || "cw_workspace";
+      const mkBrand = (name, focal) => ({
+        id: name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 60) || "brand",
+        name, aliases: [], official_domains: [], is_focal_brand: !!focal
+      });
+      const payload = {
+        vertical_id: slug,
+        name_th: `${myBrand} — ${category}`,
+        name_en: `${myBrand} custom workspace`,
+        focal_brand: myBrand,
+        categories: [category],
+        brands: [mkBrand(myBrand, true), ...compList.map(c => mkBrand(c, false))]
       };
 
-      activeVerticalId = customId;
-      activeFocalBrand = myBrand;
-
-      const select = document.getElementById("industrySelect");
-      if (select) select.value = customId;
-
-      renderAll();
-      alert(`Workspace updated! Analyzing ${myBrand} vs ${compList.length} competitors in ${category}.`);
+      try {
+        setScanBanner(`Creating workspace "${myBrand}"…`);
+        await apiPost("/api/v1/verticals", payload);
+        const engine = (document.getElementById("scanEngineType") || {}).value || "mock";
+        await runScanFlow(slug, engine, 15, true);
+      } catch (err) {
+        setFailedBanner(err.message || String(err));
+        alert("Could not run workspace scan: " + (err.message || err));
+      }
     }
 
-    function onIndustryChange() {
+    async function onIndustryChange() {
       const select = document.getElementById("industrySelect");
       activeVerticalId = select ? select.value : "ecommerce_retail_th";
+
+      if (DATA_MODE !== "demo") {
+        try { await loadLive(activeVerticalId); return; }
+        catch (err) { setNoDataBanner(activeVerticalId); }
+      }
       const data = getActiveDataset();
       activeFocalBrand = data.focalBrand || (data.brands[0] ? data.brands[0].name : "");
-      
-      if (document.getElementById("directMyBrand")) {
-        document.getElementById("directMyBrand").value = data.focalBrand || "";
-        document.getElementById("directCompetitors").value = data.brands.filter(b => b.name !== data.focalBrand).map(b => b.name).join(", ");
-        document.getElementById("directCategory").value = data.name.replace(/\(TH\)/, "").trim();
-      }
-
+      prefillWorkspaceInputs();
       renderAll();
     }
 
@@ -1099,7 +1085,15 @@
 
     function renderAll() {
       const data = getActiveDataset();
-      const brands = data.brands;
+      const brands = data.brands || [];
+      if (!brands.length) {
+        document.getElementById("heroNarrative").innerText = "No brand observations available for this sector yet.";
+        document.getElementById("heroNarrativeSub").innerText = "Run a scan to populate live data.";
+        ["competitiveLedgerBody", "sourceDistributionList", "strategicNotesContainer", "queryTableBody"].forEach(id => {
+          const el = document.getElementById(id); if (el) el.innerHTML = "";
+        });
+        return;
+      }
       const sorted = [...brands].sort((a, b) => b.sov - a.sov);
       const focalObj = brands.find(b => b.name === activeFocalBrand) || sorted[0];
       const focalRank = sorted.findIndex(b => b.name === focalObj.name) + 1;
@@ -1127,12 +1121,14 @@
       document.getElementById("suppMetric02Val").innerText = data.citations.reduce((acc, c) => acc + c.count, 0);
 
       renderLedger(brands, focalObj.name);
-      renderSourceDistribution(data.citations);
-      
-      const dynamicOpps = generateDynamicOpportunities(focalObj.name, brands, data.name);
-      renderOpportunities(dynamicOpps);
-      
-      renderQueries(data.queries);
+      renderSourceDistribution(data.citations || []);
+
+      const opps = (data.opportunities && data.opportunities.length)
+        ? data.opportunities
+        : generateDynamicOpportunities(focalObj.name, brands, data.name);
+      renderOpportunities(opps);
+
+      renderQueries(data.queries || []);
       updateSimulatorBrands(brands, focalObj.name);
       initCharts(brands, focalObj.name);
     }
@@ -1170,8 +1166,11 @@
       if (!container) return;
       container.innerHTML = "";
       if (taxonomyList) taxonomyList.innerHTML = "";
-
-      const maxCount = Math.max(...citations.map(c => c.count));
+      if (!citations.length) {
+        container.innerHTML = '<p class="text-xs text-ink-muted italic">No citation data in this run.</p>';
+        return;
+      }
+      const maxCount = Math.max(...citations.map(c => c.count)) || 1;
       citations.forEach((c, idx) => {
         const pctWidth = (c.count / maxCount) * 100;
         container.innerHTML += `
@@ -1406,29 +1405,49 @@
       const engine = document.getElementById("scanEngineType").value;
       const count = parseInt(document.getElementById("scanQueryCount").value, 10);
       const includeCtrl = document.getElementById("scanIncludeControl").checked;
-
       closeModal("modalScanLauncher");
-      document.getElementById("modalScanProgress").classList.remove("hidden");
+      try {
+        await runScanFlow(vertId, engine, count, includeCtrl);
+      } catch (err) {
+        closeModal("modalScanProgress");
+        setFailedBanner(err.message || String(err));
+        alert("Scan failed: " + (err.message || err));
+      }
+    }
 
-      let current = 0;
-      const interval = setInterval(() => {
-        current += 1;
-        const pct = Math.min(100.0, Math.round((current / count) * 100));
+    // POST /scan -> poll /scan/{id}/progress -> GET /metrics/{vertical} -> render
+    async function runScanFlow(verticalId, engine, count, includeControl) {
+      document.getElementById("modalScanProgress").classList.remove("hidden");
+      document.getElementById("scanStatusBadge").innerText = "QUEUED";
+      document.getElementById("scanProgressBar").style.width = "0%";
+      setScanBanner(`Scan queued (${engine}) for ${verticalId}…`);
+
+      const start = await apiPost("/api/v1/scan", {
+        vertical_id: verticalId, engine_type: engine, count: count, include_control_set: includeControl
+      });
+      const taskId = start.task_id;
+
+      let done = false;
+      while (!done) {
+        await new Promise(r => setTimeout(r, 900));
+        const p = await apiGet(`/api/v1/scan/${taskId}/progress`);
+        const pct = Number(p.progress_pct || 0);
         document.getElementById("scanProgressBar").style.width = pct + "%";
         document.getElementById("scanPctText").innerText = pct.toFixed(1) + "%";
-        document.getElementById("scanCounterText").innerText = `Scanning query ${current} of ${count}...`;
-        document.getElementById("scanCurrentQuery").innerText = `[${engine.toUpperCase()}] Auditing Thai Consumer Query #${current}...`;
+        document.getElementById("scanStatusBadge").innerText = p.status;
+        document.getElementById("scanCounterText").innerText =
+          `${p.completed || 0} / ${p.total || count} observations`;
+        document.getElementById("scanCurrentQuery").innerText =
+          `[${(p.engine_type || engine).toUpperCase()}] ${p.current_query || ""}`;
 
-        if (current >= count) {
-          clearInterval(interval);
-          document.getElementById("scanStatusBadge").innerText = "COMPLETED";
-          setTimeout(() => {
-            closeModal("modalScanProgress");
-            alert(`DEMO ONLY: no scan was run and nothing was persisted. This button is not yet connected to the backend (POST /api/v1/scan). Showing bundled sample data.`);
-            renderAll();
-          }, 800);
+        if (p.status === "COMPLETED") { done = true; }
+        else if (p.status === "FAILED") {
+          throw new Error(p.error || "scan failed on the server");
         }
-      }, 100);
+      }
+
+      closeModal("modalScanProgress");
+      await loadLive(verticalId);
     }
 
     function exportData() {
@@ -1448,21 +1467,166 @@
       document.body.removeChild(link);
     }
 
-    function refreshData() {
-      renderAll();
-      alert("DEMO ONLY: re-rendered bundled sample data. Not connected to the backend yet.");
+    async function refreshData() {
+      if (DATA_MODE === "demo") {
+        renderAll();
+        return;
+      }
+      try {
+        await loadLive(activeVerticalId);
+      } catch (err) {
+        setFailedBanner(err.message || String(err));
+      }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      // Prefill workspace inputs on initial load
+    function prefillWorkspaceInputs() {
       const data = getActiveDataset();
       if (document.getElementById("directMyBrand")) {
-        document.getElementById("directMyBrand").value = data.focalBrand || "Shopee Thailand";
-        document.getElementById("directCompetitors").value = data.brands.filter(b => b.name !== data.focalBrand).map(b => b.name).slice(0, 4).join(", ");
-        document.getElementById("directCategory").value = "สกินแคร์และเครื่องสำอาง";
+        document.getElementById("directMyBrand").value = data.focalBrand || "";
+        document.getElementById("directCompetitors").value =
+          data.brands.filter(b => b.name !== data.focalBrand).map(b => b.name).slice(0, 4).join(", ");
+        document.getElementById("directCategory").value =
+          (data.name || "").replace(/\(.*\)/, "").trim();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderAll();
+      prefillWorkspaceInputs();
+      // Try to show real data for the default vertical; fall back to demo.
+      try {
+        await loadLive(activeVerticalId, { silentIfMissing: true });
+      } catch (_e) {
+        loadDemoMode();
+      }
+    });
+
+    // ===================================================================
+    //  API CLIENT + LIVE/DEMO DATA MODE  (Phase 4 backend integration)
+    // ===================================================================
+    let DATA_MODE = "demo"; // "demo" | "live" | "historical"
+    const API_BASE = () => (localStorage.getItem("aibt_api_base") || "").replace(/\/+$/, "");
+    const API_KEY = () => localStorage.getItem("aibt_api_key") || "";
+
+    function _headers(json) {
+      const h = {};
+      if (json) h["Content-Type"] = "application/json";
+      if (API_KEY()) h["X-API-Key"] = API_KEY();
+      return h;
+    }
+    async function apiGet(path) {
+      const r = await fetch(API_BASE() + path, { headers: _headers(false) });
+      if (!r.ok) throw new Error(`GET ${path} -> ${r.status} ${(await r.text()).slice(0, 200)}`);
+      return r.json();
+    }
+    async function apiPost(path, body) {
+      const r = await fetch(API_BASE() + path, {
+        method: "POST", headers: _headers(true), body: JSON.stringify(body)
+      });
+      if (!r.ok) throw new Error(`POST ${path} -> ${r.status} ${(await r.text()).slice(0, 200)}`);
+      return r.json();
+    }
+
+    function configureApi() {
+      const base = prompt("API base URL (blank = same origin as this page):", API_BASE());
+      if (base !== null) localStorage.setItem("aibt_api_base", base.trim());
+      const key = prompt("API key (X-API-Key). Leave blank if the server runs in open mode:", API_KEY());
+      if (key !== null) localStorage.setItem("aibt_api_key", key.trim());
+      loadLive(activeVerticalId).catch(err => setFailedBanner(err.message || String(err)));
+    }
+
+    function setBanner(cls, text) {
+      const b = document.getElementById("dataModeBanner");
+      b.className = "w-full text-center text-[11px] font-mono uppercase tracking-wider py-2 px-4 " + cls;
+      document.getElementById("dataModeText").innerText = text;
+    }
+    function setDemoBanner() { setBanner("bg-[#6B2326] text-[#FAF9F8]", "Demo data — bundled samples, not live AI observations"); }
+    function setLiveBanner(meta) {
+      setBanner("bg-[#1E3E30] text-[#FAF9F8]",
+        `Live data · run ${meta.run_id || "?"} · engine ${meta.engine_type || "?"} · ${meta.total_queries || 0} queries`);
+    }
+    function setHistoricalBanner(meta) {
+      setBanner("bg-[#0F1F38] text-[#FAF9F8]", `Historical data · run ${meta.run_id || "?"} · engine ${meta.engine_type || "?"}`);
+    }
+    function setScanBanner(text) { setBanner("bg-[#0F1F38] text-[#FAF9F8]", text); }
+    function setFailedBanner(text) { setBanner("bg-[#6B2326] text-[#FAF9F8]", "Error — " + text); }
+    function setNoDataBanner(v) { setBanner("bg-[#66615E] text-[#FAF9F8]", `No scan yet for "${v}" — run a scan to see live data`); }
+
+    function loadDemoMode() {
+      DATA_MODE = "demo";
+      setDemoBanner();
+      if (!verticalDatasets[activeVerticalId]) activeVerticalId = "ecommerce_retail_th";
+      activeFocalBrand = getActiveDataset().focalBrand;
+      renderAll();
+    }
+
+    // Map the API run summary onto the dashboard's internal dataset shape.
+    function adaptApiMetrics(api) {
+      const brands = (api.metrics?.brands || []).map(b => ({
+        name: b.brand,
+        sov: Number(b.share_of_voice_pct || 0),
+        avgRank: b.average_rank == null ? 0 : Number(b.average_rank),
+        sentiment: `${(b.positive_pct == null ? b.net_sentiment_score : b.positive_pct) || 0}% Pos`,
+        mentions: b.mentions || 0
+      }));
+      const citations = (api.citations_analysis?.domain_rankings || []).map(d => ({
+        domain: d.domain, count: d.citation_count || 0,
+        pct: d.influence_share_pct || 0, category: d.category || "Web Source"
+      }));
+      const queries = (api.observations || []).slice(0, 20).map(o => {
+        const ranked = (o.brand_mentions || []).filter(m => m.mentioned).sort((a, b) => (a.rank || 99) - (b.rank || 99));
+        return {
+          id: o.query_id, text: o.query_text, cat: o.category || "General",
+          top: ranked[0]?.brand_name || "—",
+          cite: (o.citations || []).slice(0, 2).map(c => c.domain).join(", ") || "—"
+        };
+      });
+      const opportunities = (api.opportunities || []).map(o => ({
+        priority: o.priority || "P2", title: o.title || "Opportunity",
+        target: o.category || "STRATEGIC INTERVENTION",
+        badgeColor: "bg-crimson-light text-crimson", borderColor: "border-crimson",
+        what: o.what_is_happening || "", why: o.why_it_is_happening || "",
+        so_what: o.so_what || "", now_what: o.now_what || ""
+      }));
+      return {
+        id: api.vertical_id,
+        name: api.vertical_name || api.vertical_id,
+        focalBrand: api.focal_brand?.name || (brands[0] && brands[0].name) || "",
+        brands, citations, queries, opportunities,
+        _meta: {
+          run_id: api.run_id, engine_type: api.engine_type,
+          data_mode: api.data_mode, total_queries: api.total_queries,
+          run_stats: api.run_stats, primary_surface: api.metrics?.primary_surface
+        }
+      };
+    }
+
+    async function loadLive(verticalId, opts) {
+      opts = opts || {};
+      const api = await apiGet(`/api/v1/metrics/${encodeURIComponent(verticalId)}`);
+      if (api.status === "PENDING_SCAN" || !api.run_id || !(api.metrics?.brands || []).length) {
+        if (opts.silentIfMissing) { throw new Error("no live data yet"); }
+        setNoDataBanner(verticalId);
+        DATA_MODE = "live";
+        return;
+      }
+      const ds = adaptApiMetrics(api);
+      verticalDatasets[verticalId] = ds;
+      activeVerticalId = verticalId;
+      activeFocalBrand = ds.focalBrand;
+      DATA_MODE = api.data_mode === "synthetic" ? "demo" : "live";
+      const select = document.getElementById("industrySelect");
+      if (select && [...select.options].some(o => o.value === verticalId)) select.value = verticalId;
+
+      if (api.data_mode === "synthetic") {
+        setBanner("bg-[#6B2326] text-[#FAF9F8]",
+          `Synthetic (mock) run ${api.run_id} — not real AI observations, do not use for decisions`);
+      } else {
+        setLiveBanner(ds._meta);
       }
       renderAll();
-    });
+      prefillWorkspaceInputs();
+    }
   </script>
 </body>
 </html>

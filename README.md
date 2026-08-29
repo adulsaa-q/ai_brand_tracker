@@ -1,163 +1,124 @@
 # Thailand AI Market & Decision Intelligence Platform
 
-[![Python 3.12](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/Backend-FastAPI_REST-009688.svg)](https://fastapi.tiangolo.com/)
-[![DuckDB](https://img.shields.io/badge/Lakehouse-DuckDB_Star_Schema-FFF000.svg)](https://duckdb.org/)
-[![Code Quality: Ruff](https://img.shields.io/badge/Code_Quality-Ruff_100%25-green.svg)](https://github.com/astral-sh/ruff)
-[![Tests: Pytest](https://img.shields.io/badge/Tests-28_Passed_100%25-success.svg)](https://docs.pytest.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Tracks how generative AI answers (Gemini, OpenRouter models) and search surfaces
+(Google SERP via Serper, web retrieval via Tavily) talk about brands when Thai
+consumers ask "ซื้อ/ใช้บริการที่ไหนดี" — measuring **AI Share of Voice**,
+recommendation rank, sentiment, and which web domains drive those answers, then
+turning it into a 4-stage decision memo (*What → Why → So what → Now what*).
 
-A production-grade **Generative Engine Optimization (GEO)**, **AI Share of Voice (SoV)**, **Multi-Model Search Grounding**, and **Consumer Decision Intelligence Platform** engineered for continuous market surveillance, competitive gap analysis, and automated executive decision memos across Thailand's digital commerce ecosystems.
+> **Status:** remediation phases 0–4 complete. See `docs/STATUS.md` for the
+> honest per-feature breakdown (Shipped / Experimental / Demo / Roadmap) and
+> `docs/adr/` for the architecture decisions.
 
 ---
 
-## 1. System Architecture
+## 1. Architecture (as built)
 
-```mermaid
-graph TD
-    User["Executive / Analyst / Strategist"] --> UI["Zero-Terminal Web Terminal (index.html)<br/>Direct Custom Brand Workspace & Focal Switcher"]
-    UI --> API["FastAPI Backend REST & SSE Engine (src/api.py)<br/>Port 8000 Static Mount & API Endpoints"]
-    
-    subgraph Core Universe & Observation Layer
-        API --> Gen["Domain-Adaptive Query Generator V2 (src/universe/generator.py)<br/>6 Intent Pillars × Thai Consumer Personas"]
-        Gen --> Engines["Multi-Engine Observation Suite (src/engines/)"]
-        Engines --> E1["Google Gemini 2.5 Flash (Search Grounding)"]
-        Engines --> E2["Tavily Search API (Citation Graph)"]
-        Engines --> E3["Serper.dev (Google Organic SERP gl=th)"]
-        Engines --> E4["OpenRouter Free Tier (Dynamic Benchmark)"]
-        Engines --> E5["Mock Engine (0-Cost Deterministic Sandbox)"]
-    end
-    
-    subgraph Data Lakehouse & Persistence
-        Engines --> Pydantic["Pydantic v2 Parsing (Rank, Sentiment, Citations, Claims)"]
-        Pydantic --> DuckDB[("DuckDB Star Schema Lakehouse (data/lakehouse.duckdb)<br/>dim_brand · dim_query · fact_observation")]
-        Pydantic --> SQLite[("SQLite State Store (data/tracker_v3.db)")]
-    end
-    
-    subgraph Decision Intelligence & Analytics
-        DuckDB --> Analytics["Decision Intelligence Engine (src/analytics/)<br/>4-Stage Strategy Memo · What-If Simulator · Citation Graph"]
-        Analytics --> UI
-        Analytics --> CSV["CSV / Report Exporter"]
-    end
+```
+CLI / FastAPI  ─┬─►  run_intelligence_pipeline (src/runner.py)
+                │
+                │   QueryUniverseGenerator ──► EngineFactory ──► one engine:
+                │      config/*.yaml            mock | gemini | openrouter | serper | tavily
+                │                                     │  (shared retry/backoff, typed errors,
+                │                                     │   versioned prompts, UUID obs ids)
+                │                                     ▼
+                │                          RawObservation  (provider + answer_surface + parse_status)
+                │                                     │
+                │                                     ▼
+                │                          DuckDB star schema  ── the single analytical store
+                │                          dim_brand · dim_query · fact_observation
+                │                          fact_brand_mention · fact_citation   (all tagged run_id)
+                │                                     │
+                │        AnalyticsRepository.load_observations(run_id)  ◄── analytics read HERE
+                │                                     ▼
+                │        MarketMetrics (per answer_surface) · OpportunityFinder ·
+                │        CitationInfluence · ClaimIntelligence · InformationLag
+                │                                     ▼
+                └──►  data/run_<id>.json  +  data/latest_run_summary_<vertical>.json  (atomic)
+
+FastAPI (src/api.py, :8000)  — auth via src/security.py, scan concurrency/quota limits
+   GET  /api/v1/health                     liveness + dependency checks + auth mode
+   GET  /api/v1/verticals                  list sectors
+   POST /api/v1/verticals        [write]   create/replace a custom sector
+   POST /api/v1/scan             [write]   queue a background scan
+   GET  /api/v1/scan/{id}/progress         live progress + run_stats
+   GET  /api/v1/metrics/{vertical}         last run summary (or PENDING_SCAN)
+   GET  /api/v1/export/{vertical}          CSV / JSON
+   GET  /                                  web dashboard (dashboard/web/index.html)
+
+dashboard/web/index.html  — calls the API above; shows LIVE / SYNTHETIC / NO-DATA / ERROR states
+dashboard/app.py          — Streamlit view of data/latest_run_summary.json
 ```
 
 ---
 
-## 2. Core Capabilities & Highlights
-
-* **Universal Multi-Vertical Support**:
-  - Pre-configured with 6 benchmark sectors:
-    1. `ecommerce_retail_th` (E-Commerce & Beauty Retail)
-    2. `ev_automotive_th` (Electric Vehicles & Automotive)
-    3. `banking_fintech_th` (Banking, Digital Loans & FinTech)
-    4. `real_estate_th` (Real Estate & Condominiums)
-    5. `hospital_healthcare_th` (Private Hospitals & Healthcare)
-    6. `fnb_coffee_th` (Food, Beverage & Coffee Retail Chains)
-* **Custom Brand Workspace (Zero-Terminal Direct Input)**:
-  - Users can directly type their own brand, competitor entities, and market category right on the UI to receive instant real-time telemetry and customized 4-stage strategic recommendations.
-* **Domain-Adaptive Query Universe Generator V2**:
-  - Parameterized across **6 Consumer Intent Pillars** (*Promotion, Trust/Authenticity, Variety/Quality, Service/Speed, Payment/0%, Comparison*) with seeded reproducibility.
-* **4-Stage Decision Intelligence Framework**:
-  - Structures business actions into **What is happening ➔ Why ➔ So what (Impact) ➔ Now what (Action)** categorized by P1 Critical, P2 Defensive, and P3 Opportunities.
-* **Full-Stack Single-Port Server**:
-  - Serves both high-performance REST APIs and the rich web terminal on a single unified port (`http://127.0.0.1:8000`).
-
----
-
-## 3. Quickstart & Command-Line Usage
-
-### 3.1 Start Full-Stack Server (Web Terminal + REST API)
+## 2. Quickstart
 
 ```bash
-# Launch FastAPI backend + Web Terminal on port 8000 and auto-open browser
-python src/cli.py serve --port 8000
-```
-Open your browser at **[http://localhost:8000](http://localhost:8000)**.
+pip install -e ".[dev]"                 # core + tests
+pip install -e ".[dev,dashboard]"       # + Streamlit dashboard
 
-### 3.2 Run Autonomous AI Intelligence Scan via CLI
+# run a scan (mock = deterministic, zero cost, clearly labelled synthetic)
+python -m src.cli run --vertical ev_automotive_th --count 30 --engine mock
+
+# real generative run (needs GEMINI_API_KEY)
+python -m src.cli run --vertical ecommerce_retail_th --count 15 --engine gemini
+
+# full-stack server + web dashboard
+python -m src.cli serve --port 8000      # http://localhost:8000
+```
+
+### API security
+
+`AIBT_API_KEYS` unset → **open mode** (writes allowed, logged, `/health` says
+`auth_mode: "open"`). Set it (comma-separated) to require `X-API-Key` /
+`Authorization: Bearer` on writes. See `SECURITY.md`.
+
+---
+
+## 3. Verticals
+
+Pre-configured: `ecommerce_retail_th`, `ev_automotive_th`, `banking_fintech_th`,
+`real_estate_th`, `hospital_healthcare_th`, `fnb_coffee_th`. Add your own via
+`POST /api/v1/verticals` or by editing `config/entities.yaml`.
+
+---
+
+## 4. Tests & quality
 
 ```bash
-# Run scan across any vertical with 30 invariant benchmark queries
-python src/cli.py run --vertical ev_automotive_th --count 30 --engine mock
-
-# Run real-world Google Gemini 2.5 Flash Grounded Scan
-python src/cli.py run --vertical ecommerce_retail_th --count 15 --engine gemini
+pytest tests/ -q          # unit + contract + integration + acceptance
+ruff check . && ruff format --check .
+python -m build --wheel   # packaging smoke
 ```
 
-### 3.3 Synthesize Domain Queries
+CI (`.github/workflows/ci.yml`) runs editable install, wheel build, import
+smoke, ruff, and the full test suite.
 
-```bash
-# Generate deterministic domain-adaptive query suite
-python src/cli.py generate --vertical banking_fintech_th --count 20 --seed 42
+---
+
+## 5. Project layout
+
+```
+config/            entities.yaml · control_benchmark_set.yaml · thai_personas.yaml
+src/
+  runner.py        end-to-end pipeline (persist -> reload from DuckDB -> analyse)
+  api.py           FastAPI REST + static mount
+  security.py      auth dependency + scan limiter
+  prompts.py       versioned prompt registry
+  ids.py           UUID observation / run ids
+  brands.py        canonical brand-identity resolution
+  universe/        QueryUniverseGenerator + Thai temporal calendar
+  engines/         mock · gemini · openrouter · serper · tavily  (+ _http, _parsing)
+  storage/         duckdb_store.py  (SQLite dropped — ADR 0001)
+  analytics/       metrics · opportunity · citation_graph · claim_intelligence ·
+                   information_lag · simulator · repository
+docs/adr/          0001 single store · 0002 answer surfaces + temporal context
+docs/STATUS.md     per-feature Shipped/Experimental/Demo/Roadmap
 ```
 
 ---
 
-## 4. API Endpoints Reference
+## 6. License
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/v1/health` | Service health status and system version |
-| `GET` | `/api/v1/verticals` | List all available benchmark verticals and metadata |
-| `POST` | `/api/v1/verticals` | Dynamically create a custom industry sector |
-| `POST` | `/api/v1/scan` | Trigger background AI observation scan worker |
-| `GET` | `/api/v1/scan/{task_id}/progress` | Real-time scan progress %, query counter, and log stream |
-| `GET` | `/api/v1/metrics/{vertical_id}` | Aggregated DuckDB market metrics, SoV, and sentiment |
-| `GET` | `/api/v1/export/{vertical_id}` | Export full observation report in CSV or JSON format |
-| `GET` | `/` | Web Executive Terminal (`dashboard/web/index.html`) |
-
----
-
-## 5. Automated Test Suite & Quality Verification
-
-Run the comprehensive unit and integration test suite:
-
-```bash
-# Run Pytest suite
-pytest tests/
-
-# Check 100% Ruff lint and formatting compliance
-ruff check .
-ruff format --check .
-```
-
-* **Test Coverage**: 28 passed tests across API routes, query generators, multi-vertical engines, lakehouse persistence, and opportunity models.
-
----
-
-## 6. Project Structure
-
-```
-ai_brand_tracker/
-├── config/
-│   ├── entities.yaml               # 6 core benchmark verticals & competitor registry
-│   ├── control_benchmark_set.yaml  # Longitudinal invariant 30 queries
-│   ├── thai_personas.yaml          # Consumer persona definitions
-│   └── settings.yaml               # Engine weights and scoring parameters
-├── dashboard/
-│   └── web/
-│       └── index.html              # Flagship Executive Web Terminal
-├── data/
-│   ├── lakehouse.duckdb            # Star Schema OLAP Lakehouse
-│   └── tracker_v3.db               # Transactional SQLite store
-├── docs/
-│   ├── V5_DELTA_BLUEPRINT.md       # V5 Architectural Delta Blueprint
-│   ├── UNIVERSAL_AI_PLATFORM_V4_BLUEPRINT.md
-│   └── research/                   # Thai consumer & GEO research papers
-├── src/
-│   ├── analytics/                  # Decision intelligence, opportunity finder, simulator
-│   ├── engines/                    # Multi-engine adapters (Gemini, Tavily, Serper, OpenRouter, Mock)
-│   ├── models/                     # Pydantic v2 domain schemas
-│   ├── storage/                    # DuckDB and SQLite storage managers
-│   ├── universe/                   # Domain-adaptive Query Universe Generator V2
-│   ├── api.py                      # FastAPI REST & SSE Background Server
-│   ├── cli.py                      # Unified CLI entrypoint
-│   └── runner.py                   # Intelligence scan execution pipeline
-└── tests/                          # 28/28 Unit & integration test suites
-```
-
----
-
-## 7. License & Authorship
-
-Developed by **Adul Saa (Q)** for autonomous enterprise intelligence operations. Released under the [MIT License](LICENSE).
+MIT. Developed by Adul Sa-a (Q).
