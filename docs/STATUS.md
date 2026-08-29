@@ -1,6 +1,27 @@
-# Feature status (post remediation phases 0–4)
+# Feature status (post remediation phases 0–5)
 
 Honest per-feature state. Updated after implementation, not before.
+
+## North star (not yet met)
+
+Today the platform **observes** how AI answers recommend brands. To answer real
+enterprise GEO / GSO / AEO needs it must also **prescribe**: evidence-linked,
+owner-assignable actions a marketing team can execute and then measure.
+
+Gap between here and there:
+
+- Recommendations are templated prose, not tied to the specific query, the
+  competitor that won it, or the citation/domain that drove it.
+- No citation to content-gap mapping (which page/entity to create or improve,
+  and where to earn placement).
+- No brand-entity consistency check across sources (structured data,
+  Wikidata / Wikipedia presence, canonical naming).
+- No longitudinal "did our intervention move SoV" loop (needs `/trends`).
+- Query universe is 6 intent pillars, not yet a real map of how customers ask.
+- Output is a JSON summary, not an exec-ready brief with effort / impact /
+  confidence per action.
+
+This is the main product direction, after the UX pass.
 
 ## Shipped — works and is tested
 
