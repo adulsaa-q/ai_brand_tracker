@@ -3,6 +3,7 @@ from .claim_intelligence import ClaimIntelligenceEngine
 from .information_lag import AIInformationLagTracker
 from .metrics import MarketMetricsEngine
 from .opportunity import OpportunityFinder
+from .simulator import MarketStrategySimulator
 
 __all__ = [
     "CitationInfluenceAnalyzer",
@@ -10,4 +11,5 @@ __all__ = [
     "AIInformationLagTracker",
     "MarketMetricsEngine",
     "OpportunityFinder",
+    "MarketStrategySimulator",
 ]

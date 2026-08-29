@@ -70,9 +70,23 @@ def test_citation_influence():
     obs = [
         {
             "brand_mentions": [{"brand_name": "Shopee", "mentioned": True}],
-            "citations": [{"domain": "pantip.com"}, {"domain": "wongnai.com"}]
+            "citations": [{"domain": "pantip.com"}, {"domain": "wongnai.com"}],
         }
     ]
     cit = CitationInfluenceAnalyzer.analyze_influence(obs)
     assert cit["total_citations"] == 2
     assert cit["unique_domains"] == 2
+
+
+def test_market_strategy_simulator():
+    from src.analytics.simulator import MarketStrategySimulator
+
+    sim = MarketStrategySimulator.simulate_strategy(
+        target_brand="Shopee Thailand",
+        current_sov_pct=50.0,
+        current_nrs=20.0,
+        strategy_levers=["forum_advocacy", "official_mall_guarantee"],
+    )
+    assert sim["simulated"]["share_of_voice_pct"] > 50.0
+    assert sim["simulated"]["net_recommendation_score"] > 20.0
+    assert "pantip.com" in sim["activated_citation_nodes"]

@@ -1,0 +1,24 @@
+name: CI Test & Quality Suite
+
+on:
+  push:
+    branches: [ main, upgrade/** ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install . pytest ruff
+      - name: Lint with Ruff
+        run: ruff check .
+      - name: Test with Pytest
+        run: pytest tests/
