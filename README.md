@@ -39,8 +39,9 @@ CLI / FastAPI  ─┬─►  run_intelligence_pipeline (src/runner.py)
 FastAPI (src/api.py, :8000)  — auth via src/security.py, scan concurrency/quota limits
    GET  /api/v1/health                     liveness + dependency checks + auth mode
    GET  /api/v1/verticals                  list sectors
+   GET  /api/v1/models                     live OpenRouter free-model list
    POST /api/v1/verticals        [write]   create/replace a custom sector
-   POST /api/v1/scan             [write]   queue a background scan
+   POST /api/v1/scan             [write]   queue a background scan (X-Provider-Key for BYOK)
    GET  /api/v1/scan/{id}/progress         live progress + run_stats
    GET  /api/v1/metrics/{vertical}         last run summary (or PENDING_SCAN)
    GET  /api/v1/export/{vertical}          CSV / JSON
@@ -73,6 +74,19 @@ python -m src.cli serve --port 8000      # http://localhost:8000
 `AIBT_API_KEYS` unset → **open mode** (writes allowed, logged, `/health` says
 `auth_mode: "open"`). Set it (comma-separated) to require `X-API-Key` /
 `Authorization: Bearer` on writes. See `SECURITY.md`.
+
+### Bring-your-own OpenRouter key + live free models
+
+```bash
+python -m src.cli models                              # live free-model list
+python -m src.cli run --engine openrouter --model deepseek/deepseek-chat:free ...
+```
+
+The free tier changes constantly, so the list is always fetched live
+(`GET /api/v1/models`). Callers can pass a key per request via `X-Provider-Key`
+(header) instead of the `OPENROUTER_API_KEY` env var — it is used for that run
+and never stored. In the web dashboard: *API settings* → OpenRouter key (kept in
+your browser only), then pick a model in the scan dialog.
 
 ---
 

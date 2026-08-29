@@ -57,6 +57,8 @@ def run_intelligence_pipeline(
     progress_callback: Any = None,
     entities_path: str | None = None,
     output_dir: str | None = None,
+    engine_model: str | None = None,
+    engine_api_key: str | None = None,
 ) -> dict[str, Any]:
     run_id = new_run_id()
     entities_path = entities_path or ENTITIES_PATH
@@ -113,7 +115,10 @@ def run_intelligence_pipeline(
 
     from src.engines import EngineFactory
 
-    engine = EngineFactory.create(engine_type=engine_type)
+    # engine_api_key is a per-run bring-your-own-key: used to build the engine,
+    # then dropped. It is never written to logs, run_stats, or the summary.
+    engine = EngineFactory.create(engine_type=engine_type, model_name=engine_model, api_key=engine_api_key)
+    resolved_model = getattr(engine, "model_name", engine_model)
 
     stats = {
         "requested_observations": len(queries),
@@ -188,6 +193,8 @@ def run_intelligence_pipeline(
         "vertical_name": target_vertical.get("name_th", ""),
         "focal_brand": {"id": focal.brand_id, "name": focal.name},
         "engine_type": engine_type,
+        "engine_model": resolved_model,
+        "byok": bool(engine_api_key),
         "data_mode": "synthetic" if engine_type == "mock" else "live",
         "total_queries": len(queries),
         "run_stats": stats,

@@ -12,7 +12,7 @@ import uuid
 from typing import Any, Literal
 
 import yaml
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -78,6 +78,7 @@ class VerticalCreateRequest(BaseModel):
 class ScanTriggerRequest(BaseModel):
     vertical_id: str = Field("ecommerce_retail_th", min_length=2, max_length=64)
     engine_type: Literal["mock", "gemini", "openrouter", "tavily", "serper"] = "mock"
+    model_name: str | None = Field(None, max_length=160)
     count: int = Field(30, ge=1, le=200)
     include_control_set: bool = True
     seed: int = Field(42, ge=0, le=2**31 - 1)
@@ -109,7 +110,14 @@ def _prune_tasks_locked() -> None:
 
 
 def _run_scan_background_task(
-    task_id: str, vertical_id: str, engine_type: str, count: int, seed: int, include_control: bool
+    task_id: str,
+    vertical_id: str,
+    engine_type: str,
+    count: int,
+    seed: int,
+    include_control: bool,
+    model_name: str | None = None,
+    provider_key: str | None = None,
 ):
     with tasks_lock:
         tasks_state[task_id]["status"] = "RUNNING"
@@ -134,6 +142,8 @@ def _run_scan_background_task(
             progress_callback=progress_callback,
             entities_path=ENTITIES_PATH,
             output_dir=DATA_DIR,
+            engine_model=model_name,
+            engine_api_key=provider_key,
         )
         with tasks_lock:
             tasks_state[task_id].update(
@@ -214,7 +224,14 @@ def create_vertical(req: VerticalCreateRequest):
 
 
 @app.post("/api/v1/scan", dependencies=[Depends(require_write_auth)])
-def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
+def trigger_scan(
+    req: ScanTriggerRequest,
+    background_tasks: BackgroundTasks,
+    x_provider_key: str | None = Header(default=None),
+):
+    """Bring-your-own-key: pass the provider key (e.g. OpenRouter) in the
+    ``X-Provider-Key`` header. It is used to build the engine and then dropped -
+    never logged, never written to task state or the run summary."""
     known = {v["vertical_id"] for v in _get_entities_config().get("verticals", [])}
     if req.vertical_id not in known:
         raise HTTPException(status_code=404, detail=f"Unknown vertical: {req.vertical_id}")
@@ -226,6 +243,8 @@ def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
             "task_id": task_id,
             "vertical_id": req.vertical_id,
             "engine_type": req.engine_type,
+            "model_name": req.model_name,
+            "byok": bool(x_provider_key),
             "data_mode": "synthetic" if req.engine_type == "mock" else "live",
             "status": "QUEUED",
             "progress_pct": 0.0,
@@ -244,9 +263,29 @@ def trigger_scan(req: ScanTriggerRequest, background_tasks: BackgroundTasks):
         count=req.count,
         seed=req.seed,
         include_control=req.include_control_set,
+        model_name=req.model_name,
+        provider_key=x_provider_key,
     )
     data_mode = "synthetic" if req.engine_type == "mock" else "live"
     return {"task_id": task_id, "status": "QUEUED", "vertical_id": req.vertical_id, "data_mode": data_mode}
+
+
+@app.get("/api/v1/models", dependencies=[Depends(require_read_auth)])
+def list_free_models(provider: str = "openrouter", x_provider_key: str | None = Header(default=None)):
+    """Live list of currently-free models. The list changes over time, so it is
+    always fetched fresh. Optional ``X-Provider-Key`` improves rate limits."""
+    if provider != "openrouter":
+        raise HTTPException(status_code=400, detail="Only 'openrouter' free-model discovery is supported")
+    from src.engines.model_registry import OpenRouterModelRegistry
+
+    models = OpenRouterModelRegistry(api_key=x_provider_key).get_free_tier_candidates()
+    return {
+        "provider": provider,
+        "count": len(models),
+        "fetched_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "note": "OpenRouter's free tier changes frequently; re-fetch before each run.",
+        "models": models,
+    }
 
 
 @app.get("/api/v1/scan/{task_id}/progress", dependencies=[Depends(require_read_auth)])

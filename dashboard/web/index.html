@@ -680,12 +680,26 @@
 
         <div>
           <label class="block font-bold text-midnight mb-1 font-mono uppercase text-[11px]">Observation Engine:</label>
-          <select id="scanEngineType" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-semibold focus:outline-none focus:border-midnight cursor-pointer">
+          <select id="scanEngineType" onchange="onEngineChange()" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-semibold focus:outline-none focus:border-midnight cursor-pointer">
             <option value="mock">Mock Observation Engine (Sandbox)</option>
             <option value="gemini">Google Gemini 2.5 Flash (Search Grounding)</option>
+            <option value="openrouter">OpenRouter — live free model list</option>
+            <option value="serper">Serper — Google organic SERP (TH)</option>
             <option value="tavily">Tavily Search Grounding (Web Citations)</option>
-            <option value="openrouter">OpenRouter Qualified Free Models</option>
           </select>
+        </div>
+
+        <div id="scanModelRow" class="hidden">
+          <label class="block font-bold text-midnight mb-1 font-mono uppercase text-[11px]">
+            OpenRouter Model <span id="scanModelCount" class="text-ink-faint normal-case"></span>
+          </label>
+          <select id="scanModelSelect" class="w-full bg-canvas hairline-all px-3 py-2 text-xs font-semibold focus:outline-none focus:border-midnight cursor-pointer">
+            <option value="">— loading live free models —</option>
+          </select>
+          <p class="text-[10px] text-ink-faint mt-1">
+            Fetched live from OpenRouter (the free tier changes often). Set your key under
+            <button type="button" onclick="configureApi()" class="underline decoration-dotted">API settings</button>.
+          </p>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
@@ -985,7 +999,8 @@
         setScanBanner(`Creating workspace "${myBrand}"…`);
         await apiPost("/api/v1/verticals", payload);
         const engine = (document.getElementById("scanEngineType") || {}).value || "mock";
-        await runScanFlow(slug, engine, 15, true);
+        const model = (document.getElementById("scanModelSelect") || {}).value || null;
+        await runScanFlow(slug, engine, 15, true, model);
       } catch (err) {
         setFailedBanner(err.message || String(err));
         alert("Could not run workspace scan: " + (err.message || err));
@@ -1394,6 +1409,7 @@
     function openScanModal() {
       document.getElementById("scanTargetVertical").value = activeVerticalId;
       document.getElementById("modalScanLauncher").classList.remove("hidden");
+      onEngineChange();
     }
 
     function closeModal(id) {
@@ -1405,9 +1421,10 @@
       const engine = document.getElementById("scanEngineType").value;
       const count = parseInt(document.getElementById("scanQueryCount").value, 10);
       const includeCtrl = document.getElementById("scanIncludeControl").checked;
+      const model = (document.getElementById("scanModelSelect") || {}).value || null;
       closeModal("modalScanLauncher");
       try {
-        await runScanFlow(vertId, engine, count, includeCtrl);
+        await runScanFlow(vertId, engine, count, includeCtrl, model);
       } catch (err) {
         closeModal("modalScanProgress");
         setFailedBanner(err.message || String(err));
@@ -1416,15 +1433,17 @@
     }
 
     // POST /scan -> poll /scan/{id}/progress -> GET /metrics/{vertical} -> render
-    async function runScanFlow(verticalId, engine, count, includeControl) {
+    async function runScanFlow(verticalId, engine, count, includeControl, modelName) {
       document.getElementById("modalScanProgress").classList.remove("hidden");
       document.getElementById("scanStatusBadge").innerText = "QUEUED";
       document.getElementById("scanProgressBar").style.width = "0%";
-      setScanBanner(`Scan queued (${engine}) for ${verticalId}…`);
+      setScanBanner(`Scan queued (${engine}${modelName ? " · " + modelName : ""}) for ${verticalId}…`);
 
+      const extra = PROVIDER_KEY() ? { "X-Provider-Key": PROVIDER_KEY() } : {};
       const start = await apiPost("/api/v1/scan", {
-        vertical_id: verticalId, engine_type: engine, count: count, include_control_set: includeControl
-      });
+        vertical_id: verticalId, engine_type: engine, count: count,
+        include_control_set: includeControl, model_name: modelName || null
+      }, extra);
       const taskId = start.task_id;
 
       let done = false;
@@ -1507,21 +1526,22 @@
     let DATA_MODE = "demo"; // "demo" | "live" | "historical"
     const API_BASE = () => (localStorage.getItem("aibt_api_base") || "").replace(/\/+$/, "");
     const API_KEY = () => localStorage.getItem("aibt_api_key") || "";
+    const PROVIDER_KEY = () => localStorage.getItem("aibt_openrouter_key") || "";
 
-    function _headers(json) {
-      const h = {};
+    function _headers(json, extra) {
+      const h = Object.assign({}, extra || {});
       if (json) h["Content-Type"] = "application/json";
       if (API_KEY()) h["X-API-Key"] = API_KEY();
       return h;
     }
-    async function apiGet(path) {
-      const r = await fetch(API_BASE() + path, { headers: _headers(false) });
+    async function apiGet(path, extra) {
+      const r = await fetch(API_BASE() + path, { headers: _headers(false, extra) });
       if (!r.ok) throw new Error(`GET ${path} -> ${r.status} ${(await r.text()).slice(0, 200)}`);
       return r.json();
     }
-    async function apiPost(path, body) {
+    async function apiPost(path, body, extra) {
       const r = await fetch(API_BASE() + path, {
-        method: "POST", headers: _headers(true), body: JSON.stringify(body)
+        method: "POST", headers: _headers(true, extra), body: JSON.stringify(body)
       });
       if (!r.ok) throw new Error(`POST ${path} -> ${r.status} ${(await r.text()).slice(0, 200)}`);
       return r.json();
@@ -1530,9 +1550,32 @@
     function configureApi() {
       const base = prompt("API base URL (blank = same origin as this page):", API_BASE());
       if (base !== null) localStorage.setItem("aibt_api_base", base.trim());
-      const key = prompt("API key (X-API-Key). Leave blank if the server runs in open mode:", API_KEY());
+      const key = prompt("Dashboard API key (X-API-Key). Blank if the server runs in open mode:", API_KEY());
       if (key !== null) localStorage.setItem("aibt_api_key", key.trim());
+      const pk = prompt("OpenRouter API key (bring-your-own — stored only in THIS browser, sent per scan, never persisted server-side):", PROVIDER_KEY());
+      if (pk !== null) localStorage.setItem("aibt_openrouter_key", pk.trim());
       loadLive(activeVerticalId).catch(err => setFailedBanner(err.message || String(err)));
+    }
+
+    // Populate the OpenRouter model dropdown from the live free list.
+    async function onEngineChange() {
+      const engine = (document.getElementById("scanEngineType") || {}).value;
+      const row = document.getElementById("scanModelRow");
+      if (engine !== "openrouter") { row.classList.add("hidden"); return; }
+      row.classList.remove("hidden");
+      const sel = document.getElementById("scanModelSelect");
+      sel.innerHTML = '<option value="">— loading live free models —</option>';
+      try {
+        const extra = PROVIDER_KEY() ? { "X-Provider-Key": PROVIDER_KEY() } : {};
+        const res = await apiGet("/api/v1/models?provider=openrouter", extra);
+        document.getElementById("scanModelCount").innerText = `(${res.count} free, ${res.fetched_at})`;
+        sel.innerHTML = '<option value="">Auto (engine default free model)</option>' +
+          res.models.map(m =>
+            `<option value="${m.id}">${m.id} — ${(m.context_length || 0).toLocaleString()} ctx</option>`
+          ).join("");
+      } catch (err) {
+        sel.innerHTML = '<option value="">could not load models — ' + (err.message || err).slice(0, 80) + '</option>';
+      }
     }
 
     function setBanner(cls, text) {

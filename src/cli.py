@@ -41,6 +41,9 @@ def main():
     )
     run_parser.add_argument("--seed", type=int, default=42, help="Random seed")
     run_parser.add_argument(
+        "--model", type=str, default=None, help="Model id (e.g. an OpenRouter free model from `cli.py models`)"
+    )
+    run_parser.add_argument(
         "--control", action="store_true", default=True, help="Include invariant control benchmark set"
     )
 
@@ -79,6 +82,7 @@ def main():
             seed=args.seed,
             engine_type=args.engine,
             include_control=args.control,
+            engine_model=args.model,
         )
 
     elif args.command == "migrate":

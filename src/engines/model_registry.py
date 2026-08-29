@@ -36,6 +36,12 @@ class OpenRouterModelRegistry:
             return []
 
     def get_free_tier_candidates(self) -> list[dict[str, Any]]:
+        """Live list of currently-free OpenRouter models.
+
+        OpenRouter's free tier changes frequently, so this is always fetched, not
+        cached to disk. Sorted by context length so the most capable free model
+        is first.
+        """
         free_models = []
         for m in self.fetch_available_models():
             pricing = m.get("pricing", {})
@@ -44,14 +50,19 @@ class OpenRouterModelRegistry:
                 completion_price = float(pricing.get("completion", 0))
             except (TypeError, ValueError):
                 continue
-            if (prompt_price == 0.0 and completion_price == 0.0) or ":free" in m.get("id", ""):
+            is_free = (prompt_price == 0.0 and completion_price == 0.0) or ":free" in m.get("id", "")
+            # keep only models that can emit text (skip image/audio-only endpoints)
+            out_mods = (m.get("architecture") or {}).get("output_modalities")
+            emits_text = (not out_mods) or ("text" in out_mods)
+            if is_free and emits_text:
                 free_models.append(
                     {
                         "id": m.get("id"),
                         "name": m.get("name"),
-                        "context_length": m.get("context_length"),
-                        "description": m.get("description", ""),
+                        "context_length": m.get("context_length") or 0,
+                        "description": (m.get("description", "") or "")[:280],
                         "is_free": True,
                     }
                 )
+        free_models.sort(key=lambda x: x["context_length"], reverse=True)
         return free_models

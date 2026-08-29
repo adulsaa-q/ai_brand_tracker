@@ -22,6 +22,8 @@ Honest per-feature state. Updated after implementation, not before.
 | Scan abuse limits | concurrency + daily quota → 429; `count` bounded 1..200 |
 | Health endpoint | liveness vs dependency checks (config + DuckDB), auth mode |
 | Web dashboard ↔ backend | scan → progress → metrics wired; LIVE / SYNTHETIC / NO-DATA / ERROR states |
+| Live OpenRouter free-model list | `GET /api/v1/models` fetches fresh every call; dashboard model dropdown when engine = openrouter |
+| Bring-your-own provider key | `X-Provider-Key` header / browser localStorage / env; never logged or persisted (only `byok` flag) |
 | Packaging + CI | wheel builds, editable install, import smoke, ruff, tests |
 
 ## Experimental — real code, not production-hardened

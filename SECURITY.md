@@ -27,6 +27,23 @@ FastAPI dependency (`src/security.py`) — never hardcoded. Write endpoints
 `AIBT_ALLOWED_ORIGINS` (comma-separated). Unset → `*` with a logged warning.
 `allow_credentials` is always `False`; methods limited to GET/POST/OPTIONS.
 
+## Bring-your-own provider key (OpenRouter etc.)
+
+Provider API keys are **never stored server-side**. Three ways to supply one, in
+order of precedence:
+
+1. `X-Provider-Key` request header on `POST /api/v1/scan` and `GET /api/v1/models`
+   — used to build the engine for that one run, then dropped. It is never
+   logged, never written to `tasks_state`, and never written to the run summary.
+   Only a boolean `byok: true/false` is recorded.
+2. Browser `localStorage` (`aibt_openrouter_key`) set via the dashboard's *API
+   settings* — stays in that browser, sent only as the header above.
+3. `OPENROUTER_API_KEY` env var — the CLI / server default.
+
+`GET /api/v1/models?provider=openrouter` returns the **live** free-model list
+(the free tier changes often, so it is fetched fresh every call, never cached to
+disk).
+
 ## Untrusted content
 
 Treat as untrusted: the consumer query text, provider responses, retrieved web
