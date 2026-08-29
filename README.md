@@ -172,8 +172,12 @@ is tracked in [docs/STATUS.md](docs/STATUS.md).
 
 ---
 
+## Acknowledgements
+
+Built with AI assistance (Claude Code). Direction, architecture decisions,
+review, and testing are the author's; pair-written commits carry a
+`Co-Authored-By` trailer.
+
 ## License
 
 MIT — see [LICENSE](LICENSE). Built by Adul Sa-a (Q).
-
-<sub>Developed with AI assistance (Claude); commits that were pair-written carry a <code>Co-Authored-By</code> trailer.</sub>
