@@ -40,6 +40,7 @@ It supports several observation engines and keeps their signals separate, becaus
 - **Decision memo** — competitor gap analysis in a *What → Why → So what → Now what* structure.
 - **Web dashboard + REST API** — background scans with live progress, CSV/JSON export, and an honest data-mode banner on every view.
 - **Live OpenRouter free-model discovery** — the free tier changes constantly, so the model list is fetched and probe-checked on demand.
+- **Free-model contractor system** — deterministic radar snapshots the live catalog, synthetic benchmarks record tool-calling/quality status, and a bounded Hermes contractor uses explicit task envelopes without changing the primary model route.
 - **Bring-your-own-key** — pass a provider key per request via `X-Provider-Key`; it is used to build the engine and then discarded, never logged or persisted.
 
 ---

@@ -8,6 +8,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from scripts.migrate_v1_to_v3 import migrate_csv_to_stores
 from src.engines.model_registry import OpenRouterModelRegistry
+from src.free_models.benchmark import benchmark_model, save_benchmark
+from src.free_models.contractor import ContractorTask, FreeModelContractor, save_result
+from src.free_models.radar import FreeModelRadar
 from src.runner import run_intelligence_pipeline
 from src.universe import QueryUniverseGenerator
 
@@ -54,6 +57,23 @@ def main():
     # models
     subparsers.add_parser("models", help="Discover free AI models on OpenRouter")
 
+    # free-model radar
+    radar_parser = subparsers.add_parser("free-radar", help="Update deterministic OpenRouter free-model registry")
+    radar_parser.add_argument("--state-dir", default="data/free_models")
+    radar_parser.add_argument("--min-context", type=int, default=32000)
+
+    benchmark_parser = subparsers.add_parser("free-benchmark", help="Benchmark one harmless synthetic free model")
+    benchmark_parser.add_argument("model")
+    benchmark_parser.add_argument("--state-dir", default="data/free_models")
+
+    contractor_parser = subparsers.add_parser("free-contractor", help="Run a bounded pinned Hermes sub-agent")
+    contractor_parser.add_argument("--model", required=True)
+    contractor_parser.add_argument("--objective", required=True)
+    contractor_parser.add_argument("--repo", default=".")
+    contractor_parser.add_argument("--allowed-path", action="append", default=[])
+    contractor_parser.add_argument("--verify", action="append", default=[])
+    contractor_parser.add_argument("--dry-run", action="store_true")
+
     # dashboard
     subparsers.add_parser("dashboard", help="Launch Executive Streamlit Dashboard")
 
@@ -94,6 +114,21 @@ def main():
         print(f"\n🤖 Discovered {len(free_models)} Free Models on OpenRouter:")
         for m in free_models:
             print(f" - {m['id']}: {m['name']} (Context: {m['context_length']})")
+
+    elif args.command == "free-radar":
+        print(__import__("json").dumps(FreeModelRadar(args.state_dir).run(args.min_context), ensure_ascii=False, indent=2))
+
+    elif args.command == "free-benchmark":
+        record = benchmark_model(args.model)
+        path = save_benchmark(record, args.state_dir)
+        print(__import__("json").dumps({"record": record, "path": str(path)}, ensure_ascii=False, indent=2))
+
+    elif args.command == "free-contractor":
+        task = ContractorTask(args.objective, args.repo, args.allowed_path, args.verify)
+        result = FreeModelContractor().run(task, args.model, dry_run=args.dry_run)
+        path = os.path.join("data/free_models/results", f"{task.task_id}.json")
+        save_result(result, path)
+        print(__import__("json").dumps({"result": result.__dict__, "path": path}, ensure_ascii=False, indent=2))
 
     elif args.command == "dashboard":
         import subprocess
